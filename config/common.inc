@@ -58,7 +58,7 @@ define ("R_VERSION", '0.5');
 
 define ("TABLE_USERS",			"robert_users");								// table des utilisateurs dans la BDD
 define ("TABLE_CAL"  ,			"robert_calendar");								// table du calendrier
-define ("TABLE_MATOS",			"robert_matos_detail");							// table du matoss au détail
+define ("TABLE_MATOS",			"robert_matos_detail");							// table du matos au détail
 define ("TABLE_MATOS_CATEG",	"robert_matos_sous_cat");						// table des notes de calendrier
 define ("TABLE_PACKS",			"robert_matos_packs");							// table des packs de matoss
 define ("TABLE_TEKOS",			"robert_tekos");								// table des techniciens

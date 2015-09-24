@@ -84,7 +84,7 @@ if ($_SESSION['user']->getUserInfos('prenom') != "Demo") : ?>
 </div>
 
 <div id="versionRobert">
-	<b>Robert v<?php echo R_VERSION; ?></b><br />GNU Affero (AGLP)
+	<b>Robert v<?php echo R_VERSION; ?></b><br />GNU Affero (AGPL)
 </div>
 
 

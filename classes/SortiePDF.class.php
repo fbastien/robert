@@ -139,7 +139,7 @@ class SortiePDF {
 		try { $this->createDossierContenu ('devis'); }						// check si les dossiers DATA existe, sinon on le crée
 		catch (Exception $e) { throw new Exception ('Erreur création du dossier de contenu : ' . $e->getMessage()); return; }
 
-		$this->namePDF = 'Devis_Acousmie_'.$this->datePDF.'-'.$this->numDevis.'_'.$this->nomCreateur.'_'.$this->benefPlan.'.pdf' ;
+		$this->namePDF = 'Devis_'.NOM_BOITE.'_'.$this->datePDF.'-'.$this->numDevis.'_'.$this->nomCreateur.'_'.$this->benefPlan.'.pdf' ;
 		$this->pathPDF .= 'devis/'.$this->namePDF;
 
 
@@ -154,9 +154,9 @@ class SortiePDF {
 		$pdf = new PDF_Devisfacture( 'P', 'mm', 'A4' );
 		$pdf->AddPage();
 		$pdf->SetMargins(5, 5, 5);
-		$pdf->addLogo('../gfx/logoAcousmie.jpg', 73, 34, 'JPG');
+		$pdf->addLogo('../gfx/logo.jpg', 73, 34, 'JPG');
 		$pdf->addSociete(NOM_BOITE, ADRESSE_BOITE . "\n"
-					    .CP_BOITE ." ". VILLE_BOITE ."\n"
+						.CP_BOITE ." ". VILLE_BOITE ."\n"
 						."SIRET : " . SIRET_BOITE . "\n\n"
 						."Devis Géré par ".$this->infoCreateur->getInfo('prenom')." ".$this->infoCreateur->getInfo('nom')."\n"
 						."Tél.  : " . $this->telCreateur . "\n"
@@ -411,15 +411,15 @@ class SortiePDF {
 		}
 		catch (Exception $e) { throw new Exception ('Erreur création du dossier de contenu : ' . $e->getMessage()); return; }
 
-		$this->namePDF = 'Facture_Acousmie_'.$this->datePDF.'-'.$this->idPlan.'_'.$this->nomCreateur.'_'.$this->benefPlan.'.pdf' ;
+		$this->namePDF = 'Facture_'.NOM_BOITE.'_'.$this->datePDF.'-'.$this->idPlan.'_'.$this->nomCreateur.'_'.$this->benefPlan.'.pdf' ;
 		$this->pathPDF .= 'facture/'.$this->namePDF;
 
 		$pdf = new PDF_Devisfacture( 'P', 'mm', 'A4' );
 		$pdf->AddPage();
 		$pdf->SetMargins(5, 5, 5);
-		$pdf->addLogo('../gfx/logoAcousmie.jpg', 73, 34, 'JPG');
+		$pdf->addLogo('../gfx/logo.jpg', 73, 34, 'JPG');
 		$pdf->addSociete(NOM_BOITE, ADRESSE_BOITE . "\n"
-					    .CP_BOITE ." ". VILLE_BOITE ."\n\n"
+						.CP_BOITE ." ". VILLE_BOITE ."\n\n"
 						."SIRET : " . SIRET_BOITE . "\n\n"
 						."Tél.  : " . TEL_BOITE . "\n"
 						."Email : " . EMAIL_BOITE );

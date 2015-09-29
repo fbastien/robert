@@ -22,38 +22,9 @@ $serverName = php_uname('n');
 //echo $serverName ;
 
 
-/* ***************************************************************************** */
-/* ***************************************************************************** */
-/*
 
- *	Modifiez les lignes 40 à 43 ci-dessous, en vous inspirant de l'exemple, pour renseigner :
- *	le nom de l'hôte ou se trouve la base de données SQL
- *	le nom de l'utilisateur SQL
- *	le mot de passe de l'utilisateur SQL
- *  le nom de la base de données
- *
- *  N'oubliez pas de sauvegarder.
-
-*/
-
-
-	define ("HOST", "localhost");												// nom de l'hôte ou se trouve la bdd
-	define ("USER", "root");													// nom de l'utilisateur autorisé à se connecter
-	define ("PASS", "");														// son mot de passe
-	define ("BASE", "robert");													// nom de la base de données
-
-
-
-
-
-
-/* ***************************************************************************** */
-/* ***************************************************************************** */
-
-define ("DEVS_MAILS", "polo@polosson.com, mathieu@d2mphotos.fr");				// Adresses email des développeurs
-
-define ("DSN", 'mysql:dbname='.BASE.';host='.HOST);								// données de connexion à la BDD via PDO
-
+define ("DEVS_MAILS", "fbastien@gmail.com");									// Adresses email des développeurs de cette branche du Robert
+																				// Développeurs originaux : polo@polosson.com, mathieu@d2mphotos.fr
 define ("R_VERSION", '0.5');
 
 define ("TABLE_USERS",			"robert_users");								// table des utilisateurs dans la BDD
@@ -89,6 +60,15 @@ define ("COOKIE_NAME_PASS", 'auth_password');									// nom du cookie gestion p
 define ("COOKIE_PEREMPTION", time() + (3600 * 24 * 2));							// péremption des cookies : 2 jours.
 
 date_default_timezone_set('Europe/Paris');										// La timezone par défaut, si introuvable dans le php.ini
+
+// Lecture du fichier de propriétés
+$config = parse_ini_file($install_path . FOLDER_CONFIG . 'config.ini');
+$config['boite.TVA.val'] = (float) $config['boite.TVA.val'];
+
+define ("DSN",  'mysql:dbname=' . $config['db.base'] . ';host=' . $config['db.host']);		// données de connexion à la BDD via PDO
+define ("USER", $config['db.user']);
+define ("PASS", $config['db.pass']);
+
 
 // fonction de suppression de dossier, vite fait, dispo pour tout le monde !
 function rrmdir($dir) {

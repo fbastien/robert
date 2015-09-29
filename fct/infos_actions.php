@@ -7,17 +7,33 @@ require_once ('checkConnect.php' );
 if ( $_SESSION["user"]->isAdmin() !== true ) { die("Vous n'avez pas accès à cette partie du Robert."); }
 
 extract($_POST) ;
-$infosBoiteFile = $install_path . FOLDER_CONFIG . 'infos_boite.php';
+$confFile = $install_path . FOLDER_CONFIG . 'config.ini';
 
 if ($action == 'modifConsts') {
 	unset($_POST['action']);
-	$newConstFile = "<?php \n\n";
-	foreach ($_POST as $key => $val) {
-		$newConstFile .= "define('$key', '$val');\n";
+	$newIniFile = "";
+	foreach ($config as $key => $val) {
+		$newIniFile .= "$key = ";
+		$htmlKey = preg_replace('/\./', '_', $key);
+		$newVal = $val;
+		if(isset($_POST[$htmlKey])) {
+			$newVal = $_POST[$htmlKey];
+			if($key === 'boite.TVA.val') {
+				$newVal = (float) $newVal;
+			}
+		}
+		if(is_string($newVal)) {
+			if($newVal !== "") {
+				$newIniFile .= '"'.preg_replace('/"/', '\"', $newVal).'"';
+			}
+		}
+		else {
+			$newIniFile .= $newVal;
+		}
+		$newIniFile .= "\n";
 	}
-	$newConstFile .= "\n?>";
 	
-	if ( file_put_contents($infosBoiteFile, $newConstFile) !== false )
+	if ( file_put_contents($confFile, $newIniFile, LOCK_EX) !== false )
 		echo 'Informations sauvegardées.';
 	else echo 'Impossible de sauvegarder les infos...';
 }

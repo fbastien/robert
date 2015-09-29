@@ -1,7 +1,7 @@
 <?php if ( !isset($_SESSION["user"])) { header('Location: index.php'); }
 
 require_once ('date_fr.php');
-require_once ('infos_boite.php');
+require_once ('common.inc');
 
 $hideForPoppy = '';
 if ( ! $_SESSION["user"]->isLevelMod() )
@@ -23,7 +23,7 @@ if ( ! $_SESSION["user"]->isLevelMod() )
 		initToolTip('#friseLegende', -250);
 		$('#legendeConfirmCal').show();
 		$('.C').css( 'overflow-y', 'scroll');
-		tva_val = <?php echo TVA_VAL; ?>;
+		tva_val = <?php echo $config['boite.TVA.val']; ?>;
 	});
 </script>
 

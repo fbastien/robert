@@ -130,8 +130,6 @@ foreach ($matosPlanMod as $matId => $matQte) {
 $js = substr($sD, 6); $ms = substr($sD, 4, 2); $as = substr($sD, 0, 4);
 $je = substr($eD, 6); $me = substr($eD, 4, 2); $ae = substr($eD, 0, 4);
 
-require_once ('infos_boite.php');
-
 ?>
 
 <script> var id_MODPLAN = <?php echo $_GET['plan'] ?> ; </script>
@@ -261,7 +259,7 @@ if (!isset($_SESSION['plan_mod_backup'])) $_SESSION['plan_mod_backup'] = array($
 		</div>
 		<div class="inline top tiers rightText">
 			<?php echo '<div class="enorme">TOTAL H.T. : '.number_format($totalFinal, 2).' €</div>
-					 <div class="enorme">TOTAL T.T.C. : '.number_format($totalFinal + ($totalFinal * TVA_VAL), 2).' €</div>';
+					 <div class="enorme">TOTAL T.T.C. : '.number_format($totalFinal + ($totalFinal * $config['boite.TVA.val']), 2).' €</div>';
 			?>
 		</div>
 	</div>

@@ -4,8 +4,6 @@
 	require_once ('common.inc');		// OBLIGATOIRE pour les sessions, à placer TOUJOURS EN HAUT du code !!
 	require_once ('checkConnect.php' );
 
-	require_once ( '../' . FOLDER_CONFIG . 'infos_boite.php');
-
 	if (!isset($_GET['tek'])) { die('pas de technicien sélectionné !') ; }
 	$idTekos = $_GET['tek'] ;
 	$t = new Tekos($idTekos);

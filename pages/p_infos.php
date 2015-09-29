@@ -1,7 +1,7 @@
 <?php
 	if ( !isset($_SESSION["user"])) { header('Location: index.php'); }
 	if ( $_SESSION["user"]->isAdmin() !== true ) { header('Location: index.php'); }
-	require('infos_boite.php');
+	require_once('common.inc');
 ?>
 
 <script src="./fct/infos_Ajax.js"></script>
@@ -15,54 +15,54 @@
 
 <br /><br /><br />
 
-<div class="marge30l gros">
+<div class="marge30l gros" id="infosDiv">
 	<div class="inline ui-widget-content ui-corner-all pad10">
 		<div class="ui-widget-header ui-corner-all center">Raison Sociale</div>
-		<div class="ui-state-default ui-corner-all"><input type="text" id="NOM_BOITE" value="<?php echo NOM_BOITE ?>" size="20" /></div>
+		<div class="ui-state-default ui-corner-all"><input type="text" name="boite.nom" value="<?php echo $config['boite.nom'] ?>" size="20" /></div>
 	</div>
 	<div class="inline ui-widget-content ui-corner-all pad10">
 		<div class="ui-widget-header ui-corner-all center">Status</div>
-		<div class="ui-state-default ui-corner-all"><input type="text" id="TYPE_BOITE" value="<?php echo TYPE_BOITE ?>" size="20" /></div>
+		<div class="ui-state-default ui-corner-all"><input type="text" name="boite.type" value="<?php echo $config['boite.type'] ?>" size="20" /></div>
 	</div>
 	<br /><br />
 	<div class="inline ui-widget-content ui-corner-all pad10">
 		<div class="ui-widget-header ui-corner-all center">Adresse Postale</div>
-		<div class="ui-state-default ui-corner-all"><input type="text" id="ADRESSE_BOITE" value="<?php echo ADRESSE_BOITE ?>" size="20" /></div>
+		<div class="ui-state-default ui-corner-all"><input type="text" name="boite.adresse.rue" value="<?php echo $config['boite.adresse.rue'] ?>" size="20" /></div>
 	</div>
 	<div class="inline ui-widget-content ui-corner-all pad10">
 		<div class="ui-widget-header ui-corner-all center">Code Postal</div>
-		<div class="ui-state-default ui-corner-all"><input type="text" id="CP_BOITE" value="<?php echo CP_BOITE ?>" size="20" /></div>
+		<div class="ui-state-default ui-corner-all"><input type="text" name="boite.adresse.CP" value="<?php echo $config['boite.adresse.CP'] ?>" size="20" /></div>
 	</div>
 	<div class="inline ui-widget-content ui-corner-all pad10">
 		<div class="ui-widget-header ui-corner-all center">Ville</div>
-		<div class="ui-state-default ui-corner-all"><input type="text" id="VILLE_BOITE" value="<?php echo VILLE_BOITE ?>" size="20" /></div>
+		<div class="ui-state-default ui-corner-all"><input type="text" name="boite.adresse.ville" value="<?php echo $config['boite.adresse.ville'] ?>" size="20" /></div>
 	</div>
 	<br /><br />
 	<div class="inline ui-widget-content ui-corner-all pad10">
 		<div class="ui-widget-header ui-corner-all center">No de Téléphone</div>
-		<div class="ui-state-default ui-corner-all"><input type="text" id="TEL_BOITE" value="<?php echo TEL_BOITE ?>" size="20" /></div>
+		<div class="ui-state-default ui-corner-all"><input type="text" name="boite.tel" value="<?php echo $config['boite.tel'] ?>" size="20" /></div>
 	</div>
 	<div class="inline ui-widget-content ui-corner-all pad10">
 		<div class="ui-widget-header ui-corner-all center">Adresse Email</div>
-		<div class="ui-state-default ui-corner-all"><input type="text" id="EMAIL_BOITE" value="<?php echo EMAIL_BOITE ?>" size="20" /></div>
+		<div class="ui-state-default ui-corner-all"><input type="text" name="boite.email" value="<?php echo $config['boite.email'] ?>" size="20" /></div>
 	</div>
 	<br /><br />
 	<div class="inline ui-widget-content ui-corner-all pad10">
 		<div class="ui-widget-header ui-corner-all center">No de SIRET</div>
-		<div class="ui-state-default ui-corner-all"><input type="text" id="SIRET_BOITE" value="<?php echo SIRET_BOITE ?>" size="20" /></div>
+		<div class="ui-state-default ui-corner-all"><input type="text" name="boite.SIRET" value="<?php echo $config['boite.SIRET'] ?>" size="20" /></div>
 	</div>
 	<div class="inline ui-widget-content ui-corner-all pad10">
 		<div class="ui-widget-header ui-corner-all center">Code APE</div>
-		<div class="ui-state-default ui-corner-all"><input type="text" id="APE_BOITE" value="<?php echo APE_BOITE ?>" size="20" /></div>
+		<div class="ui-state-default ui-corner-all"><input type="text" name="boite.APE" value="<?php echo $config['boite.APE'] ?>" size="20" /></div>
 	</div>
 	<br /><br />
 	<div class="inline ui-widget-content ui-corner-all pad10">
 		<div class="ui-widget-header ui-corner-all center">No de TVA</div>
-		<div class="ui-state-default ui-corner-all"><input type="text" id="N_TVA_BOITE" value="<?php echo N_TVA_BOITE ?>" size="20" /></div>
+		<div class="ui-state-default ui-corner-all"><input type="text" name="boite.TVA.num" value="<?php echo $config['boite.TVA.num'] ?>" size="20" /></div>
 	</div>
 	<div class="inline ui-widget-content ui-corner-all pad10">
 		<div class="ui-widget-header ui-corner-all center">Valeur de TVA (%)</div>
-		<div class="ui-state-default ui-corner-all"><input type="text" id="TVA_VAL" value="<?php echo TVA_VAL * 100 ?>" size="20" /></div>
+		<div class="ui-state-default ui-corner-all"><input type="text" name="boite.TVA.val" value="<?php echo $config['boite.TVA.val'] * 100 ?>" size="20" /></div>
 	</div>
 </div>
 

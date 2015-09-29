@@ -6,7 +6,6 @@
 
 	require_once ('matos_tri_sousCat.php');
 	require_once ('../fct/plans_actions.php');
-	require_once ( '../' . FOLDER_CONFIG . 'infos_boite.php');
 
 
 	if (!isset($_GET['plan'])) { return ; }
@@ -119,7 +118,7 @@ catch( Exception $e) {
 	return -1;
 }
 
-	$titrePageBar = NOM_BOITE . " - Fiche : " . $retour['titre'];
+	$titrePageBar = $config['boite.nom'] . " - Fiche : " . $retour['titre'];
 
 ?>
 
@@ -308,11 +307,11 @@ catch( Exception $e) {
 	<div id='planDecla' class='ui-widget titreSection pageBreakBefore bordFin ui-corner-all'>
 		<div style='width:99%'>
 			<div class='inline top padV10' style='width:47%;'><br />
-			<?php echo TYPE_BOITE . ' <span class="enorme inline">' . NOM_BOITE .'</span><br />';
-			   echo ADRESSE_BOITE . "<br />" . CP_BOITE . ' ' . VILLE_BOITE . '<p>';
-			   echo "N° de TVA intracommunautaire : " . N_TVA_BOITE . '<br />';
-			   echo "N° de SIRET : " . SIRET_BOITE . '<p>';
-			   echo "<span>" . TEL_BOITE . " - " . EMAIL_BOITE . ' - </span>';
+			<?php echo $config['boite.type'] . ' <span class="enorme inline">' . $config['boite.nom'] .'</span><br />';
+			   echo $config['boite.adresse.rue'] . "<br />" . $config['boite.adresse.CP'] . ' ' . $config['boite.adresse.ville'] . '<p>';
+			   echo "N° de TVA intracommunautaire : " . $config['boite.TVA.num'] . '<br />';
+			   echo "N° de SIRET : " . $config['boite.SIRET'] . '<p>';
+			   echo "<span>" . $config['boite.tel'] . " - " . $config['boite.email'] . ' - </span>';
 
 			?>
 			</div>

@@ -18,7 +18,7 @@
  */
 
 
-include_once('infos_boite.php');
+require_once('common.inc');
 require_once('date_fr.php');
 require_once('matos_tri_sousCat.php');
 
@@ -135,11 +135,13 @@ class SortiePDF {
 
 	// CRÉATION D'UN DEVIS EN PDF, PUIS AJOUT EN BDD (table 'devis')
 	public function createDevis ( $salaires, $remise = 0, $contratTxt = false ) {
+		global $config;
+		
 		$this->numDevis = Devis::getLastNumDevis($this->idPlan) + 1;		// numéro du devis à créer
 		try { $this->createDossierContenu ('devis'); }						// check si les dossiers DATA existe, sinon on le crée
 		catch (Exception $e) { throw new Exception ('Erreur création du dossier de contenu : ' . $e->getMessage()); return; }
 
-		$this->namePDF = 'Devis_'.NOM_BOITE.'_'.$this->datePDF.'-'.$this->numDevis.'_'.$this->nomCreateur.'_'.$this->benefPlan.'.pdf' ;
+		$this->namePDF = 'Devis_'.$config['boite.nom'].'_'.$this->datePDF.'-'.$this->numDevis.'_'.$this->nomCreateur.'_'.$this->benefPlan.'.pdf' ;
 		$this->pathPDF .= 'devis/'.$this->namePDF;
 
 
@@ -155,9 +157,9 @@ class SortiePDF {
 		$pdf->AddPage();
 		$pdf->SetMargins(5, 5, 5);
 		$pdf->addLogo('../gfx/logo.jpg', 73, 34, 'JPG');
-		$pdf->addSociete(NOM_BOITE, ADRESSE_BOITE . "\n"
-						.CP_BOITE ." ". VILLE_BOITE ."\n"
-						."SIRET : " . SIRET_BOITE . "\n\n"
+		$pdf->addSociete($config['boite.nom'], $config['boite.adresse.rue'] . "\n"
+						.$config['boite.adresse.CP'] ." ". $config['boite.adresse.ville'] ."\n"
+						."SIRET : " . $config['boite.SIRET'] . "\n\n"
 						."Devis Géré par ".$this->infoCreateur->getInfo('prenom')." ".$this->infoCreateur->getInfo('nom')."\n"
 						."Tél.  : " . $this->telCreateur . "\n"
 						."Email : " . $this->infoCreateur->getInfo('email') );
@@ -169,7 +171,7 @@ class SortiePDF {
 		$pdf->addClientAdresse( $this->benefInfos['type']." ".$this->benefInfos['NomRS']."\n\n"
 							  . $this->benefInfos['adresse']."\n\n"
 							  . $this->benefInfos['codePostal']." ".strtoupper($this->benefInfos['ville'])."\n");
-		$pdf->addNumTVA( N_TVA_BOITE );
+		$pdf->addNumTVA( $config['boite.TVA.num'] );
 		$pdf->addReference($this->titrePlan, "du $this->datePlanS au $this->datePlanE, à $this->lieuPlan");
 
 
@@ -213,7 +215,7 @@ class SortiePDF {
 
 	/// CADRE des TVA et des TOTAUX
 		$pdf->addCadreTVAs( 158 );
-		$tab_tva = array("1" => (float)TVA_VAL * 100, "2" =>  5.5 );
+		$tab_tva = array("1" => $config['boite.TVA.val'] * 100, "2" =>  5.5 );
 		$params  = array("RemiseGlobale" => 1,
 							"remise_tva"     => 1,					// {la remise s'applique sur ce code TVA}
 							"remise"         => 0,					// {montant de la remise}
@@ -236,7 +238,7 @@ class SortiePDF {
 	/// Tableau du détail du matériel
 		$pdf->AddPage();
 		$pdf->SetMargins(5, 5, 5);
-		$pdf->addSociete(NOM_BOITE, ADRESSE_BOITE . "\n". CP_BOITE ." ". VILLE_BOITE );
+		$pdf->addSociete($config['boite.nom'], $config['boite.adresse.rue'] . "\n". $config['boite.adresse.CP'] ." ". $config['boite.adresse.ville'] );
 //		$pdf->addCreateur( "Devis géré par : " . $this->createurLine, 8 );
 		$pdf->fact_dev( "Détail devis No ", "$this->datePDF-$this->numDevis", false );
 		$pdf->addDate( $this->dateTXT );
@@ -282,7 +284,7 @@ class SortiePDF {
 				$pdf->SetDrawColor(0, 0, 0);
 				$pdf->SetTextColor(0,0,0);
 				$pdf->SetMargins(5, 5, 5);
-				$pdf->addSociete( NOM_BOITE, ADRESSE_BOITE . "\n". CP_BOITE ." ". VILLE_BOITE );
+				$pdf->addSociete( $config['boite.nom'], $config['boite.adresse.rue'] . "\n". $config['boite.adresse.CP'] ." ". $config['boite.adresse.ville'] );
 //				$pdf->addCreateur( "Devis géré par : " . $this->createurLine, 8 );
 				$pdf->fact_dev( "Détail devis No ", "$this->datePDF-$this->numDevis" );
 				$pdf->addDate( $this->dateTXT );
@@ -336,7 +338,7 @@ class SortiePDF {
 					$pdf->SetDrawColor(0, 0, 0);
 					$pdf->SetTextColor(0,0,0);
 					$pdf->SetMargins(5, 5, 5);
-					$pdf->addSociete(NOM_BOITE, ADRESSE_BOITE . "\n". CP_BOITE ." ". VILLE_BOITE );
+					$pdf->addSociete($config['boite.nom'], $config['boite.adresse.rue'] . "\n". $config['boite.adresse.CP'] ." ". $config['boite.adresse.ville'] );
 //					$pdf->addCreateur( "Devis géré par : " . $this->createurLine, 8 );
 					$pdf->fact_dev( "Détail devis No ", "$this->datePDF-$this->numDevis" );
 					$pdf->addDate( $this->dateTXT );
@@ -405,24 +407,26 @@ class SortiePDF {
 
 	// CREATION D'UNE FACTURE EN PDF (overwrite)
 	public function createFacture ( $remise = 0) {
+		global $config;
+		
 		try {
 			$this->effaceOldFactures();						// Si déjà une facture dedans, on la supprime pour la recréer.
 			$this->createDossierContenu ('facture');		// check si le dossiers DATA existe, sinon on le crée
 		}
 		catch (Exception $e) { throw new Exception ('Erreur création du dossier de contenu : ' . $e->getMessage()); return; }
 
-		$this->namePDF = 'Facture_'.NOM_BOITE.'_'.$this->datePDF.'-'.$this->idPlan.'_'.$this->nomCreateur.'_'.$this->benefPlan.'.pdf' ;
+		$this->namePDF = 'Facture_'.$config['boite.nom'].'_'.$this->datePDF.'-'.$this->idPlan.'_'.$this->nomCreateur.'_'.$this->benefPlan.'.pdf' ;
 		$this->pathPDF .= 'facture/'.$this->namePDF;
 
 		$pdf = new PDF_Devisfacture( 'P', 'mm', 'A4' );
 		$pdf->AddPage();
 		$pdf->SetMargins(5, 5, 5);
 		$pdf->addLogo('../gfx/logo.jpg', 73, 34, 'JPG');
-		$pdf->addSociete(NOM_BOITE, ADRESSE_BOITE . "\n"
-						.CP_BOITE ." ". VILLE_BOITE ."\n\n"
-						."SIRET : " . SIRET_BOITE . "\n\n"
-						."Tél.  : " . TEL_BOITE . "\n"
-						."Email : " . EMAIL_BOITE );
+		$pdf->addSociete($config['boite.nom'], $config['boite.adresse.rue'] . "\n"
+						.$config['boite.adresse.CP'] ." ". $config['boite.adresse.ville'] ."\n\n"
+						."SIRET : " . $config['boite.SIRET'] . "\n\n"
+						."Tél.  : " . $config['boite.tel'] . "\n"
+						."Email : " . $config['boite.email'] );
 		$pdf->addCreateur( "Facture éditée par : " . $this->createurLine, 8 );
 		$pdf->fact_dev( "Facture ", "$this->datePDF-$this->idPlan" );
 		$pdf->addDate( $this->dateTXT );
@@ -431,7 +435,7 @@ class SortiePDF {
 		$pdf->addClientAdresse( $this->benefInfos['type']." ".$this->benefInfos['NomRS']."\n\n"
 							  . $this->benefInfos['adresse']."\n\n"
 							  . $this->benefInfos['codePostal']." ".strtoupper($this->benefInfos['ville'])."\n");
-		$pdf->addNumTVA( N_TVA_BOITE );
+		$pdf->addNumTVA( $config['boite.TVA.num'] );
 		$pdf->addReference($this->titrePlan, "du $this->datePlanS au $this->datePlanE, à $this->lieuPlan");
 
 
@@ -475,7 +479,7 @@ class SortiePDF {
 
 	/// CADRE des TVA et des TOTAUX
 		$pdf->addCadreTVAs( 150 );
-		$tab_tva = array("1" => (float)TVA_VAL * 100, "2" =>  5.5 );
+		$tab_tva = array("1" => $config['boite.TVA.val'] * 100, "2" =>  5.5 );
 		$params  = array("RemiseGlobale" => 1,
 							"remise_tva"     => 1,					// {la remise s'applique sur ce code TVA}
 							"remise"         => 0,					// {montant de la remise}
@@ -489,7 +493,7 @@ class SortiePDF {
 	/// Tableau du détail du matériel
 		$pdf->AddPage();
 		$pdf->SetMargins(5, 5, 5);
-		$pdf->addSociete(NOM_BOITE, ADRESSE_BOITE . "\n". CP_BOITE ." ". VILLE_BOITE );
+		$pdf->addSociete($config['boite.nom'], $config['boite.adresse.rue'] . "\n". $config['boite.adresse.CP'] ." ". $config['boite.adresse.ville'] );
 		$pdf->addCreateur( "Facture éditée par : " . $this->createurLine, 8 );
 		$pdf->fact_dev( "Détail facture No ", "$this->datePDF-$this->idPlan", false );
 		$pdf->addDate( $this->dateTXT );
@@ -533,7 +537,7 @@ class SortiePDF {
 				$noPage += 1;
 				$pdf->AddPage();
 				$pdf->SetMargins(5, 5, 5);
-				$pdf->addSociete( NOM_BOITE, ADRESSE_BOITE . "\n". CP_BOITE ." ". VILLE_BOITE );
+				$pdf->addSociete( $config['boite.nom'], $config['boite.adresse.rue'] . "\n". $config['boite.adresse.CP'] ." ". $config['boite.adresse.ville'] );
 				$pdf->addCreateur( "Facture éditée par : " . $this->createurLine, 8 );
 				$pdf->fact_dev( "Détail facture No ", "$this->datePDF-$this->idPlan" );
 				$pdf->addDate( $this->dateTXT );
@@ -585,7 +589,7 @@ class SortiePDF {
 					$noPage += 1;
 					$pdf->AddPage();
 					$pdf->SetMargins(5, 5, 5);
-					$pdf->addSociete(NOM_BOITE, ADRESSE_BOITE . "\n". CP_BOITE ." ". VILLE_BOITE );
+					$pdf->addSociete($config['boite.nom'], $config['boite.adresse.rue'] . "\n". $config['boite.adresse.CP'] ." ". $config['boite.adresse.ville'] );
 					$pdf->addCreateur( "Facture éditée par : " . $this->createurLine, 8 );
 					$pdf->fact_dev( "Détail facture No ", "$this->datePDF-$this->idPlan" );
 					$pdf->addDate( $this->dateTXT );

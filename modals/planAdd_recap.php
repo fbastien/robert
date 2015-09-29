@@ -67,8 +67,6 @@ while ( $sp = $p->whileTestSousPlan() ) {
 
 $_SESSION['plan_add'] = serialize($p);
 
-require_once ('infos_boite.php');
-
 ?>
 
 <script>
@@ -164,7 +162,7 @@ require_once ('infos_boite.php');
 		<i class="micro">Tarif 1 jour : <?php echo number_format($totalJour, 2); ?> €</i>
 	</div>
 	<div class="inline top tiers rightText">
-		<?php echo '<div class="enorme">TOTAL H.T. : '.number_format($totalFinal, 2).' €</div><div class="enorme">TOTAL T.T.C. : '.number_format($totalFinal + ($totalFinal * TVA_VAL), 2).' €</div>'; ?>
+		<?php echo '<div class="enorme">TOTAL H.T. : '.number_format($totalFinal, 2).' €</div><div class="enorme">TOTAL T.T.C. : '.number_format($totalFinal + ($totalFinal * $config['boite.TVA.val']), 2).' €</div>'; ?>
 	</div>
 </div>
 

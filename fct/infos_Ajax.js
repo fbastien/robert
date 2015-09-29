@@ -2,10 +2,10 @@
 $(function () {
 	$('#saveInfos').click(function () {
 		var ajaxReq = 'action=modifConsts'
-		$('input').each(function() {
-			var dataType = $(this).attr('id');
+		$('#infosDiv input').each(function() {
+			var dataType = $(this).attr('name');
 			var dataVal = $(this).val();
-			if (dataType == 'TVA_VAL') dataVal /= 100;
+			if (dataType == 'boite.TVA.val') dataVal /= 100;
 			ajaxReq += '&'+dataType+'='+dataVal ;
 		});
 //		alert(ajaxReq);

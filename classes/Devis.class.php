@@ -18,7 +18,6 @@
  */
 
 
-include_once('infos_boite.php');
 require_once('date_fr.php');
 require_once('matos_tri_sousCat.php');
 

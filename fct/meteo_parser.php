@@ -33,22 +33,24 @@ $gotXmlTag = preg_match('/^\<\?xml/', $xmlStr);
 if ($gotXmlTag > 0) {
 	$xml = simplexml_load_string(utf8_encode($xmlStr));
 	$item = $xml->channel->item;
-	$previz = array();
-	foreach($item->xpath('//meteo:weather') as $tag){
-		$desc = utf8_decode((string)$tag['namepictos_apmidi']);
-		$previz[] = array( 'icon' => (string)$tag['pictos_apmidi'], 'condition' => $desc, 'temp' => (string)$tag['tempe_apmidi'].'°');
-	}
-	$previz['err'] = array('icon' => 'inconnu', 'condition'=>"Impossible de trouver la météo... C'est dans trop longtemps, ou bien c'est déjà passé !", 'temp' => '?');
-	
-	$timeOffset = $time_wanted - $time_current;
-	$dateOffset	= number_format($timeOffset / (3600 * 24), 0);
-	if ($dateOffset > 2 || $dateOffset < 0)
-		$retour = $previz['err'];
-	else
-		$retour = $previz[$dateOffset];
+	if(isset($item->weather)) {
+		$previz = array();
+		foreach($item->xpath('//meteo:weather') as $tag){
+			$desc = utf8_decode((string)$tag['namepictos_apmidi']);
+			$previz[] = array( 'icon' => (string)$tag['pictos_apmidi'], 'condition' => $desc, 'temp' => (string)$tag['tempe_apmidi'].'°');
+		}
+		$previz['err'] = array('icon' => 'inconnu', 'condition'=>"Impossible de trouver la météo... C'est dans trop longtemps, ou bien c'est déjà passé !", 'temp' => '?');
+		
+		$timeOffset = $time_wanted - $time_current;
+		$dateOffset	= number_format($timeOffset / (3600 * 24), 0);
+		if ($dateOffset > 2 || $dateOffset < 0)
+			$retour = $previz['err'];
+		else
+			$retour = $previz[$dateOffset];
 
-	$json = json_encode($retour);
-	echo $json;
+		$json = json_encode($retour);
+		echo $json;
+	}
 }
 else echo '{"day_of_week":"inconnu","icon":"gfx\/icones\/unknown_weather.png","condition":"Impossible de trouver la m\u00e9t\u00e9o... Meteorologic ne répond pas, ou mal."}';
 

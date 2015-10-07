@@ -2,7 +2,7 @@
 
 session_start();
 require_once ('initInclude.php');
-require_once ('common.inc');		// OBLIGATOIRE pour les sessions, à placer TOUJOURS EN HAUT du code !!
+require_once ('common.inc.php');		// OBLIGATOIRE pour les sessions, à placer TOUJOURS EN HAUT du code !!
 require_once ('checkConnect.php' );
 
 	if ( ! isset($_GET['dir']) || ! isset ( $_GET['file']) ) die('Il me manque le dossier et/ou le fichier à télécharger !') ; 
@@ -13,22 +13,22 @@ require_once ('checkConnect.php' );
 
 	
 	if ( $dir == 'sql' ){
-		$dir = FOLDER_CONFIG . "dumpSQL/";
+		$dir = FOLDER_DUMP_SQL;
 		$mime = 'text/plain';
 	}
 	elseif ( $dir == 'PlanDevis' ) {
 		if ($planID == null || $planID == '') die("J'ai besoin de l'ID du plan pour vous envoyer le devis !") ;
-		$dir = FOLDER_PLANS_DATAS . $planID . '/devis' ;
+		$dir = FOLDER_PLANS_DATA . $planID . '/devis' ;
 		$mime = 'application/pdf';
 	}
 	elseif ( $dir == 'PlanFacture' ) {
 		if ($planID == null || $planID == '') die("J'ai besoin de l'ID du plan pour vous envoyer la facture !") ;
-		$dir = FOLDER_PLANS_DATAS . $planID . '/facture' ;
+		$dir = FOLDER_PLANS_DATA . $planID . '/facture' ;
 		$mime = 'application/pdf';
 	}
 	elseif ( $dir == 'PlanFichier' ) {
 		if ($planID == null || $planID == '') die("J'ai besoin de l'ID du plan pour vous envoyer le fichier !") ;
-		$dir = FOLDER_PLANS_DATAS . $planID ;
+		$dir = FOLDER_PLANS_DATA . $planID ;
 		$ext = strtolower (substr( $file, strrpos( $file, '.')) );
 		if ( $ext == 'jpg' || $ext == 'jpeg' || $ext == 'bmp')
 			$mime = 'image/jpeg';
@@ -37,7 +37,7 @@ require_once ('checkConnect.php' );
 	}
 	elseif ( $dir == 'Tekos'){
 		if ($idTekos == null || $idTekos == '') die("J'ai besoin de l'ID du technicien pour vous envoyer le fichier !") ;
-		$dir = FOLDER_TEKOS_DATAS . strtolower($idTekos) ;
+		$dir = FOLDER_TEKOS_DATA . strtolower($idTekos) ;
 		$ext = strtolower (substr( $file, strrpos( $file, '.')) );
 		if ( $ext == 'jpg' || $ext == 'jpeg' || $ext == 'bmp')
 			$mime = 'image/jpeg';

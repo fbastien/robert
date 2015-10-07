@@ -1,5 +1,5 @@
 <?php
-require('FPDF.class.php');
+require('../lib/FPDF/FPDF.class.php');
 define('EURO', 'Euros' );
 define('EURO_VAL', 6.55957 );
 

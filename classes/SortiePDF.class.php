@@ -18,7 +18,7 @@
  */
 
 
-require_once('common.inc');
+require_once('common.inc.php');
 require_once('date_fr.php');
 require_once('matos_tri_sousCat.php');
 
@@ -74,7 +74,7 @@ class SortiePDF {
 		$this->matosPlan   = $planInfo->getPlanMatos();
 		$this->nbjours	   = $planInfo->getNBSousPlans();
 
-		$this->pathPDF = '../datas/PLANS_DATAS/'.$idPlan.'/';					// relatif au dossier 'fct/', (le dossier par défaut des instanciations)
+		$this->pathPDF = '../'.FOLDER_PLANS_DATA.$idPlan.'/';					// relatif au dossier 'fct/', (le dossier par défaut des instanciations)
 		$this->datePDF = date('Ymd');
 		$this->dateTXT = date('d/m/Y');
 

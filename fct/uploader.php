@@ -1,6 +1,6 @@
 <?php
 require_once ('initInclude.php');
-require_once ('common.inc');		// OBLIGATOIRE pour les sessions, à placer TOUJOURS EN HAUT du code !!
+require_once ('common.inc.php');		// OBLIGATOIRE pour les sessions, à placer TOUJOURS EN HAUT du code !!
 
 /**
  * Handle file uploads via XMLHttpRequest
@@ -182,11 +182,11 @@ if ( !isset($_GET['dataType']) && !isset($_GET['folder'])) {
 if ($_GET['dataType'] == "tekos") {
 	$tekosFolder =  @$_GET["folder"];
 	$tekosFolder = strtolower ( $tekosFolder );
-	$fullpath = '../'. FOLDER_TEKOS_DATAS . $tekosFolder  ;
+	$fullpath = '../'. FOLDER_TEKOS_DATA . $tekosFolder  ;
 	$result = checkTekosDir( $fullpath );
 }
 elseif ($_GET['dataType'] == "plan") {
-	$fullpath = '../'. FOLDER_PLANS_DATAS . $_GET['folder'];
+	$fullpath = '../'. FOLDER_PLANS_DATA . $_GET['folder'];
 	$result = checkTekosDir( $fullpath );
 }
 

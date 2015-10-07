@@ -23,7 +23,7 @@ require_once('matos_tri_sousCat.php');
 
 class Devis {
 
-	const PATH_CONTENU_PLANS = '../datas/PLANS_DATAS/';		// dossier principal des contenu des plans (relatif au dossier 'fct' !)
+	const PATH_CONTENU_PLANS = '../data/PLANS_DATA/';		// dossier principal des contenu des plans (relatif au dossier 'fct' !)
 	const DEVIS_cFICHIER	 = 'fichier';					// champs BDD
 	const DEVIS_cID_PLAN	 = 'id_plan';
 	const DEVIS_cNUM_DEVIS	 = 'numDevis';

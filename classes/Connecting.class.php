@@ -20,9 +20,9 @@
 
 define('BF_TIME_LAPS', (60*5)); // 5 minutes		// laps de temps à attendre après avoir fait trop de tentatives (en secondes)
 define('BF_NB_TENTATIVE', 5);	// 5 tentatives		// Nbre de tentatives maxi, tous les TIME_LAPS
-define('BF_DIR', $install_path.'BFlogs/');			// répertoire de stockage des logs
-if (!is_dir($install_path.'BFlogs/'))
-	mkdir($install_path.'BFlogs/');
+define('BF_DIR', $install_path.'tmp/BFlogs/');		// répertoire de stockage des logs
+if (!is_dir(BF_DIR))
+	mkdir(BF_DIR);
 
 
 // CLASSE DE SÉCU ANTI FORCE BRUTE

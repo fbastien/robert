@@ -1,7 +1,7 @@
 <?php
 	if ( !isset($_SESSION["user"])) { header('Location: index.php'); }
 	if ( $_SESSION["user"]->isAdmin() !== true ) { header('Location: index.php'); }
-	require_once('common.inc');
+	require_once('common.inc.php');
 ?>
 
 <script src="./fct/infos_Ajax.js"></script>

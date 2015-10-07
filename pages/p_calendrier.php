@@ -1,7 +1,7 @@
 <?php if ( !isset($_SESSION["user"])) { header('Location: index.php'); }
 
 require_once ('date_fr.php');
-require_once ('common.inc');
+require_once ('common.inc.php');
 
 $hideForPoppy = '';
 if ( ! $_SESSION["user"]->isLevelMod() )

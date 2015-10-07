@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once ('initInclude.php');
-require_once ('common.inc');		// OBLIGATOIRE pour les sessions, à placer TOUJOURS EN HAUT du code !!
+require_once ('common.inc.php');		// OBLIGATOIRE pour les sessions, à placer TOUJOURS EN HAUT du code !!
 require_once ('checkConnect.php' );
 
 extract($_POST);
@@ -56,7 +56,7 @@ if ( $action == 'delTekFile'){
 	$result = array() ;
 	$file = urldecode($file);
 	$tekDir = strtolower($data) ;
-	$dir = '../' . FOLDER_TEKOS_DATAS . $tekDir . '/' ;
+	$dir = '../' . FOLDER_TEKOS_DATA . $tekDir . '/' ;
 	$filename = $dir . $file ;
 
 	if ( !file_exists ( $filename ) ){ $result['Error'] = 'Fichier inexistant'; }
@@ -72,7 +72,7 @@ if ( $action == 'delTekFile'){
 
 if ( $action == 'fileList'){
 	$dirName = strtolower($user) ;
-	$dir =  '../' . FOLDER_TEKOS_DATAS . "$dirName"  ;
+	$dir =  '../' . FOLDER_TEKOS_DATA . "$dirName"  ;
 	$result = array() ;
 
 	// pas de .. ou / ds le nom de tekos 

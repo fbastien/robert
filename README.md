@@ -1,5 +1,5 @@
 
-# ROBERT, version 0.5
+# ROBERT fork, version 1.0.0
 
 
 ## 1) Description rapide du Robert
@@ -64,11 +64,26 @@
 
 ## 3) Documentation du Robert : INSTALLATION
 
-Sommaire ([voir wiki](https://github.com/RobertManager/robert/wiki/)) :
+### 1. Avant de commencer
 
-1. **Avant de commencer**
-2. **Installation du Robert pas à pas**
-3. **Problèmes connus**
+Vous devez disposer d'un serveur LAMP (ou WAMP ou MAMP) comprenant :
+* PHP5.2 ou ultérieur, avec la librairie "curl"
+* MySQL5
+* PhpMyAdmin
+Assurez-vous d'avoir un accès au serveur MySQL ainsi qu'un compte phpMyAdmin pour la base de données, et un accès FTP pour le transfert de fichiers vers le serveur.
+
+### 2. Installation du Robert pas à pas
+
+* **Téléchargez** le code source du Robert, et décompactez-le dans un dossier facile à retrouver.
+* Ouvrez le fichier " **config.ini** " se trouvant dans le dossier "/config".
+* **modifiez les lignes 7 à 10** en mettant les bons codes d'accès au serveur MySQL, et le nom de la base de données, en vous inspirant de l'exemple, puis sauvegardez.
+* Rendez-vous sur votre **phpMyAdmin**, créez une base de données si besoin, et entrez dedans.
+* Cliquez sur l'onglet " **Importer** ", puis sur le bouton "parcourir" allez chercher le fichier " **install_BDD.sql** " se trouvant dans le dossier "/scripts/install". Vous pouvez aussi copier-coller le contenu de ce fichier dans la zone de requête de l'onglet "SQL".
+* **Uploadez le code source** du Robert sur le serveur, dans le dossier racine du nom de domaine (ou sous-domaine) que vous avez choisi.
+* **Connectez-vous au Robert** grâce au log/pass suivant :
+> `log : root@robertmanager.org, pass: admin`
+
+### 3. Problèmes connus
 
 
 
@@ -87,10 +102,86 @@ Sommaire ([voir wiki](https://github.com/RobertManager/robert/wiki/)) :
 
 Sommaire ([voir wiki](https://github.com/RobertManager/robert/wiki/)) :
 
-1. **Règles de base de présentation du code**
-2. **La structure du Robert expliquée**
-3. **Liste des classes et leur utilisation**
-4. **dépôt GIT et GitHub**
+### 1. Versionning, dépôt GIT et GitHub
+
+Le code source de Robert utilise le [logiciel de versionning "Git"](http://fr.wikipedia.org/wiki/Git). Vous pouvez créer un clone du dépôt grâce à la commande :
+
+	git clone git://github.com/fbastien/robert
+
+Ou bien, si vous avez un compte gitHub, grâce au [bouton "Fork"](https://github.com/fbastien/robert/fork_select) (en haut de page), vous pourrez cloner le dépôt gitHub sur votre propre compte gitHub.
+Lorsque vous avez modifié le code source, pour ajouter une fonctionnalité ou corriger un bug, vous pouvez faire un ["Pull Request"](https://github.com/fbastien/robert/pull/new/master). Ceci nous préviendra qu'une nouvelle version du Robert est disponible, afin que nous puissions fusionner votre version à la version officielle (faire un "merge").
+
+### 2. Règles de base de présentation du code
+
+Ceci peut paraître trivial, mais il est important pour la lisibilité du code que l'on soit tous sur la même longueur d'onde en ce qui concerne la présentation...
+
+* **indentation** : merci d'indenter correctement votre code, avec des tabulations.
+* **nom des variables** : la première lettre doit être en minuscule. Merci d'utiliser des noms de variables compréhensibles, qui ont un rapport avec leurs valeurs.
+Ex : `$nomDeLaVar`, ou `$nom_de_la_var`
+* **accolades** : laisser celle d'ouverture sur la ligne de déclaration, et celle de fermeture sur une ligne seule.
+
+Par exemple :
+
+	if ($var == 'string') {
+		do something
+	}
+	else {
+		do something else
+	}
+
+* Inspirez-vous du code existant pour la présentation.
+
+### 3. La structure du Robert expliquée
+
+#### Présentation de la structure des dossiers :
+* `/classes` : Les définitions de classes PHP
+* `/config` : Les paramètres pour accéder aux BDD et les infos de votre structure
+* `/css` : hum hum ;)
+* `/data` : Les fichiers générés par le site (factures, devis, sauvegardes)
+* `/debug` : Interfaces pour tester certaines classes
+* `/fct` : Les fichiers de fonctions
+* `/font` : Polices perso
+* `/gfx` : Les graphismes
+* `/inc` : Classes d'initialisation ( chemins par défaut / connections / header HTML)
+* `/js` : Bibliothèques JS ( upload de fichiers, JQUERY ... )
+* `/lib` : Les définitions de classes PHP de bibliothèques externes
+* `/modals` : Fenêtres modales de pages
+* `/pages` : Pages principales du site
+* `/scripts` : Scripts d'installation et de maintenance du site
+* `/tmp/BFLogs` : Log des connections au site
+
+#### Le système des "pages" Ajax
+
+Dans le dossier **/fct/** vous trouverez les fonctions.
+Chaque module comprend au moins un fichier **\*_actions.php** et **\*_Ajax.js**.
+Ainsi les fichiers en rapport avec la section 'matos' du site seront :
+* `matos_Ajax.js`  => Traitement des formulaires, Gestions des éléments de l'interface, Appels Ajax au fichier php
+* `matos_actions.php`  =>  Récupère les données et appelle les traitements, retourne le status en JSON à la page appelante
+* `matos_tri_sousCat.php` =>  Des fonctions supplémentaires  uniquement pour gérer les sous catégories de matériel. Ces fonctions sont donc rassemblées dans un fichier extérieur à matos_actions.php
+
+![structure php ajax bdd](http://www.robert.polosson.com/gfx/dev-tuto/structure_robert.jpg)
+
+#### Structure de donnée & Base de Donnée
+
+#### Détails concernant...
+Les fichiers `initInclude.php` : *TODO*
+
+### 4. Liste des classes et leur utilisation
+
+* `Calendar.class.php`
+* `Connecting.class.php`
+* `Devis.class.php`
+* `Infos.class.php`
+* `Interlocuteur.class.php`
+* `Liste.class.php`
+* `Matos.class.php`
+* `Pack.class.php`
+* `PDF_Devisfacture.class.php`
+* `Plan.class.php`
+* `SortiePDF.class.php`
+* `Structure.class.php`
+* `Tekos.class.php`
+* `Users.class.php`
 
 
 
@@ -109,4 +200,3 @@ Voir la Licence Publique Générale GNU Affero pour plus de détails.
 Vous devriez avoir reçu une copie de la Licence Publique Générale
 GNU Affero avec les sources du logiciel (LICENCE.txt); si ce n'est pas
 le cas, rendez-vous à http://www.gnu.org/licenses/agpl.txt (en Anglais)
-

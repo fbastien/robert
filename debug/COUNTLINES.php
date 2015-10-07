@@ -2,7 +2,7 @@
 
 $path = ('..');																// path to the root dir of the project
 $type_files = array('php','js','html','css','py','sh');						// files accepted
-$excludeDir = array('debug', 'BFlogs');										// dir to exclude
+$excludeDir = array('debug', 'tmp');										// dir to exclude
 
 
 $counterPath = explode( '/', dirname($_SERVER["PHP_SELF"]));

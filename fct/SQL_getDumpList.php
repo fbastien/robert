@@ -1,9 +1,9 @@
 <?php
 function getDumpList () {
 	$list = array();
-	$dir = opendir($install_path.FOLDER_CONFIG.'dumpSQL');
+	$dir = opendir($install_path.FOLDER_DUMP_SQL);
 	while (($fileSQL = readdir($dir)) !== false) {
-		if ($fileSQL != '.' && $fileSQL != '..')
+		if ($fileSQL != '.' && $fileSQL != '..' && $fileSQL != '.gitignore')
 		$list[] = $fileSQL;
 	}
 	rsort($list, SORT_STRING);

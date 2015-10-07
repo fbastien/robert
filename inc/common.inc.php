@@ -19,8 +19,6 @@
 
 $host = $_SERVER['HTTP_HOST'];
 $serverName = php_uname('n');
-//echo $serverName ;
-
 
 
 define ("DEVS_MAILS", "fbastien@gmail.com");									// Adresses email des développeurs de cette branche du Robert
@@ -30,8 +28,8 @@ define ("R_VERSION", '0.5');
 define ("TABLE_USERS",			"robert_users");								// table des utilisateurs dans la BDD
 define ("TABLE_CAL"  ,			"robert_calendar");								// table du calendrier
 define ("TABLE_MATOS",			"robert_matos_detail");							// table du matos au détail
-define ("TABLE_MATOS_CATEG",	"robert_matos_sous_cat");						// table des notes de calendrier
-define ("TABLE_PACKS",			"robert_matos_packs");							// table des packs de matoss
+define ("TABLE_MATOS_CATEG",	"robert_matos_sous_cat");						// table des sous-catégories de matos
+define ("TABLE_PACKS",			"robert_matos_packs");							// table des packs de matos
 define ("TABLE_TEKOS",			"robert_tekos");								// table des techniciens
 define ("TABLE_PLANS",			"robert_plans");								// table des plans
 define ("TABLE_PLANS_DETAILS",	"robert_plans_details");						// table des details pour chaque jour de plan
@@ -51,8 +49,9 @@ define ("FOLDER_INC",		"inc/");
 define ("FOLDER_MAILS",		"mails/");
 define ("FOLDER_PAGES",		"pages/");
 
-define ("FOLDER_TEKOS_DATAS", "datas/TEKOS_DATAS/");
-define ("FOLDER_PLANS_DATAS", "datas/PLANS_DATAS/");
+define ("FOLDER_TEKOS_DATA", "data/TEKOS_DATA/");
+define ("FOLDER_PLANS_DATA", "data/PLANS_DATA/");
+define ("FOLDER_DUMP_SQL", "data/dumpSQL/");
 
 define ("SALT_PASS",		'G:niUk5!1|WQ');									// Grain de sel (seed) pour la création / récup de password in BDD
 define ("COOKIE_NAME_LOG",	'auth_login');										// nom du cookie gestion login

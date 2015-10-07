@@ -234,7 +234,7 @@ class Plan implements Iterator {
 		$r = $this->infos->delete() ;
 		if ($r > 0) {
 			Devis::deleteAllDevisBDD($idPlan);
-			rrmdir($install_path.FOLDER_PLANS_DATAS.$idPlan.'/');
+			rrmdir($install_path.FOLDER_PLANS_DATA.$idPlan.'/');
 		}
 		return $r ;
 	}

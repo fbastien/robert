@@ -20,9 +20,10 @@
 
 function autoload ($classname) {
 	global $install_path;
-	//echo $install_path;
+	
 	if (file_exists ($file = $install_path.'classes/'.$classname.'.class.php'))
-
+		require ($file);
+	elseif (file_exists ($file = $install_path.'lib/'.$classname.'.class.php'))
 		require ($file);
 }
 

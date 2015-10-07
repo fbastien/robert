@@ -1,7 +1,7 @@
 <?php
 @session_start();
 require_once ('initInclude.php');
-require_once ('common.inc');		// OBLIGATOIRE pour les sessions, à placer TOUJOURS EN HAUT du code !!
+require_once ('common.inc.php');		// OBLIGATOIRE pour les sessions, à placer TOUJOURS EN HAUT du code !!
 require_once ('checkConnect.php' );
 require_once ('date_fr.php');
 require_once ('matos_tri_sousCat.php');
@@ -592,7 +592,7 @@ if ( @$action == 'createFacture' ) {
 
 // Suppression de la FACTURE
 if ( @$action == 'supprFacture') {
-	$factureFilePath = '../'.FOLDER_PLANS_DATAS.$idPlan.'/facture';
+	$factureFilePath = '../'.FOLDER_PLANS_DATA.$idPlan.'/facture';
 	rrmdir($factureFilePath);
 	$retour['error'] = 'OK';
 	$retour = json_encode($retour);
@@ -601,7 +601,7 @@ if ( @$action == 'supprFacture') {
 
 // RÉCUP DU NOM DE FICHIER DE LA FACTURE
 if ( @$action == 'showFactureFile') {
-	$factureFilePath = '../'.FOLDER_PLANS_DATAS.$idPlan.'/facture';
+	$factureFilePath = '../'.FOLDER_PLANS_DATA.$idPlan.'/facture';
 	$f = @scandir($factureFilePath);
 	if ($f != false) {
 		$factureFile = array();
@@ -624,7 +624,7 @@ if ( @$action == 'showFactureFile') {
 // Suppression d'un fichier divers du plan
 if ( @$action == 'supprFichier' ) {
 	$file = urldecode($file);
-	$fichierPath = '../'.FOLDER_PLANS_DATAS.$idPlan.'/'.$file;
+	$fichierPath = '../'.FOLDER_PLANS_DATA.$idPlan.'/'.$file;
 	if (@unlink($fichierPath) == true)
 		$retour['error'] = 'OK';
 	else $retour['error'] = "Impossible de supprimer le fichier $file !";
@@ -634,7 +634,7 @@ if ( @$action == 'supprFichier' ) {
 
 // Récup les fichiers divers du plan
 if (@$action == 'showPlanFiles') {
-	$filePath = '../'.FOLDER_PLANS_DATAS.$idPlan;
+	$filePath = '../'.FOLDER_PLANS_DATA.$idPlan;
 	$f = @scandir($filePath);
 	if ($f != false) {
 		$listeFile = array();

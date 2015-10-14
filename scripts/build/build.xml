@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE project>
+<!--
+	Fichier importé par ../../build.xml
+	Ne pas exécuter les cibles directement sur ce fichier
+-->
+<project name="Robert" default="build-phar">
+	<description>Script Ant de déploiement du Robert</description>
+	
+	<property name="version" value="1.0.0" />
+	<property name="output" location="scripts/build/out" />
+	<!-- <property name="composer.bin" location="/usr/lobal/bin/composer/composer" /> -->
+	<!-- <property name="composer.bin" location="C:\ProgramData\ComposerSetup\bin\composer.bat" /> -->
+	
+	<target name="import-check" description="Vérifie que le fichier n'est pas appelé directement mais via le fichier à la racine du projet">
+		<fail unless="build.xml.imported" message="Ce fichier ne doit pas être appelé directement, utiliser le fichier build.xml à la racine du projet." />
+	</target>
+	
+	<target name="app-clean" depends="import-check" description="Nettoie les fichiers de l'application déployée">
+		<delete includeEmptyDirs="true">
+			<fileset dir="${target}/tmp/BFlogs" includes="**/*" />
+		</delete>
+	</target>
+	
+	<target name="build-clean" depends="import-check" description="Nettoie les fichiers des builds précédents">
+		<delete includeEmptyDirs="true" failonerror="false">
+			<fileset dir="${output}" />
+		</delete>
+	</target>
+	
+	<target name="build-prepare" depends="build-clean" description="Prépare un build">
+		<mkdir dir="${output}" />
+	</target>
+
+	<target name="lib-update" depends="import-check" description="Installe les bibliothèques externes pour les inclure dans l'application">
+		<fail unless="composer.bin" message="Impossible d'exécuter Composer. Veuillez indiquer son chemin absolu dans la propriété &quot;composer.bin&quot; du fichier scripts/build/build.xml." />
+		<exec executable="${composer.bin}" failonerror="true" failifexecutionfails="true">
+			<arg value="update" />
+			<arg value="--no-dev" />
+		</exec>
+	</target>
+	
+	<target name="build-phar" depends="build-prepare, lib-update" description="Crée l'archive pour le déploiement de l'application ou la publication d'une version">
+		<zip destfile="${output}/robert-${version}.phar">
+			<fileset dir=".">
+				<exclude name="**/.gitignore" />
+				<exclude name=".settings/" />
+				<exclude name=".buildpath" />
+				<exclude name=".project" />
+				<exclude name="composer.*" />
+				<exclude name="build.xml" />
+				<exclude name="scripts/build/" />
+				<exclude name="test/" />
+				<exclude name="tmp/BFlogs/*" />
+			</fileset>
+		</zip>
+	</target>
+</project>

@@ -23,7 +23,7 @@ $serverName = php_uname('n');
 
 define ("DEVS_MAILS", "fbastien@gmail.com");									// Adresses email des développeurs de cette branche du Robert
 																				// Développeurs originaux : polo@polosson.com, mathieu@d2mphotos.fr
-define ("R_VERSION", '0.5');
+define ("R_VERSION", '1.0.0');
 
 define ("TABLE_USERS",			"robert_users");								// table des utilisateurs dans la BDD
 define ("TABLE_CAL"  ,			"robert_calendar");								// table du calendrier

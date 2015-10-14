@@ -1,0 +1,25 @@
+{
+	"name" : "fbastien/robert",
+	"description" : "Fork du Robert https://github.com/RobertManager/robert",
+	"version" : "1.0.0",
+	"type" : "project",
+	"homepage" : "https://github.com/fbastien/robert",
+	"time" : "2015-10-14",
+	"license" : "AGPL-3.0",
+	"support" : {
+		"email" : "fbastien@gmail.com",
+		"source" : "https://github.com/fbastien/robert"
+	},
+	"require" : {
+		"itbz/fpdf" : "~1.7.1-stable"
+	},
+	"config" : {
+		"platform" : {
+			"php" : "5.3"
+		},
+		"vendor-dir" : "lib"
+	},
+	"archive" : {
+		"exclude" : ["/data/dumpSQL/*", "/data/PLANS_DATA/*", "/data/TEKOS_DATA/*", "/scripts/build/out", "/tmp/BFlogs/*"]
+	}
+}

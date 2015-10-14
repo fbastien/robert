@@ -1,5 +1,5 @@
 <?php
-require('../lib/FPDF/FPDF.class.php');
+require('../lib/autoload.php');
 define('EURO', 'Euros' );
 define('EURO_VAL', 6.55957 );
 
@@ -36,13 +36,17 @@ define('EURO_VAL', 6.55957 );
 //  function addTVAs( $params, $tab_tva, $invoice )
 //  function temporaire( $texte )
 
-class PDF_Devisfacture extends FPDF {
+class PDF_Devisfacture extends \fpdf\FPDF_EXTENDED {
 	// variables privées
 	var $colonnes;
 	var $format;
 	var $angle=0;
 	var $logoPresent = false;
 	var $logoH;
+	
+	public function __construct($orientation = 'P', $unit = 'mm', $format = 'A4') {
+		parent::__construct(0, $orientation, $unit, $format);
+	}
 
 	// fonctions privées
 	function RoundedRect($x, $y, $w, $h, $r, $style = '') {

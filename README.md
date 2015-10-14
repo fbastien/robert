@@ -74,22 +74,19 @@ Assurez-vous d'avoir un accès au serveur MySQL ainsi qu'un compte phpMyAdmin po
 
 ### 2. Installation du Robert pas à pas
 
-* **Téléchargez** le code source du Robert, et décompactez-le dans un dossier facile à retrouver.
+* **Téléchargez** l'archive de la dernière version du Robert, et décompactez-la (c'est comme un fichier ZIP) dans un dossier facile à retrouver.
 * Ouvrez le fichier " **config.ini** " se trouvant dans le dossier "/config".
 * **modifiez les lignes 7 à 10** en mettant les bons codes d'accès au serveur MySQL, et le nom de la base de données, en vous inspirant de l'exemple, puis sauvegardez.
 * Rendez-vous sur votre **phpMyAdmin**, créez une base de données si besoin, et entrez dedans.
 * Cliquez sur l'onglet " **Importer** ", puis sur le bouton "parcourir" allez chercher le fichier " **install_BDD.sql** " se trouvant dans le dossier "/scripts/install". Vous pouvez aussi copier-coller le contenu de ce fichier dans la zone de requête de l'onglet "SQL".
 * **Uploadez le code source** du Robert sur le serveur, dans le dossier racine du nom de domaine (ou sous-domaine) que vous avez choisi.
-* **Connectez-vous au Robert** grâce au log/pass suivant :
-> `log : root@robertmanager.org, pass: admin`
+* **Connectez-vous au Robert** grâce au log/pass suivant : `log : root@robertmanager.org, pass: admin`
 
 ### 3. Problèmes connus
 
 
 
 ## 4) Documentation du Robert : UTILISATION
-
-Sommaire ([voir wiki](https://github.com/RobertManager/robert/wiki/)) :
 
 1. **Pour commencer**
 2. **Pour aller + loin**
@@ -100,8 +97,6 @@ Sommaire ([voir wiki](https://github.com/RobertManager/robert/wiki/)) :
 
 ## 5) Documentation du Robert : DÉVELOPPEMENT
 
-Sommaire ([voir wiki](https://github.com/RobertManager/robert/wiki/)) :
-
 ### 1. Versionning, dépôt GIT et GitHub
 
 Le code source de Robert utilise le [logiciel de versionning "Git"](http://fr.wikipedia.org/wiki/Git). Vous pouvez créer un clone du dépôt grâce à la commande :
@@ -111,7 +106,16 @@ Le code source de Robert utilise le [logiciel de versionning "Git"](http://fr.wi
 Ou bien, si vous avez un compte gitHub, grâce au [bouton "Fork"](https://github.com/fbastien/robert/fork_select) (en haut de page), vous pourrez cloner le dépôt gitHub sur votre propre compte gitHub.
 Lorsque vous avez modifié le code source, pour ajouter une fonctionnalité ou corriger un bug, vous pouvez faire un ["Pull Request"](https://github.com/fbastien/robert/pull/new/master). Ceci nous préviendra qu'une nouvelle version du Robert est disponible, afin que nous puissions fusionner votre version à la version officielle (faire un "merge").
 
-### 2. Règles de base de présentation du code
+### 2. Avant de commencer
+
+En plus des éléments nécessaires listés pour l'installation du Robert, vous devez aussi disposer des logiciels suivants :
+* Composer, qui permet d'importer facilement des librairies externes
+* Apache Ant, qui permet de gérer la construction du projet
+
+Ouvrir le fichier "/scripts/build/**build.xml**" et renseigner la propriété `<property name="composer.bin" location="..." />` en renseignant dans l'attribut "location" le chemin absolu du script de lancement de composer (nommé "composer.bat" pour Windows et "composer" pour Unix).
+Inspirez-vous des exemples en commentaires.
+
+### 3. Règles de base de présentation du code
 
 Ceci peut paraître trivial, mais il est important pour la lisibilité du code que l'on soit tous sur la même longueur d'onde en ce qui concerne la présentation...
 
@@ -131,7 +135,7 @@ Par exemple :
 
 * Inspirez-vous du code existant pour la présentation.
 
-### 3. La structure du Robert expliquée
+### 4. La structure du Robert expliquée
 
 #### Présentation de la structure des dossiers :
 * `/classes` : Les définitions de classes PHP
@@ -166,7 +170,7 @@ Ainsi les fichiers en rapport avec la section 'matos' du site seront :
 #### Détails concernant...
 Les fichiers `initInclude.php` : *TODO*
 
-### 4. Liste des classes et leur utilisation
+### 5. Liste des classes et leur utilisation
 
 * `Calendar.class.php`
 * `Connecting.class.php`

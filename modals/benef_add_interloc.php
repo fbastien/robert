@@ -60,7 +60,7 @@ $liste_struct = $l->getListe(TABLE_STRUCT);
 		<br />
 		<div class="ui-widget-header ui-corner-all">téléphone :</div>
 		<input type="text" id="newInterlocTel" size="15" />
-		<div class="ui-widget-header ui-corner-all">Poste occupé: </b></div>
+		<div class="ui-widget-header ui-corner-all">Poste occupé:</div>
 		<input type="text" id="newInterlocPoste" size="20" />
 	</div>
 	<div class="inline bot">

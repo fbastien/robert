@@ -214,7 +214,7 @@ $listeInterlocks = $l->getListe ( TABLE_INTERLOC, '*', 'label' );
 			<div class=" ui-corner-all inline rightText quart">Nom et Prénom&nbsp;</div><input type="text" id="newInterlocNom" size="20" /><b class="red">*</b><br />
 			
 			<div class=" ui-corner-all inline rightText quart">Surnom&nbsp;</div><input type="text" id="newInterlocSurnom" size="20" />&nbsp;&nbsp;<br />
-			<div class=" ui-corner-all inline rightText quart">Structure associée&nbsp;</div><input id="newInterlocStructName" type="text" disabled="" size="20"><b class="red">*</b><p>
+			<div class=" ui-corner-all inline rightText quart">Structure associée&nbsp;</div><input id="newInterlocStructName" type="text" disabled="disabled" size="20"><b class="red">*</b><p>
 
 			<div class=" ui-corner-all inline rightText">Adresse&nbsp;</div><input type="text" id="newInterlocAdr" size="31" /><b class="red">*</b><br />
 			<div class=" ui-corner-all inline rightText">Code postal&nbsp;</div><input type="text" id="newInterlocCP" class="NumericInput" maxlength="5" size="5" />
@@ -228,8 +228,8 @@ $listeInterlocks = $l->getListe ( TABLE_INTERLOC, '*', 'label' );
 				<input type="text" class='phoneInput NumericInput' id="phone-4" maxlength="2" size="2" />.
 				<input type="text" class='phoneInput NumericInput' id="phone-5" maxlength="2" size="2" />
 				<br />
-			<div class=" ui-corner-all inline rightText quart">Poste occupé&nbsp;</b></div><input type="text" id="newInterlocPoste" size="20" /><br />
-			<div class=" ui-corner-all inline center quart">Remarque</b></div><br /><input type="text" size="40" id="newInterlocRem" /> 
+			<div class=" ui-corner-all inline rightText quart">Poste occupé&nbsp;</div><input type="text" id="newInterlocPoste" size="20" /><br />
+			<div class=" ui-corner-all inline center quart">Remarque</div><br /><input type="text" size="40" id="newInterlocRem" /> 
 			<input type="text"  class='hide' id="newInterlocStructID" />
 			<input type="text"  class='hide' id="modInterID" />
 	</div> 

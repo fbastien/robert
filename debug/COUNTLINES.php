@@ -75,14 +75,14 @@ $countCode = countLinesOfCode($path,$excludeDir,$type_files);
 
 
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
 <head>
 	<meta charset="utf-8" />
 	<meta name="robots" content="noindex,nofollow" />
 </head>
 
 <body>
-	<h1>Analyse du code source du projet <u><?php echo $projectName; ?></u></h1>
+	<h1>Analyse du code source du projet <span style="text-decoration: underline;"><?php echo $projectName; ?></span></h1>
 	
 	<div style="display: inline-block; vertical-align:top; padding-left:30px; font-size:1em; width:15%;">
 		<?php 

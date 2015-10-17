@@ -72,7 +72,7 @@ $varsBenefs = substr($varsBenefs,0,strlen($varsBenefs)-1 ) ;
 		<div class="newPlan_data miniCal" id="picker_end"></div>
 	</div>
 	<div class="inline bot" style="width: 120px;">
-		<button class="bouton" id="PlanAddNext1">SUIVANT ></button>
+		<button class="bouton" id="PlanAddNext1">SUIVANT &gt;</button>
 	</div>
 	<br /><br /><br />
 </div>
@@ -83,9 +83,10 @@ $varsBenefs = substr($varsBenefs,0,strlen($varsBenefs)-1 ) ;
 	<p id="displayNbPlanSimult" class="leftText red petit"></p>
 	<div class="big">
 		Création de <i><b id="rappelTitrePlan"></b></i>	à <b id="rappelLieuPlan"></b>, pour <b id="rappelBenefPlan"></b>
-		<span class="micro"><button class="bouton" id="PlanAddPrev1">< PRÉCÉDENT</button></span>
+		<span class="micro"><button class="bouton" id="PlanAddPrev1">&lt; PRÉCÉDENT</button></span>
 	</div>
 	<table class="petit" style="width:99%;">
+		<tr>
 			<TH class="ui-corner-all"> Choix des techniciens - filtre : <select id="selectTekosCateg"><option>Tout</option>
 						<?php foreach ( $catTekos as $k) echo "<option>$k</option>"; ?></select></TH>
 						
@@ -94,6 +95,7 @@ $varsBenefs = substr($varsBenefs,0,strlen($varsBenefs)-1 ) ;
 				<select id="selectMatosCateg"><option>Tout</option><?php foreach ( $catMatos as $k) echo "<option>$k</option>"; ?></select>
 				<button class="bouton" id="packMatosSwitch">MATÉRIEL au détail</button>
 			</TH>
+		</tr>
 			<tr>
 				<td class="tiers bordFin top">
 					<div class="mini pad10" id="TekosHolder">
@@ -156,7 +158,6 @@ $varsBenefs = substr($varsBenefs,0,strlen($varsBenefs)-1 ) ;
 								$id         = $v['id'] ;
 								$label      = $v['ref'] ;
 								$categPack  = $v['categorie'] ;
-								$qte        = $v['Qtotale'];
 								$detail		= json_decode($v['detail'], true);
 								
 								echo "<div id='pack-$id' class='ui-state-default packPik'>

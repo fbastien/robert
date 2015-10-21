@@ -18,6 +18,7 @@
  */
 
 
+global $install_path;
 require_once ($install_path . FOLDER_CLASSES . 'Infos.class.php' );
 
 class Users implements Iterator {

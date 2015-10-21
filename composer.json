@@ -17,6 +17,9 @@
 		"phpunit/phpunit" : ">=4.8-stable",
 		"phpunit/dbunit" : ">=1.2-stable"
 	},
+	"autoload" : {
+		"classmap" : ["classes/"]
+	},
 	"config" : {
 		"platform" : {
 			"php" : "5.3.3"

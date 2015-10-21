@@ -18,6 +18,7 @@
  */
 
 
+global $install_path;
 define('BF_TIME_LAPS', (60*5)); // 5 minutes		// laps de temps à attendre après avoir fait trop de tentatives (en secondes)
 define('BF_NB_TENTATIVE', 5);	// 5 tentatives		// Nbre de tentatives maxi, tous les TIME_LAPS
 define('BF_DIR', $install_path.'tmp/BFlogs/');		// répertoire de stockage des logs

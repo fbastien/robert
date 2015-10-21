@@ -1,7 +1,5 @@
 <?php
 
-global $install_path;
-
 function list_themes () {
 	global $install_path;
 	$list = array();

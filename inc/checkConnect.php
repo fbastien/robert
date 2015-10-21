@@ -22,7 +22,7 @@
 
 // Vérifie si la session est toujours active.
 
-require_once('autoload.php');
+require_once(__DIR__.'/../lib/autoload.php');
 require_once('PDOinit.php');
 
 $Auth = new Connecting($bdd);

@@ -38,15 +38,14 @@ define ("TABLE_INTERLOC",		"robert_benef_interlocuteurs");					// table des inte
 define ("TABLE_DEVIS",			"robert_devis");								// table des devis
 define ("TABLE_NOTES",			"robert_notes");								// table des notes de calendrier
 
-define ("FOLDER_ADMIN",		"admin/");											// Decription des dossiers du site
 define ("FOLDER_CLASSES",	"classes/");
 define ("FOLDER_CONFIG",	"config/");
 define ("FOLDER_CSS",		"css/");
 define ("FOLDER_FCT",		"fct/");
 define ("FOLDER_GFX",		"gfx/");
-define ("FOLDER_JS",		"js/");
 define ("FOLDER_INC",		"inc/");
-define ("FOLDER_MAILS",		"mails/");
+define ("FOLDER_JS",		"js/");
+define ("FOLDER_LIB",		"lib/");
 define ("FOLDER_PAGES",		"pages/");
 
 define ("FOLDER_TEKOS_DATA", "data/TEKOS_DATA/");

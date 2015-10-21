@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/3.7/phpunit.xsd"
+		bootstrap="../lib/autoload.php">
+	<php>
+		<var name="PHPUNIT_DB_DSN" value="mysql:dbname=robert_test;host=localhost" />
+		<var name="PHPUNIT_DB_USER" value="root" />
+		<var name="PHPUNIT_DB_PASSWD" value="" />
+		<var name="PHPUNIT_DB_DBNAME" value="robert_test" />
+	</php>
+</phpunit>

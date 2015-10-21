@@ -67,7 +67,7 @@
 ### 1. Avant de commencer
 
 Vous devez disposer d'un serveur LAMP (ou WAMP ou MAMP) comprenant :
-* PHP5.2 ou ultérieur, avec la librairie "curl"
+* PHP5.3.3 ou ultérieur, avec la librairie "curl"
 * MySQL5
 * PhpMyAdmin
 Assurez-vous d'avoir un accès au serveur MySQL ainsi qu'un compte phpMyAdmin pour la base de données, et un accès FTP pour le transfert de fichiers vers le serveur.
@@ -114,6 +114,12 @@ En plus des éléments nécessaires listés pour l'installation du Robert, vous 
 
 Ouvrir le fichier "/scripts/build/**build.xml**" et renseigner la propriété `<property name="composer.bin" location="..." />` en renseignant dans l'attribut "location" le chemin absolu du script de lancement de composer (nommé "composer.bat" pour Windows et "composer" pour Unix).
 Inspirez-vous des exemples en commentaires.
+
+Les tests unitaires se trouvent dans le dossier "/test" et peuvent être exécutés avec PHPUnit.
+Celui-ci est importé par Composer et l'exécutable est installé dans le dossier "/lib/bin".
+Le fichier de configuration "/test/**phpunit.xml**" doit être passé en paramètre (`--configuration`) de PHPUnit.
+Les tests doivent être effectués sur une base de données différente de celle sur laquelle est déployée le Robert (mais ayant la même structure).
+Par défaut, ils sont effectués sur une base "robert_test" en localhost ; modifier les informations de connexion dans ce fichier de configuration si besoin.
 
 ### 3. Règles de base de présentation du code
 

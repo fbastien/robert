@@ -3,6 +3,7 @@
 		bootstrap="../lib/autoload.php">
 	<php>
 		<var name="PHPUNIT_DB_DSN" value="mysql:dbname=robert_test;host=localhost;charset=UTF8" />
+		<var name="PHPUNIT_DB_HOST" value="localhost" />
 		<var name="PHPUNIT_DB_USER" value="root" />
 		<var name="PHPUNIT_DB_PASSWD" value="" />
 		<var name="PHPUNIT_DB_DBNAME" value="robert_test" />

@@ -78,7 +78,7 @@ Assurez-vous d'avoir un accès au serveur MySQL ainsi qu'un compte phpMyAdmin po
 * Ouvrez le fichier " **config.ini** " se trouvant dans le dossier "/config".
 * **modifiez les lignes 7 à 10** en mettant les bons codes d'accès au serveur MySQL, et le nom de la base de données, en vous inspirant de l'exemple, puis sauvegardez.
 * Rendez-vous sur votre **phpMyAdmin**, créez une base de données si besoin, et entrez dedans.
-* Cliquez sur l'onglet " **Importer** ", puis sur le bouton "parcourir" allez chercher le fichier " **install_BDD.sql** " se trouvant dans le dossier "/scripts/install". Vous pouvez aussi copier-coller le contenu de ce fichier dans la zone de requête de l'onglet "SQL".
+* Cliquez sur l'onglet " **Importer** ", puis sur le bouton "parcourir" allez chercher le fichier " **install_DB.sql** " se trouvant dans le dossier "/scripts/install". Vous pouvez aussi copier-coller le contenu de ce fichier dans la zone de requête de l'onglet "SQL".
 * **Uploadez le code source** du Robert sur le serveur, dans le dossier racine du nom de domaine (ou sous-domaine) que vous avez choisi.
 * **Connectez-vous au Robert** grâce au log/pass suivant : `log : root@robertmanager.org, pass: admin`
 

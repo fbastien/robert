@@ -5,7 +5,7 @@ require_once ('common.inc.php');		// OBLIGATOIRE pour les sessions, à placer TO
 require_once ('checkConnect.php' );
 
 $lm = new Liste();
-$liste_ssCat = $lm->getListe(TABLE_MATOS_CATEG);
+$liste_ssCat = $lm->getListe(TABLE_MATOS_CATEG, '*', 'ordre', 'ASC');
 
 ?>
 

@@ -1525,97 +1525,97 @@
 		<row>
 			<value>4</value>
 			<value>Périphériques son</value>
-			<value>5</value>
+			<value>4</value>
 		</row>
 		<row>
 			<value>5</value>
-			<value>Cables son</value>
-			<value>9</value>
+			<value>Microphones</value>
+			<value>5</value>
 		</row>
 		<row>
 			<value>6</value>
-			<value>Projecteurs</value>
-			<value>17</value>
+			<value>Divers son</value>
+			<value>6</value>
 		</row>
 		<row>
 			<value>7</value>
-			<value>Gradateurs</value>
-			<value>18</value>
+			<value>Pieds micro</value>
+			<value>7</value>
 		</row>
 		<row>
 			<value>8</value>
-			<value>Divers Lumière</value>
-			<value>20</value>
+			<value>Câbles son</value>
+			<value>8</value>
 		</row>
 		<row>
 			<value>9</value>
-			<value>Microphones</value>
-			<value>6</value>
+			<value>Pieds enceinte et lumière</value>
+			<value>9</value>
 		</row>
 		<row>
 			<value>10</value>
-			<value>Divers elec</value>
-			<value>15</value>
-		</row>
-		<row>
-			<value>12</value>
-			<value>Divers son</value>
-			<value>7</value>
-		</row>
-		<row>
-			<value>13</value>
-			<value>Divers transport</value>
-			<value>23</value>
-		</row>
-		<row>
-			<value>14</value>
-			<value>Pieds enceinte et lumiere</value>
-			<value>10</value>
-		</row>
-		<row>
-			<value>15</value>
-			<value>Divers structure</value>
-			<value>13</value>
-		</row>
-		<row>
-			<value>17</value>
 			<value>Structure</value>
+			<value>10</value>
+		</row>
+		<row>
+			<value>11</value>
+			<value>Pendrillons</value>
 			<value>11</value>
 		</row>
 		<row>
-			<value>18</value>
-			<value>Véhicules</value>
-			<value>22</value>
-		</row>
-		<row>
-			<value>19</value>
-			<value>Divers</value>
-			<value>21</value>
-		</row>
-		<row>
-			<value>20</value>
-			<value>Distribution Electrique</value>
-			<value>14</value>
-		</row>
-		<row>
-			<value>21</value>
-			<value>Pieds Micro</value>
-			<value>8</value>
-		</row>
-		<row>
-			<value>23</value>
-			<value>Console Lumiere</value>
-			<value>16</value>
-		</row>
-		<row>
-			<value>26</value>
-			<value>Pendrillons</value>
+			<value>12</value>
+			<value>Divers structure</value>
 			<value>12</value>
 		</row>
 		<row>
-			<value>27</value>
-			<value>Cables Lumière</value>
+			<value>13</value>
+			<value>Distribution électrique</value>
+			<value>13</value>
+		</row>
+		<row>
+			<value>14</value>
+			<value>Divers élec</value>
+			<value>14</value>
+		</row>
+		<row>
+			<value>15</value>
+			<value>Console lumière</value>
+			<value>15</value>
+		</row>
+		<row>
+			<value>16</value>
+			<value>Projecteurs</value>
+			<value>16</value>
+		</row>
+		<row>
+			<value>17</value>
+			<value>Gradateurs</value>
+			<value>17</value>
+		</row>
+		<row>
+			<value>18</value>
+			<value>Câbles lumière</value>
+			<value>18</value>
+		</row>
+		<row>
 			<value>19</value>
+			<value>Divers lumière</value>
+			<value>19</value>
+		</row>
+		<row>
+			<value>20</value>
+			<value>Divers</value>
+			<value>20</value>
+		</row>
+		<row>
+			<value>21</value>
+			<value>Véhicules</value>
+			<value>21</value>
+		</row>
+		<row>
+			<value>22</value>
+			<value>Divers transport</value>
+			<value>22</value>
 		</row>
 	</table>
 	

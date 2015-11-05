@@ -156,7 +156,7 @@
 
 <?php
 $lm = new Liste();
-$liste_ssCat = $lm->getListe(TABLE_MATOS_CATEG);
+$liste_ssCat = $lm->getListe(TABLE_MATOS_CATEG, '*', 'ordre', 'ASC');
 ?>
 
 <div class="ui-widget-content ui-corner-all leftText petit hide" id="addMatosModal">

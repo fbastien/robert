@@ -43,9 +43,19 @@ abstract class Database_Testcase extends PHPUnit_Extensions_Database_TestCase {
 	/** Vide la base de données de toutes ses tables. */
 	protected function truncateDatabase() {
 		$pdo = $this->getConnection()->getConnection();
-		$tableList = $pdo->query('SELECT `TABLE_NAME` FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = \''.$GLOBALS['PHPUNIT_DB_DBNAME'].'\'');
+		$tableList = $pdo->query("SELECT `TABLE_NAME`, `TABLE_TYPE` FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = '{$GLOBALS['PHPUNIT_DB_DBNAME']}'");
 		foreach($tableList as $table) {
-			$pdo->exec('DROP TABLE `'.$table['TABLE_NAME'].'`');
+			switch($table['TABLE_TYPE']) {
+				case 'BASE TABLE':
+					$query = "DROP TABLE `{$table['TABLE_NAME']}`";
+					break;
+				case 'VIEW':
+					$query = "DROP VIEW `{$table['TABLE_NAME']}`";
+					break;
+				default:
+					throw new RuntimeException("Type de table inconnu : {$table['TABLE_TYPE']}");
+			}
+			$pdo->exec($query);
 		}
 	}
 	
@@ -69,14 +79,14 @@ abstract class Database_Testcase extends PHPUnit_Extensions_Database_TestCase {
 		
 		$mysqli = new mysqli($GLOBALS['PHPUNIT_DB_HOST'], $GLOBALS['PHPUNIT_DB_USER'], $GLOBALS['PHPUNIT_DB_PASSWD'], $GLOBALS['PHPUNIT_DB_DBNAME']);
 		if ($mysqli->connect_errno) {
-			throw new RuntimeException('Erreur de connexion à la base de données (' . $mysqli->connect_errno . ') : ' . $mysqli->connect_error);
+			throw new RuntimeException("Erreur de connexion à la base de données ($mysqli->connect_errno) : $mysqli->connect_error");
 		}
 		
 		$isSuccess = $mysqli->multi_query($script);
 		
 		while(true) {
 			if(!$isSuccess) {
-				$errMessage = 'Erreur lors de l\'exécution du script "'.$file.'" (' . $mysqli->errno . '/' . $mysqli->sqlstate . ') : ' . $mysqli->error;
+				$errMessage = "Erreur lors de l'exécution du script \"$file\" ($mysqli->errno/$mysqli->sqlstate) : $mysqli->error";
 				$mysqli->close();
 				if($isTest) {
 					$this->fail($errMessage);

@@ -1503,6 +1503,15 @@
 		</row>
 	</table>
 	
+	<table name="VIEW_COLUMNS">
+	<!--
+		<column>TABLE_NAME</column>
+		<column>COLUMN_NAME</column>
+		<column>ORDINAL_POSITION</column>
+		<column>DATA_TYPE</column>
+	-->
+	</table>
+	
 	<table name="robert_matos_sous_cat">
 		<column>id</column>
 		<column>label</column>

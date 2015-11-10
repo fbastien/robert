@@ -50,6 +50,7 @@
 				<exclude name="composer.*" />
 				<exclude name="build.xml" />
 				<exclude name="scripts/build/" />
+				<exclude name="scripts/install/old/" />
 				<exclude name="test/" />
 				<exclude name="tmp/BFlogs/*" />
 			</fileset>

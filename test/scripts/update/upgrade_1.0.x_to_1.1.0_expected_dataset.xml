@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+<dataset>
+	<table name="robert_matos_detail">
+		<column>id</column>
+		<column>label</column>
+		<column>ref</column>
+		<column>categorie</column>
+		<column>sousCateg</column>
+		<column>tarifLoc</column>
+		<column>valRemp</column>
+		<column>remarque</column>
+		<row>
+			<value>1</value>
+			<value>Micro Shure SM58</value>
+			<value>MIC-SM58</value>
+			<value>son</value>
+			<value>9</value>
+			<value>5</value>
+			<value>50</value>
+			<value>Avec pince</value>
+		</row>
+		<row>
+			<value>2</value>
+			<value>Projecteur PAR64</value>
+			<value>PRJ-P64</value>
+			<value>lumiere</value>
+			<value>6</value>
+			<value>3</value>
+			<value>30</value>
+			<null />
+		</row>
+	</table>
+	
+	<table name="robert_matos_generique">
+		<column>id_matosdetail</column>
+		<column>quantite</column>
+		<column>panne</column>
+		<column>dateAchat</column>
+		<column>ownerExt</column>
+		<row>
+			<value>1</value>
+			<value>10</value>
+			<value>2</value>
+			<value>2015-11-10</value>
+			<null />
+		</row>
+		<row>
+			<value>2</value>
+			<value>4</value>
+			<value>0</value>
+			<null />
+			<value>Prestataire</value>
+		</row>
+	</table>
+	
+	<table name="robert_matos_ident">
+		<column>id_matosident</column>
+		<column>id_matosdetail</column>
+		<column>ref</column>
+		<column>panne</column>
+		<column>dateAchat</column>
+		<column>ownerExt</column>
+		<column>remarque</column>
+	</table>
+	
+	<table name="robert_view_matos_detail">
+		<column>id</column>
+		<column>label</column>
+		<column>ref</column>
+		<column>panne</column>
+		<column>externe</column>
+		<column>categorie</column>
+		<column>sousCateg</column>
+		<column>Qtotale</column>
+		<column>tarifLoc</column>
+		<column>valRemp</column>
+		<column>dateAchat</column>
+		<column>ownerExt</column>
+		<column>remarque</column>
+		<row>
+			<value>1</value>
+			<value>Micro Shure SM58</value>
+			<value>MIC-SM58</value>
+			<value>2</value>
+			<value>0</value>
+			<value>son</value>
+			<value>9</value>
+			<value>10</value>
+			<value>5</value>
+			<value>50</value>
+			<value>2015-11-10</value>
+			<null />
+			<value>Avec pince</value>
+		</row>
+		<row>
+			<value>2</value>
+			<value>Projecteur PAR64</value>
+			<value>PRJ-P64</value>
+			<value>0</value>
+			<value>1</value>
+			<value>lumiere</value>
+			<value>6</value>
+			<value>4</value>
+			<value>3</value>
+			<value>30</value>
+			<null />
+			<value>Prestataire</value>
+			<null />
+		</row>
+	</table>
+	
+	<table name="robert_view_sum_matos_ident">
+		<column>id_matosdetail</column>
+		<column>quantite</column>
+		<column>panne</column>
+		<column>externe</column>
+		<column>dateAchat</column>
+		<column>ownerExt</column>
+	</table>
+</dataset>

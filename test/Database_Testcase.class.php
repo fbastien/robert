@@ -125,7 +125,7 @@ abstract class Database_Testcase extends PHPUnit_Extensions_Database_TestCase {
 	}
 	
 	/**
-	 * Insère en base les données correspondant à un dataset.
+	 * Insère en base les données correspondant à un DataSet.
 	 * 
 	 * @param PHPUnit_Extensions_Database_DataSet_IDataSet $dataset Données à insérer en base.
 	 */
@@ -143,14 +143,24 @@ abstract class Database_Testcase extends PHPUnit_Extensions_Database_TestCase {
 		return $this->getConnection()->createQueryTable($tableName, "SELECT * FROM `$tableName`");
 	}
 	
+	/**
+	 * Vérifie la liste des tables et vues dans la base de données.
+	 * 
+	 * @param PHPUnit_Extensions_Database_DataSet_ITable $expected DataSet contenant la liste des tables et vues attendues.
+	 */
 	protected final function assertTableList(PHPUnit_Extensions_Database_DataSet_ITable $expected) {
 		$actual = $this->getConnection()->createQueryTable('TABLES',
 				"  SELECT `TABLE_NAME`, `TABLE_TYPE`, `ENGINE`, `TABLE_COLLATION`"
 				." FROM `information_schema`.`TABLES`"
 				." WHERE `TABLE_SCHEMA` = '{$GLOBALS['PHPUNIT_DB_DBNAME']}'");
-		$this->assertTablesEqual($expected, $actual);
+		$this->assertTablesEqual($expected, $actual, 'La liste des tables et vues est incorrecte.');
 	}
 	
+	/**
+	 * Vérifie la structure des tables dans la base de données.
+	 * 
+	 * @param PHPUnit_Extensions_Database_DataSet_ITable $expected DataSet contenant la structure attendue des tables.
+	 */
 	protected final function assertTableColumns(PHPUnit_Extensions_Database_DataSet_ITable $expected) {
 		$actual = $this->getConnection()->createQueryTable('COLUMNS',
 				" SELECT `TABLE_NAME`, `COLUMN_NAME`, `ORDINAL_POSITION`, `COLUMN_TYPE`, `COLUMN_KEY`, `COLUMN_DEFAULT`, `IS_NULLABLE`, `EXTRA`, `CHARACTER_SET_NAME`, `COLLATION_NAME`"
@@ -161,9 +171,14 @@ abstract class Database_Testcase extends PHPUnit_Extensions_Database_TestCase {
 				."       WHERE `TABLE_SCHEMA` = `COLUMNS`.`TABLE_SCHEMA`"
 				."         AND `TABLE_NAME` = `COLUMNS`.`TABLE_NAME`)"
 				."     LIKE '%TABLE%'");
-		$this->assertTablesEqual($expected, $actual);
+		$this->assertTablesEqual($expected, $actual, 'La structure des tables est incorrecte.');
 	}
 	
+	/**
+	 * Vérifie la structure des vues dans la base de données.
+	 * 
+	 * @param PHPUnit_Extensions_Database_DataSet_ITable $expected DataSet contenant la structure attendue des vues.
+	 */
 	protected final function assertViewColumns(PHPUnit_Extensions_Database_DataSet_ITable $expected) {
 		$actual = $this->getConnection()->createQueryTable('VIEW_COLUMNS',
 				" SELECT `TABLE_NAME`, `COLUMN_NAME`, `ORDINAL_POSITION`, `DATA_TYPE`"
@@ -174,11 +189,40 @@ abstract class Database_Testcase extends PHPUnit_Extensions_Database_TestCase {
 				."       WHERE `TABLE_SCHEMA` = `COLUMNS`.`TABLE_SCHEMA`"
 				."         AND `TABLE_NAME` = `COLUMNS`.`TABLE_NAME`)"
 				."     LIKE '%VIEW%'");
-		$this->assertTablesEqual($expected, $actual);
+		$this->assertTablesEqual($expected, $actual, 'La structure des vues est incorrecte.');
 	}
 	
+	/**
+	 * Vérifie le contenu d'une table dans la base de données.
+	 * 
+	 * @param PHPUnit_Extensions_Database_DataSet_ITable $expected DataSet contenant les valeurs attendues dans la table.
+	 * @param unknown $actualTableName Nom de la table à tester dans la base de données.
+	 */
 	protected final function assertTableContents(PHPUnit_Extensions_Database_DataSet_ITable $expected, $actualTableName) {
-		$this->assertTablesEqual($expected, $this->queryData($actualTableName));
+		$this->assertTablesEqual($expected, $this->queryData($actualTableName), "Le contenu de la table '$actualTableName' est incorrect.");
+	}
+	
+	/**
+	 * Vérifie que le code des vues (a priori après script de mise à jour) est identique à celui présent dans le script d'installation de la base de données.
+	 * 
+	 * Attention ! Cette méthode réinstalle la base de données. N'utiliser qu'en fin de cas de test.
+	 * 
+	 * @param Version $version Version du script d'installation avec laquelle comparer le code des vues.
+	 */
+	protected final function assertViewFormulaSameAsInstall(Version $version) {
+		// Récupère la formule actuelle des vues (a priori après script de mise à jour).
+		$viewsFormulaQuery =
+			"  SELECT `TABLE_NAME`, `VIEW_DEFINITION`"
+			." FROM `information_schema`.`VIEWS`"
+			." WHERE `TABLE_SCHEMA` = '{$GLOBALS['PHPUNIT_DB_DBNAME']}'";
+		$viewsFromUpdate = $this->getConnection()->createQueryTable('VIEWS', $viewsFormulaQuery);
+		$viewsFromUpdate->getRowCount(); // Force la récupération des données avant réinstallation de la base
+		
+		// Récupère la formule des vues après script d'installation
+		$this->installDatabase($version);
+		$viewsFromInstall = $this->getConnection()->createQueryTable('VIEWS', $viewsFormulaQuery);
+		
+		$this->assertTablesEqual($viewsFromInstall, $viewsFromUpdate, 'Le code des vues est différent entre le script d\'installation et le script de mise à jour');
 	}
 }
 ?>

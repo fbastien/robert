@@ -19,9 +19,14 @@
 
 require_once __DIR__.'/../../Database_Testcase.class.php';
 
+/**
+ * Test du script d'installation de la base de données (install_DB.sql).
+ * 
+ * @group db
+ */
 class Install_DB_Test extends Database_Testcase {
 	
-	/** Dataset correspondant à la structure attendue de la BDD. */
+	/** DataSet correspondant à la structure attendue de la BDD. */
 	private static $dataset;
 	
 	/** @return PHPUnit_Extensions_Database_DataSet_IDataSet */
@@ -31,14 +36,14 @@ class Install_DB_Test extends Database_Testcase {
 	
 	public static function setUpBeforeClass() {
 		// Vide la base de données
-		$instance = new Install_DB_Test();
+		$instance = new self();
 		$instance->truncateDatabase();
 		// Charge le dataset de la structure de la BDD
-		self::$dataset = $instance->createXmlDataSet(__DIR__.'/../DB_schema/DB-schema-1.0.0-dataset.xml');
+		self::$dataset = $instance->createXmlDataSet(__DIR__.'/../DB_schema/DB_schema_'.Version::last()->value().'_dataset.xml');
 	}
 	
 	/**
-	 * Teste la bonne exécution du script d'installation de la base de données (install_DB.sql).
+	 * Teste l'exécution sans erreur du script d'installation.
 	 * 
 	 * La structure et le contenu des tables ainsi créées est vérifié dans les autres tests.
 	 * 
@@ -53,13 +58,7 @@ class Install_DB_Test extends Database_Testcase {
 	 * @depends testScript
 	 */
 	public function testTables() {
-		$actualTable = $this->getConnection()->createQueryTable('TABLES',
-				"  SELECT `TABLE_NAME`, `TABLE_TYPE`, `ENGINE`, `TABLE_COLLATION`"
-				." FROM `information_schema`.`TABLES`"
-				." WHERE `TABLE_SCHEMA` = '{$GLOBALS['PHPUNIT_DB_DBNAME']}'");
-		$expectedTable = self::$dataset->getTable('TABLES');
-		
-		$this->assertTablesEqual($expectedTable, $actualTable);
+		$this->assertTableList(self::$dataset->getTable('TABLES'));
 	}
 	
 	/**
@@ -67,32 +66,8 @@ class Install_DB_Test extends Database_Testcase {
 	 * @depends testTables
 	 */
 	public function testTableColumns() {
-		$query = " SELECT {columns}"
-				." FROM `information_schema`.`COLUMNS`"
-				." WHERE `TABLE_SCHEMA` = '{$GLOBALS['PHPUNIT_DB_DBNAME']}'"
-				."   AND (SELECT `TABLE_TYPE`"
-				."       FROM `information_schema`.`TABLES`"
-				."       WHERE `TABLE_SCHEMA` = `COLUMNS`.`TABLE_SCHEMA`"
-				."         AND `TABLE_NAME` = `COLUMNS`.`TABLE_NAME`)"
-				."     LIKE '%{type}%'";
-		
-		// Tables
-		$actualTable = $this->getConnection()->createQueryTable('COLUMNS',
-				str_replace(array('{columns}', '{type}'),
-						array('`TABLE_NAME`, `COLUMN_NAME`, `ORDINAL_POSITION`, `COLUMN_TYPE`, `COLUMN_KEY`, `COLUMN_DEFAULT`, `IS_NULLABLE`, `EXTRA`, `CHARACTER_SET_NAME`, `COLLATION_NAME`',
-							'TABLE'),
-						$query));
-		$expectedTable = self::$dataset->getTable('COLUMNS');
-		$this->assertTablesEqual($expectedTable, $actualTable);
-		
-		// Vues
-		$actualTable = $this->getConnection()->createQueryTable('VIEW_COLUMNS',
-				str_replace(array('{columns}', '{type}'),
-						array('`TABLE_NAME`, `COLUMN_NAME`, `ORDINAL_POSITION`, `DATA_TYPE`',
-							'VIEW'),
-						$query));
-		$expectedTable = self::$dataset->getTable('VIEW_COLUMNS');
-		$this->assertTablesEqual($expectedTable, $actualTable);
+		$this->assertTableColumns(self::$dataset->getTable('COLUMNS'));
+		$this->assertViewColumns(self::$dataset->getTable('VIEW_COLUMNS'));
 	}
 	
 	/** Data provider indiquant les tables dont il faut tester le contenu. */
@@ -109,10 +84,7 @@ class Install_DB_Test extends Database_Testcase {
 	 * @depends testTableColumns
 	 */
 	public function testTableContents($tableName) {
-		$actualTable = $this->getConnection()->createQueryTable($tableName, "SELECT * FROM $tableName");
-		$expectedTable = self::$dataset->getTable($tableName);
-		
-		$this->assertTablesEqual($expectedTable, $actualTable);
+		$this->assertTableContents(self::$dataset->getTable($tableName), $tableName);
 	}
 }
 ?>

@@ -23,8 +23,8 @@ CREATE TABLE `robert_benef_interlocuteurs` (
 		KEY `label` (`label`),
 		KEY `nomPrenom` (`nomPrenom`),
 		KEY `email` (`email`) )
-	ENGINE = MyISAM
-	AUTO_INCREMENT = 1
+	ENGINE = MyISAM,
+	AUTO_INCREMENT = 1,
 	DEFAULT CHARSET = utf8;
 
 -- TABLE benef_structure
@@ -50,8 +50,8 @@ CREATE TABLE `robert_benef_structure` (
 		PRIMARY KEY (`id`),
 		UNIQUE KEY `label` (`label`),
 		KEY `SIRET` (`SIRET`) )
-	ENGINE = MyISAM
-	AUTO_INCREMENT = 1
+	ENGINE = MyISAM,
+	AUTO_INCREMENT = 1,
 	DEFAULT CHARSET = utf8;
 
 -- TABLE devis
@@ -68,8 +68,8 @@ CREATE TABLE `robert_devis` (
 		`total`    FLOAT         NOT NULL,
 		PRIMARY KEY (`id`),
 		KEY `fichier` (`fichier`) )
-	ENGINE = MyISAM
-	AUTO_INCREMENT = 1
+	ENGINE = MyISAM,
+	AUTO_INCREMENT = 1,
 	DEFAULT CHARSET = utf8;
 
 -- TABLE matos_detail
@@ -93,8 +93,8 @@ CREATE TABLE `robert_matos_detail` (
 		PRIMARY KEY (`id`),
 		UNIQUE KEY `ref` (`ref`),
 		KEY `sousCateg` (`sousCateg`) )
-	ENGINE = MyISAM
-	AUTO_INCREMENT = 1
+	ENGINE = MyISAM,
+	AUTO_INCREMENT = 1,
 	DEFAULT CHARSET = utf8;
 
 -- TABLE matos_packs
@@ -112,8 +112,8 @@ CREATE TABLE `robert_matos_packs` (
 		`detail`    VARCHAR(256) NOT NULL,
 		`remarque`  TEXT         NOT NULL,
 		PRIMARY KEY (`id`) )
-	ENGINE = MyISAM
-	AUTO_INCREMENT = 1
+	ENGINE = MyISAM,
+	AUTO_INCREMENT = 1,
 	DEFAULT CHARSET = utf8;
 
 -- TABLE matos_sous_cat
@@ -126,8 +126,8 @@ CREATE TABLE `robert_matos_sous_cat` (
 		`ordre` INT(4)       NOT NULL,
 		PRIMARY KEY (`id`),
 		KEY `ordre` (`ordre`) )
-	ENGINE = MyISAM
-	AUTO_INCREMENT = 23
+	ENGINE = MyISAM,
+	AUTO_INCREMENT = 23,
 	DEFAULT CHARSET = utf8;
 
 INSERT INTO `robert_matos_sous_cat` (`id`, `label`, `ordre`)
@@ -167,8 +167,8 @@ CREATE TABLE `robert_notes` (
 		`important` TINYINT(1)   NOT NULL,
 		PRIMARY KEY (`id`),
 		KEY `date` (`date`) )
-	ENGINE = MyISAM
-	AUTO_INCREMENT = 1
+	ENGINE = MyISAM,
+	AUTO_INCREMENT = 1,
 	DEFAULT CHARSET = utf8;
 
 -- TABLE plans
@@ -189,8 +189,8 @@ CREATE TABLE `robert_plans` (
 		`confirm`      VARCHAR(15)  NOT NULL DEFAULT '0',
 		UNIQUE KEY `id` (`id`),
 		KEY `titre` (`titre`) )
-	ENGINE = MyISAM
-	AUTO_INCREMENT = 1
+	ENGINE = MyISAM,
+	AUTO_INCREMENT = 1,
 	DEFAULT CHARSET = utf8;
 
 -- TABLE plans_details
@@ -205,8 +205,8 @@ CREATE TABLE `robert_plans_details` (
 		`materiel`         TEXT         NOT NULL,
 		`details_remarque` MEDIUMTEXT   NOT NULL,
 		PRIMARY KEY (`id_plandetails`) )
-	ENGINE = MyISAM
-	AUTO_INCREMENT = 1
+	ENGINE = MyISAM,
+	AUTO_INCREMENT = 1,
 	DEFAULT CHARSET = utf8;
 
 -- TABLE tekos
@@ -240,8 +240,8 @@ CREATE TABLE `robert_tekos` (
 		KEY `GUSO` (`GUSO`),
 		KEY `CS` (`CS`),
 		KEY `SECU` (`SECU`) )
-	ENGINE = MyISAM
-	AUTO_INCREMENT = 1
+	ENGINE = MyISAM,
+	AUTO_INCREMENT = 1,
 	DEFAULT CHARSET = utf8;
 
 -- TABLE users
@@ -266,8 +266,8 @@ CREATE TABLE `robert_users` (
 		`idTekos`             SMALLINT(3)  NOT NULL,
 		PRIMARY KEY (`id`),
 		UNIQUE KEY `email` (`email`) )
-	ENGINE = MyISAM
-	AUTO_INCREMENT = 2
+	ENGINE = MyISAM,
+	AUTO_INCREMENT = 2,
 	DEFAULT CHARSET = utf8;
 
 INSERT INTO `robert_users` (`id`, `email`, `password`, `nom`, `prenom`, `level`, `date_inscription`, `date_last_action`, `date_last_connexion`, `theme`, `yeux`, `cheveux`, `age`, `taille`, `idTekos`)

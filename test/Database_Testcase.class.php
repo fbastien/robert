@@ -17,6 +17,8 @@
  *
  */
 
+require_once __DIR__.'/Version.class.php';
+
 abstract class Database_Testcase extends PHPUnit_Extensions_Database_TestCase {
 	
 	/** @var PDO only instantiate once for test clean-up/fixture load */
@@ -67,7 +69,7 @@ abstract class Database_Testcase extends PHPUnit_Extensions_Database_TestCase {
 	 * @param string $file Chemin du fichier à exécuter.
 	 * @param boolean $isTest
 	 *     Indique si cette méthode est appelée dans le cadre d'un test unitaire (true, par défaut) ou autre (setUp ou tearDown par exemple).
-	 *     En cas d'erreur dans le script, dans le premier cas cela fera échouer le test, alors que sinon c'est une exception qui sera levée. @
+	 *     En cas d'erreur dans le script, dans le premier cas cela fera échouer le test, alors que sinon c'est une exception qui sera levée.
 	 * @throws RuntimeException En cas d'erreur de connexion ou pendant l'exécution du script.
 	 */
 	protected function executeScript($file, $isTest = true) {
@@ -100,6 +102,83 @@ abstract class Database_Testcase extends PHPUnit_Extensions_Database_TestCase {
 			$isSuccess = $mysqli->next_result();
 		}
 		$mysqli->close();
+	}
+	
+	/**
+	 * Vide la base de données et la réinstalle dans une version donnée.
+	 * 
+	 * @param Version $version Version à installer.
+	 */
+	protected function installDatabase(Version $version) {
+		// Vide la base de données
+		$this->truncateDatabase();
+		
+		// Détermine le script à exécuter
+		if($version == Version::last()) {
+			$script = __DIR__.'/../scripts/install/install_DB.sql';
+		} else {
+			$script = __DIR__."/../scripts/install/old/install_DB_{$version->value()}.sql";
+		}
+		
+		// Installe la base de données (cf. Install_DB_Test)
+		$this->executeScript($script, false);
+	}
+	
+	/**
+	 * Insère en base les données correspondant à un dataset.
+	 * 
+	 * @param PHPUnit_Extensions_Database_DataSet_IDataSet $dataset Données à insérer en base.
+	 */
+	protected function insertData(PHPUnit_Extensions_Database_DataSet_IDataSet $dataset) {
+		PHPUnit_Extensions_Database_Operation_Factory::INSERT()->execute($this->getConnection(), $dataset);
+	}
+	
+	/**
+	 * Récupère le contenu d'une table dans la base de données.
+	 * 
+	 * @param string $tableName Nom de la table à interroger.
+	 * @return PHPUnit_Extensions_Database_DataSet_QueryTable Dataset contenant les données de la table
+	 */
+	protected function queryData($tableName) {
+		return $this->getConnection()->createQueryTable($tableName, "SELECT * FROM `$tableName`");
+	}
+	
+	protected final function assertTableList(PHPUnit_Extensions_Database_DataSet_ITable $expected) {
+		$actual = $this->getConnection()->createQueryTable('TABLES',
+				"  SELECT `TABLE_NAME`, `TABLE_TYPE`, `ENGINE`, `TABLE_COLLATION`"
+				." FROM `information_schema`.`TABLES`"
+				." WHERE `TABLE_SCHEMA` = '{$GLOBALS['PHPUNIT_DB_DBNAME']}'");
+		$this->assertTablesEqual($expected, $actual);
+	}
+	
+	protected final function assertTableColumns(PHPUnit_Extensions_Database_DataSet_ITable $expected) {
+		$actual = $this->getConnection()->createQueryTable('COLUMNS',
+				" SELECT `TABLE_NAME`, `COLUMN_NAME`, `ORDINAL_POSITION`, `COLUMN_TYPE`, `COLUMN_KEY`, `COLUMN_DEFAULT`, `IS_NULLABLE`, `EXTRA`, `CHARACTER_SET_NAME`, `COLLATION_NAME`"
+				." FROM `information_schema`.`COLUMNS`"
+				." WHERE `TABLE_SCHEMA` = '{$GLOBALS['PHPUNIT_DB_DBNAME']}'"
+				."   AND (SELECT `TABLE_TYPE`"
+				."       FROM `information_schema`.`TABLES`"
+				."       WHERE `TABLE_SCHEMA` = `COLUMNS`.`TABLE_SCHEMA`"
+				."         AND `TABLE_NAME` = `COLUMNS`.`TABLE_NAME`)"
+				."     LIKE '%TABLE%'");
+		$this->assertTablesEqual($expected, $actual);
+	}
+	
+	protected final function assertViewColumns(PHPUnit_Extensions_Database_DataSet_ITable $expected) {
+		$actual = $this->getConnection()->createQueryTable('VIEW_COLUMNS',
+				" SELECT `TABLE_NAME`, `COLUMN_NAME`, `ORDINAL_POSITION`, `DATA_TYPE`"
+				." FROM `information_schema`.`COLUMNS`"
+				." WHERE `TABLE_SCHEMA` = '{$GLOBALS['PHPUNIT_DB_DBNAME']}'"
+				."   AND (SELECT `TABLE_TYPE`"
+				."       FROM `information_schema`.`TABLES`"
+				."       WHERE `TABLE_SCHEMA` = `COLUMNS`.`TABLE_SCHEMA`"
+				."         AND `TABLE_NAME` = `COLUMNS`.`TABLE_NAME`)"
+				."     LIKE '%VIEW%'");
+		$this->assertTablesEqual($expected, $actual);
+	}
+	
+	protected final function assertTableContents(PHPUnit_Extensions_Database_DataSet_ITable $expected, $actualTableName) {
+		$this->assertTablesEqual($expected, $this->queryData($actualTableName));
 	}
 }
 ?>

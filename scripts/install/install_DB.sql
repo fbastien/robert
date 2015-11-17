@@ -1,6 +1,10 @@
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
+ALTER DATABASE
+	CHARACTER SET = 'utf8'
+	COLLATE = 'utf8_unicode_ci';
+
 -- TABLE benef_interlocuteurs
 
 DROP TABLE IF EXISTS `robert_benef_interlocuteurs`;

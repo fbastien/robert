@@ -47,6 +47,7 @@
 				<exclude name=".settings/" />
 				<exclude name=".buildpath" />
 				<exclude name=".project" />
+				<exclude name=".travis.yml" />
 				<exclude name="composer.*" />
 				<exclude name="build.xml" />
 				<exclude name="scripts/build/" />

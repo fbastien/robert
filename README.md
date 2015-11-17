@@ -1,6 +1,7 @@
 
-# ROBERT fork, version 1.0.0
+# ROBERT fork, version 1.1.0
 
+[![Build Status](https://travis-ci.org/fbastien/robert.svg?branch=1.1-dev)](https://travis-ci.org/fbastien/robert)
 
 ## 1) Description rapide du Robert
 
@@ -117,7 +118,7 @@ Inspirez-vous des exemples en commentaires.
 
 Les tests unitaires se trouvent dans le dossier "/test" et peuvent être exécutés avec PHPUnit.
 Celui-ci est importé par Composer et l'exécutable est installé dans le dossier "/lib/bin".
-Le fichier de configuration "/test/**phpunit.xml**" doit être passé en paramètre (`--configuration`) de PHPUnit.
+Le fichier de configuration "/test/**phpunit-local.xml**" doit être passé en paramètre (`--configuration`) de PHPUnit.
 Les tests doivent être effectués sur une base de données différente de celle sur laquelle est déployée le Robert (mais ayant la même structure).
 Par défaut, ils sont effectués sur une base "robert_test" en localhost ; modifier les informations de connexion dans ce fichier de configuration si besoin.
 

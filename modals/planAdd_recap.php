@@ -17,7 +17,7 @@ unset($infosPlan['picker_end']);
 
 // Crée des listes utiles à la vérif et à l'affichage
 $l = new Liste();
-$matosList = $l->getListe(TABLE_MATOS, '*', 'categorie', "ASC");
+$matosList = $l->getListe(VIEW_MATOS, '*', 'categorie', "ASC");
 $listeTekos = $l->getListe(TABLE_TEKOS, '*', 'surnom', 'ASC');
 $l = null;
 

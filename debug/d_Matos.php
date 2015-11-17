@@ -2,7 +2,7 @@
 include ('listing_from_bdd.php');
 
 $l = new Liste();
-$liste_matos = $l->getListe(TABLE_MATOS);
+$liste_matos = $l->getListe(VIEW_MATOS);
 $liste_packs = $l->getListe(TABLE_PACKS);
 
 ?>
@@ -15,7 +15,7 @@ $liste_packs = $l->getListe(TABLE_PACKS);
 	<br />
 	<table class="debugTable leftText"> <?php
 		echo '<tr>';
-		foreach (getNomsChamps(TABLE_MATOS) as $k => $titreChamp) {
+		foreach (getNomsChamps(VIEW_MATOS) as $k => $titreChamp) {
 			echo '<td style="text-align:center;"><b>'.$titreChamp.'</b></td>';
 		}
 		echo '<td style="text-align:center;"><b>Action</b></td>

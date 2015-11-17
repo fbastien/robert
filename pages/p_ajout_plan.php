@@ -8,7 +8,7 @@ require_once ('date_fr.php');
 $lp = new Liste();
 $listeBenef = $lp->getListe ( TABLE_STRUCT, 'id, label' );
 $listeTekos = $lp->getListe ( TABLE_TEKOS, 'id, surnom, categorie', 'surnom', 'ASC' );
-$listeMatos = $lp->getListe ( TABLE_MATOS, '*', 'ref', "ASC" ) ;
+$listeMatos = $lp->getListe ( VIEW_MATOS, '*', 'ref', "ASC" ) ;
 $listePacks = $lp->getListe ( TABLE_PACKS, '*', 'ref', "ASC" ) ;
 $lp = null ;
 

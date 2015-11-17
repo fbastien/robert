@@ -74,7 +74,7 @@ if ( @$action == 'afficheTekosMatos') {
 	$planDetails['packs'] = Array();
 
 	$liste = new Liste () ;
-	$lm = $liste->getListe(TABLE_MATOS, 'id, panne, Qtotale', 'ref', 'ASC') ;
+	$lm = $liste->getListe(VIEW_MATOS, 'id, panne, Qtotale', 'ref', 'ASC') ;
 	$lp = $liste->getListe(TABLE_PACKS, 'id, ref, detail', 'ref', 'ASC') ;
 	if ($lm != false) {
 		if ($lp != false) $cal->initPacks($lp);
@@ -259,7 +259,7 @@ function Matos_getManque( $idPlan, $listMatos ){
 	$c->InitPlans(  $startCal , $EndCal , $idPlan  );
 
 	$liste=new Liste();
-	$lm = $liste->getListe(TABLE_MATOS, 'id, ref, panne, Qtotale') ;
+	$lm = $liste->getListe(VIEW_MATOS, 'id, ref, panne, Qtotale') ;
 	$lm = $liste->simplifyList('id');
 
 	$lmatos = $tmpPlan->getPlanMatos();
@@ -690,7 +690,7 @@ function saveTmpPlan ( $tmpPlan ){
 // RÉCUPÉRATION DES PLANS ET SOUS PLANS puis ENCODAGE JSON
 function jsonPlan($p) {
 	$l = new Liste();
-	$list_Matos = $l->getListe(TABLE_MATOS, 'id, ref, tarifLoc, externe, categorie, sousCateg, ownerExt', 'categorie', 'ASC');
+	$list_Matos = $l->getListe(VIEW_MATOS, 'id, ref, tarifLoc, externe, categorie, sousCateg, ownerExt', 'categorie', 'ASC');
 
 	if ( get_class($p) != "Plan" ) return -1 ;
 	$retour['id']			= $p->getPlanID();

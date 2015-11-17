@@ -136,10 +136,10 @@ class Pack implements Iterator {
 
 	public function countPacksInParc () {
 		$l = new Liste();
-		$listeMatos = $l->getListe(TABLE_MATOS, 'id, panne, Qtotale', 'id');
+		$listeMatos = $l->getListe(VIEW_MATOS, 'id, Qtotale', 'id');
 		$contenuBrut = $this->basedetail ;
 		$contenu = json_decode($contenuBrut, true);
-		$nbPackComplet = 10000 ;
+		$nbPackComplet = PHP_INT_MAX ;
 		foreach($contenu as $idM => $qteNeed) {
 			foreach ($listeMatos as $matos) {
 				if ($matos['id'] == $idM)

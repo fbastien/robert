@@ -105,7 +105,7 @@ class SortiePDF {
 
 			// Infos du Matos
 			$l = new Liste();
-			$list_Matos   = $l->getListe( TABLE_MATOS, 'id, ref, label, externe, tarifLoc, valRemp, categorie, sousCateg');
+			$list_Matos   = $l->getListe( VIEW_MATOS, 'id, ref, label, externe, tarifLoc, valRemp, categorie, sousCateg');
 			$list_sousCat = $l->getListe ( TABLE_MATOS_CATEG, '*', 'ordre', 'ASC' );
 			$this->list_sousCat = simplifySousCatArray($list_sousCat);
 
@@ -262,7 +262,7 @@ class SortiePDF {
 
 		$HtableauMax = 245; $noPage = 2;
 		$y = 62.8;
-		$infoMatos = new Infos(TABLE_MATOS);
+		$infoMatos = new Infos(VIEW_MATOS);
 		foreach( $this->matosBySousCat as $id => $matos ){
 			if ( empty($matos) ) continue ;
 			if ($y <= $HtableauMax) {
@@ -517,7 +517,7 @@ class SortiePDF {
 
 		$HtableauMax = 245; $noPage = 2; $totalFinal = array();
 		$y = 62.8;
-		$infoMatos = new Infos(TABLE_MATOS);
+		$infoMatos = new Infos(VIEW_MATOS);
 		foreach( $this->matosBySousCat as $id => $matos ){
 			if ( empty($matos) ) continue ;
 			if ($y <= $HtableauMax) {

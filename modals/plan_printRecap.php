@@ -32,7 +32,7 @@ try {
 
 	$l = new Liste();
 
-	$list_Matos   = $l->getListe( TABLE_MATOS, 'id, ref, tarifLoc, externe, categorie, sousCateg, ownerExt');
+	$list_Matos   = $l->getListe( VIEW_MATOS, 'id, ref, tarifLoc, externe, categorie, sousCateg, ownerExt');
 	$list_sousCat = $l->getListe ( TABLE_MATOS_CATEG, '*', 'ordre', 'ASC' );
 	array_push($list_sousCat, array ( 'id' => 999, 'label' => 'A louer' ));
 	$list_sousCat = simplifySousCatArray($list_sousCat);

@@ -3,13 +3,13 @@
 if (session_id() == '') session_start();
 require_once ('initInclude.php');
 require_once ('common.inc.php');		// OBLIGATOIRE pour les sessions, à placer TOUJOURS EN HAUT du code !!
-require_once ('checkConnect.php' );
+require_once ('checkConnect.php');
 
 $lCateg = new Liste();
 $lMatos = new Liste();
 
 $categ = $lCateg->getListe(TABLE_MATOS_CATEG, '*' );
-$matos = $lMatos->getListe(TABLE_MATOS, '*') ;
+$matos = $lMatos->getListe(VIEW_MATOS, '*') ;
 
 $matos = simplifieTableauListe ($matos);
 $categ = simplifieTableauListe ($categ);
@@ -19,9 +19,9 @@ foreach ( $matos as $matosData ){
 
 	$sousCatMatos = $matosData['sousCateg'];
 	if ( isset ($sousCategList[$sousCatMatos] ) )
-		$sousCategList[$sousCatMatos][] = $matosData["id"]  ;
+		$sousCategList[$sousCatMatos][] = $matosData["id"];
 	else
-		$sousCategList[$sousCatMatos] = array($matosData["id"])  ;
+		$sousCategList[$sousCatMatos] = array($matosData["id"]);
 }
 
 
@@ -49,9 +49,9 @@ function simplifieTableauListe ( $listArray ){
 
 	$newTableau = array();
 
-	foreach( $listArray as $ind => $Matos){
-		$ind = $Matos['id'];
-		$newTableau[$ind] = $Matos ;
+	foreach( $listArray as $ind => $matos){
+		$ind = $matos['id'];
+		$newTableau[$ind] = $matos ;
 	}
 
 	return $newTableau ;

@@ -7,10 +7,10 @@ require_once ('checkConnect.php' );
 $l = new Liste();
 
 if ( isset($_POST['searchingfor']) ) {
-	 $liste_matos = $l->getListe(TABLE_MATOS, '*', 'label', 'ASC', $_POST['searchingwhat'], 'LIKE', '%'.$_POST['searchingfor'].'%');
+	 $liste_matos = $l->getListe(VIEW_MATOS, '*', 'label', 'ASC', $_POST['searchingwhat'], 'LIKE', '%'.$_POST['searchingfor'].'%');
 	 $modeRecherche = true;
 }
-else $liste_matos = $l->getListe(TABLE_MATOS, '*', 'label');
+else $liste_matos = $l->getListe(VIEW_MATOS, '*', 'label');
 
 
 ?>

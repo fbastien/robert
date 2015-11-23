@@ -1,0 +1,1665 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+<dataset>
+	<table name="TABLES">
+		<column>TABLE_NAME</column>
+		<column>TABLE_TYPE</column>
+		<column>ENGINE</column>
+		<column>TABLE_COLLATION</column>
+		<row>
+			<value>robert_benef_interlocuteurs</value>
+			<value>BASE TABLE</value>
+			<value>MyISAM</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_benef_structure</value>
+			<value>BASE TABLE</value>
+			<value>MyISAM</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_devis</value>
+			<value>BASE TABLE</value>
+			<value>MyISAM</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_matos_detail</value>
+			<value>BASE TABLE</value>
+			<value>MyISAM</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_matos_packs</value>
+			<value>BASE TABLE</value>
+			<value>MyISAM</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_matos_sous_cat</value>
+			<value>BASE TABLE</value>
+			<value>MyISAM</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_notes</value>
+			<value>BASE TABLE</value>
+			<value>MyISAM</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_plans</value>
+			<value>BASE TABLE</value>
+			<value>MyISAM</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_plans_details</value>
+			<value>BASE TABLE</value>
+			<value>MyISAM</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_tekos</value>
+			<value>BASE TABLE</value>
+			<value>MyISAM</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_users</value>
+			<value>BASE TABLE</value>
+			<value>MyISAM</value>
+			<value>utf8_general_ci</value>
+		</row>
+	</table>
+	
+	<table name="COLUMNS">
+		<column>TABLE_NAME</column>
+		<column>COLUMN_NAME</column>
+		<column>ORDINAL_POSITION</column>
+		<column>COLUMN_TYPE</column>
+		<column>COLUMN_KEY</column>
+		<column>COLUMN_DEFAULT</column>
+		<column>IS_NULLABLE</column>
+		<column>EXTRA</column>
+		<column>CHARACTER_SET_NAME</column>
+		<column>COLLATION_NAME</column>
+		<row>
+			<value>robert_benef_interlocuteurs</value>
+			<value>id</value>
+			<value>1</value>
+			<value>int(4)</value>
+			<value>PRI</value>
+			<null />
+			<value>NO</value>
+			<value>auto_increment</value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_benef_interlocuteurs</value>
+			<value>label</value>
+			<value>2</value>
+			<value>varchar(128)</value>
+			<value>MUL</value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_benef_interlocuteurs</value>
+			<value>idStructure</value>
+			<value>3</value>
+			<value>int(4)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_benef_interlocuteurs</value>
+			<value>nomPrenom</value>
+			<value>4</value>
+			<value>varchar(64)</value>
+			<value>MUL</value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_benef_interlocuteurs</value>
+			<value>adresse</value>
+			<value>5</value>
+			<value>varchar(128)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_benef_interlocuteurs</value>
+			<value>codePostal</value>
+			<value>6</value>
+			<value>varchar(10)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_benef_interlocuteurs</value>
+			<value>ville</value>
+			<value>7</value>
+			<value>varchar(64)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_benef_interlocuteurs</value>
+			<value>email</value>
+			<value>8</value>
+			<value>varchar(128)</value>
+			<value>MUL</value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_benef_interlocuteurs</value>
+			<value>tel</value>
+			<value>9</value>
+			<value>varchar(14)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_benef_interlocuteurs</value>
+			<value>poste</value>
+			<value>10</value>
+			<value>varchar(128)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_benef_interlocuteurs</value>
+			<value>remarque</value>
+			<value>11</value>
+			<value>text</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_benef_interlocuteurs</value>
+			<value>nomStruct</value>
+			<value>12</value>
+			<value>varchar(64)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_benef_interlocuteurs</value>
+			<value>typeRetour</value>
+			<value>13</value>
+			<value>varchar(64)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_benef_structure</value>
+			<value>id</value>
+			<value>1</value>
+			<value>int(4)</value>
+			<value>PRI</value>
+			<null />
+			<value>NO</value>
+			<value>auto_increment</value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_benef_structure</value>
+			<value>label</value>
+			<value>2</value>
+			<value>varchar(128)</value>
+			<value>UNI</value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_benef_structure</value>
+			<value>SIRET</value>
+			<value>3</value>
+			<value>varchar(64)</value>
+			<value>MUL</value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_benef_structure</value>
+			<value>type</value>
+			<value>4</value>
+			<value>varchar(64)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_benef_structure</value>
+			<value>NomRS</value>
+			<value>5</value>
+			<value>varchar(128)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_benef_structure</value>
+			<value>interlocteurs</value>
+			<value>6</value>
+			<value>varchar(256)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_benef_structure</value>
+			<value>adresse</value>
+			<value>7</value>
+			<value>varchar(128)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_benef_structure</value>
+			<value>codePostal</value>
+			<value>8</value>
+			<value>varchar(8)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_benef_structure</value>
+			<value>ville</value>
+			<value>9</value>
+			<value>varchar(64)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_benef_structure</value>
+			<value>email</value>
+			<value>10</value>
+			<value>varchar(64)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_benef_structure</value>
+			<value>tel</value>
+			<value>11</value>
+			<value>varchar(14)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_benef_structure</value>
+			<value>nbContrats</value>
+			<value>12</value>
+			<value>int(3)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_benef_structure</value>
+			<value>listePlans</value>
+			<value>13</value>
+			<value>varchar(512)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_benef_structure</value>
+			<value>decla</value>
+			<value>14</value>
+			<value>varchar(256)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_benef_structure</value>
+			<value>remarque</value>
+			<value>15</value>
+			<value>text</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_devis</value>
+			<value>id</value>
+			<value>1</value>
+			<value>int(6)</value>
+			<value>PRI</value>
+			<null />
+			<value>NO</value>
+			<value>auto_increment</value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_devis</value>
+			<value>id_plan</value>
+			<value>2</value>
+			<value>int(6)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_devis</value>
+			<value>numDevis</value>
+			<value>3</value>
+			<value>int(3)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_devis</value>
+			<value>fichier</value>
+			<value>4</value>
+			<value>varchar(128)</value>
+			<value>MUL</value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_devis</value>
+			<value>matos</value>
+			<value>5</value>
+			<value>varchar(1024)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_devis</value>
+			<value>tekos</value>
+			<value>6</value>
+			<value>varchar(256)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_devis</value>
+			<value>total</value>
+			<value>7</value>
+			<value>float</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_matos_detail</value>
+			<value>id</value>
+			<value>1</value>
+			<value>int(6)</value>
+			<value>PRI</value>
+			<null />
+			<value>NO</value>
+			<value>auto_increment</value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_matos_detail</value>
+			<value>label</value>
+			<value>2</value>
+			<value>varchar(256)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_matos_detail</value>
+			<value>ref</value>
+			<value>3</value>
+			<value>varchar(128)</value>
+			<value>UNI</value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_matos_detail</value>
+			<value>panne</value>
+			<value>4</value>
+			<value>int(3)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_matos_detail</value>
+			<value>externe</value>
+			<value>5</value>
+			<value>tinyint(1)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_matos_detail</value>
+			<value>categorie</value>
+			<value>6</value>
+			<value>varchar(128)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_matos_detail</value>
+			<value>sousCateg</value>
+			<value>7</value>
+			<value>int(4)</value>
+			<value>MUL</value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_matos_detail</value>
+			<value>Qtotale</value>
+			<value>8</value>
+			<value>int(4)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_matos_detail</value>
+			<value>tarifLoc</value>
+			<value>9</value>
+			<value>float</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_matos_detail</value>
+			<value>valRemp</value>
+			<value>10</value>
+			<value>float</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_matos_detail</value>
+			<value>dateAchat</value>
+			<value>11</value>
+			<value>date</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_matos_detail</value>
+			<value>ownerExt</value>
+			<value>12</value>
+			<value>varchar(256)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_matos_detail</value>
+			<value>remarque</value>
+			<value>13</value>
+			<value>text</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_matos_packs</value>
+			<value>id</value>
+			<value>1</value>
+			<value>int(4)</value>
+			<value>PRI</value>
+			<null />
+			<value>NO</value>
+			<value>auto_increment</value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_matos_packs</value>
+			<value>label</value>
+			<value>2</value>
+			<value>varchar(256)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_matos_packs</value>
+			<value>ref</value>
+			<value>3</value>
+			<value>varchar(128)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_matos_packs</value>
+			<value>categorie</value>
+			<value>4</value>
+			<value>varchar(128)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_matos_packs</value>
+			<value>externe</value>
+			<value>5</value>
+			<value>tinyint(1)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_matos_packs</value>
+			<value>tarifLoc</value>
+			<value>6</value>
+			<value>float</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_matos_packs</value>
+			<value>valRemp</value>
+			<value>7</value>
+			<value>float</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_matos_packs</value>
+			<value>detail</value>
+			<value>8</value>
+			<value>varchar(256)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_matos_packs</value>
+			<value>remarque</value>
+			<value>9</value>
+			<value>text</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_matos_sous_cat</value>
+			<value>id</value>
+			<value>1</value>
+			<value>int(4)</value>
+			<value>PRI</value>
+			<null />
+			<value>NO</value>
+			<value>auto_increment</value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_matos_sous_cat</value>
+			<value>label</value>
+			<value>2</value>
+			<value>varchar(256)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_matos_sous_cat</value>
+			<value>ordre</value>
+			<value>3</value>
+			<value>int(4)</value>
+			<value>MUL</value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_notes</value>
+			<value>id</value>
+			<value>1</value>
+			<value>int(9)</value>
+			<value>PRI</value>
+			<null />
+			<value>NO</value>
+			<value>auto_increment</value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_notes</value>
+			<value>date</value>
+			<value>2</value>
+			<value>int(10)</value>
+			<value>MUL</value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_notes</value>
+			<value>texte</value>
+			<value>3</value>
+			<value>text</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_notes</value>
+			<value>createur</value>
+			<value>4</value>
+			<value>varchar(128)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_notes</value>
+			<value>important</value>
+			<value>5</value>
+			<value>tinyint(1)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_plans</value>
+			<value>id</value>
+			<value>1</value>
+			<value>int(11)</value>
+			<value>PRI</value>
+			<null />
+			<value>NO</value>
+			<value>auto_increment</value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_plans</value>
+			<value>idGroup</value>
+			<value>2</value>
+			<value>int(11)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_plans</value>
+			<value>titre</value>
+			<value>3</value>
+			<value>varchar(64)</value>
+			<value>MUL</value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_plans</value>
+			<value>lieu</value>
+			<value>4</value>
+			<value>varchar(128)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_plans</value>
+			<value>date_start</value>
+			<value>5</value>
+			<value>tinytext</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_plans</value>
+			<value>date_end</value>
+			<value>6</value>
+			<value>tinytext</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_plans</value>
+			<value>createur</value>
+			<value>7</value>
+			<value>varchar(256)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_plans</value>
+			<value>beneficiaire</value>
+			<value>8</value>
+			<value>varchar(64)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_plans</value>
+			<value>techniciens</value>
+			<value>9</value>
+			<value>varchar(64)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_plans</value>
+			<value>materiel</value>
+			<value>10</value>
+			<value>text</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_plans</value>
+			<value>confirm</value>
+			<value>11</value>
+			<value>varchar(15)</value>
+			<value></value>
+			<value>0</value>
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_plans_details</value>
+			<value>id_plandetails</value>
+			<value>1</value>
+			<value>int(11)</value>
+			<value>PRI</value>
+			<null />
+			<value>NO</value>
+			<value>auto_increment</value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_plans_details</value>
+			<value>id_plan</value>
+			<value>2</value>
+			<value>int(11)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_plans_details</value>
+			<value>jour</value>
+			<value>3</value>
+			<value>varchar(64)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_plans_details</value>
+			<value>techniciens</value>
+			<value>4</value>
+			<value>varchar(100)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_plans_details</value>
+			<value>materiel</value>
+			<value>5</value>
+			<value>text</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_plans_details</value>
+			<value>details_remarque</value>
+			<value>6</value>
+			<value>mediumtext</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_tekos</value>
+			<value>id</value>
+			<value>1</value>
+			<value>int(3)</value>
+			<value>PRI</value>
+			<null />
+			<value>NO</value>
+			<value>auto_increment</value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_tekos</value>
+			<value>idUser</value>
+			<value>2</value>
+			<value>smallint(3)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_tekos</value>
+			<value>surnom</value>
+			<value>3</value>
+			<value>varchar(128)</value>
+			<value>UNI</value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_tekos</value>
+			<value>nom</value>
+			<value>4</value>
+			<value>varchar(128)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_tekos</value>
+			<value>prenom</value>
+			<value>5</value>
+			<value>varchar(128)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_tekos</value>
+			<value>email</value>
+			<value>6</value>
+			<value>varchar(128)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_tekos</value>
+			<value>tel</value>
+			<value>7</value>
+			<value>varchar(20)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_tekos</value>
+			<value>GUSO</value>
+			<value>8</value>
+			<value>varchar(128)</value>
+			<value>MUL</value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_tekos</value>
+			<value>CS</value>
+			<value>9</value>
+			<value>varchar(128)</value>
+			<value>MUL</value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_tekos</value>
+			<value>birthDay</value>
+			<value>10</value>
+			<value>date</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_tekos</value>
+			<value>birthPlace</value>
+			<value>11</value>
+			<value>varchar(256)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_tekos</value>
+			<value>habilitations</value>
+			<value>12</value>
+			<value>varchar(256)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_tekos</value>
+			<value>categorie</value>
+			<value>13</value>
+			<value>varchar(128)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_tekos</value>
+			<value>SECU</value>
+			<value>14</value>
+			<value>varchar(128)</value>
+			<value>MUL</value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_tekos</value>
+			<value>SIRET</value>
+			<value>15</value>
+			<value>varchar(128)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_tekos</value>
+			<value>assedic</value>
+			<value>16</value>
+			<value>varchar(64)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_tekos</value>
+			<value>intermittent</value>
+			<value>17</value>
+			<value>tinyint(1)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_tekos</value>
+			<value>adresse</value>
+			<value>18</value>
+			<value>varchar(64)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_tekos</value>
+			<value>cp</value>
+			<value>19</value>
+			<value>varchar(64)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_tekos</value>
+			<value>ville</value>
+			<value>20</value>
+			<value>varchar(64)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_tekos</value>
+			<value>diplomes_folder</value>
+			<value>21</value>
+			<value>varchar(64)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_users</value>
+			<value>id</value>
+			<value>1</value>
+			<value>int(10)</value>
+			<value>PRI</value>
+			<null />
+			<value>NO</value>
+			<value>auto_increment</value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_users</value>
+			<value>email</value>
+			<value>2</value>
+			<value>varchar(255)</value>
+			<value>UNI</value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_users</value>
+			<value>password</value>
+			<value>3</value>
+			<value>varchar(32)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_users</value>
+			<value>nom</value>
+			<value>4</value>
+			<value>char(30)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_users</value>
+			<value>prenom</value>
+			<value>5</value>
+			<value>char(30)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_users</value>
+			<value>level</value>
+			<value>6</value>
+			<value>int(1)</value>
+			<value></value>
+			<value>1</value>
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_users</value>
+			<value>date_inscription</value>
+			<value>7</value>
+			<value>int(10)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_users</value>
+			<value>date_last_action</value>
+			<value>8</value>
+			<value>int(10)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_users</value>
+			<value>date_last_connexion</value>
+			<value>9</value>
+			<value>int(10)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_users</value>
+			<value>theme</value>
+			<value>10</value>
+			<value>varchar(32)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_users</value>
+			<value>yeux</value>
+			<value>11</value>
+			<value>varchar(64)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_users</value>
+			<value>cheveux</value>
+			<value>12</value>
+			<value>varchar(64)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_users</value>
+			<value>age</value>
+			<value>13</value>
+			<value>int(2)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_users</value>
+			<value>taille</value>
+			<value>14</value>
+			<value>float</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_users</value>
+			<value>idTekos</value>
+			<value>15</value>
+			<value>smallint(3)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+	</table>
+	
+	<table name="VIEW_COLUMNS">
+	<!--
+		<column>TABLE_NAME</column>
+		<column>COLUMN_NAME</column>
+		<column>ORDINAL_POSITION</column>
+		<column>DATA_TYPE</column>
+	-->
+	</table>
+	
+	<table name="robert_matos_sous_cat">
+		<column>id</column>
+		<column>label</column>
+		<column>ordre</column>
+		<row>
+			<value>1</value>
+			<value>Amplificateurs</value>
+			<value>1</value>
+		</row>
+		<row>
+			<value>2</value>
+			<value>Enceintes</value>
+			<value>2</value>
+		</row>
+		<row>
+			<value>3</value>
+			<value>Consoles son</value>
+			<value>3</value>
+		</row>
+		<row>
+			<value>4</value>
+			<value>Périphériques son</value>
+			<value>4</value>
+		</row>
+		<row>
+			<value>5</value>
+			<value>Microphones</value>
+			<value>5</value>
+		</row>
+		<row>
+			<value>6</value>
+			<value>Pieds micro</value>
+			<value>6</value>
+		</row>
+		<row>
+			<value>7</value>
+			<value>Câbles son</value>
+			<value>7</value>
+		</row>
+		<row>
+			<value>8</value>
+			<value>Divers son</value>
+			<value>8</value>
+		</row>
+		<row>
+			<value>9</value>
+			<value>Pieds enceinte et lumière</value>
+			<value>9</value>
+		</row>
+		<row>
+			<value>10</value>
+			<value>Structure</value>
+			<value>10</value>
+		</row>
+		<row>
+			<value>11</value>
+			<value>Pendrillons</value>
+			<value>11</value>
+		</row>
+		<row>
+			<value>12</value>
+			<value>Divers structure</value>
+			<value>12</value>
+		</row>
+		<row>
+			<value>13</value>
+			<value>Distribution électrique</value>
+			<value>13</value>
+		</row>
+		<row>
+			<value>14</value>
+			<value>Divers élec</value>
+			<value>14</value>
+		</row>
+		<row>
+			<value>15</value>
+			<value>Console lumière</value>
+			<value>15</value>
+		</row>
+		<row>
+			<value>16</value>
+			<value>Projecteurs</value>
+			<value>16</value>
+		</row>
+		<row>
+			<value>17</value>
+			<value>Gradateurs</value>
+			<value>17</value>
+		</row>
+		<row>
+			<value>18</value>
+			<value>Câbles lumière</value>
+			<value>18</value>
+		</row>
+		<row>
+			<value>19</value>
+			<value>Divers lumière</value>
+			<value>19</value>
+		</row>
+		<row>
+			<value>20</value>
+			<value>Divers</value>
+			<value>20</value>
+		</row>
+		<row>
+			<value>21</value>
+			<value>Véhicules</value>
+			<value>21</value>
+		</row>
+		<row>
+			<value>22</value>
+			<value>Divers transport</value>
+			<value>22</value>
+		</row>
+	</table>
+	
+	<table name="robert_users">
+		<column>id</column>
+		<column>email</column>
+		<column>password</column>
+		<column>nom</column>
+		<column>prenom</column>
+		<column>level</column>
+		<column>date_inscription</column>
+		<column>date_last_action</column>
+		<column>date_last_connexion</column>
+		<column>theme</column>
+		<column>yeux</column>
+		<column>cheveux</column>
+		<column>age</column>
+		<column>taille</column>
+		<column>idTekos</column>
+		<row>
+			<value>1</value>
+			<value>root@robertmanager.org</value>
+			<value>8351aaf8480d8135bc77af590c93c1e2</value>
+			<value>DEBUGGER</value>
+			<value>Root</value>
+			<value>9</value>
+			<value>1325615980</value>
+			<value>1356632988</value>
+			<value>1356620371</value>
+			<value>human</value>
+			<value>blancs</value>
+			<value>rouges</value>
+			<value>31</value>
+			<value>1.73</value>
+			<value>0</value>
+		</row>
+	</table>
+</dataset>

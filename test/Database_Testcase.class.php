@@ -65,23 +65,38 @@ abstract class Database_Testcase extends PHPUnit_Extensions_Database_TestCase {
 	 * Exécute un fichier de script SQL.
 	 * 
 	 * Nécessite l'extension MySQLi (car PDO ne permet pas d'exécuter plusieurs requêtes à la fois).
+	 * Le script doit être encodé en UTF-8.
 	 * 
 	 * @param string $file Chemin du fichier à exécuter.
 	 * @param boolean $isTest
 	 *     Indique si cette méthode est appelée dans le cadre d'un test unitaire (true, par défaut) ou autre (setUp ou tearDown par exemple).
 	 *     En cas d'erreur dans le script, dans le premier cas cela fera échouer le test, alors que sinon c'est une exception qui sera levée.
-	 * @throws RuntimeException En cas d'erreur de connexion ou pendant l'exécution du script.
+	 * @throws RuntimeException En cas d'erreur de connexion ou pendant l'exécution du script, ou si le script n'est pas encodé en UTF-8.
 	 */
 	protected function executeScript($file, $isTest = true) {
 		if(!extension_loaded('mysqli')) {
 			throw new RuntimeException('Extension MySQLi manquante');
 		}
 		
-		$script = mb_convert_encoding(file_get_contents($file), mb_internal_encoding(), 'UTF-8');
+		$script = file_get_contents($file);
+		if(mb_detect_encoding($script, 'UTF-8', true) != 'UTF-8') {
+			$errMessage = "L'encodage du script \"$file\" n'est pas UTF-8";
+			if($isTest) {
+				$this->fail($errMessage);
+			} else {
+				throw new RuntimeException($errMessage);
+			}
+		}
 		
 		$mysqli = new mysqli($GLOBALS['PHPUNIT_DB_HOST'], $GLOBALS['PHPUNIT_DB_USER'], $GLOBALS['PHPUNIT_DB_PASSWD'], $GLOBALS['PHPUNIT_DB_DBNAME']);
 		if ($mysqli->connect_errno) {
 			throw new RuntimeException("Erreur de connexion à la base de données ($mysqli->connect_errno) : $mysqli->connect_error");
+		}
+		if($mysqli->character_set_name() != 'utf8') {
+			if(!$mysqli->set_charset('utf8')) {
+				$mysqli->close();
+				throw new RuntimeException("Erreur de configuration du jeu de caractères de la connexion à la base de données ($mysqli->errno) : $mysqli->error");
+			}
 		}
 		
 		$isSuccess = $mysqli->multi_query($script);

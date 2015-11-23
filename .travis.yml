@@ -12,9 +12,9 @@ services:
   - mysql
 
 before_install:
-  - mysql -e "CREATE DATABASE IF NOT EXISTS robert;" -u root
+  - mysql -e "CREATE DATABASE robert;" -u root
 
 before_script:
-  - composer install
+  - composer install --no-interaction --no-progress
 
 script: phpunit --configuration test/phpunit-travis-ci.xml --test-suffix Test.class.php .

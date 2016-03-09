@@ -27,7 +27,10 @@ abstract class Database_Testcase extends PHPUnit_Extensions_Database_TestCase im
 	/** @var PHPUnit_Extensions_Database_DB_IDatabaseConnection only instantiate once per test */
 	private $conn = null;
 	
-	/** @return PHPUnit_Extensions_Database_DB_IDatabaseConnection */
+	/**
+	 * @return PHPUnit_Extensions_Database_DB_IDatabaseConnection
+	 * @see PHPUnit_Extensions_Database_TestCase::getConnection()
+	 */
 	final public function getConnection()
 	{
 		if ($this->conn === null) {
@@ -38,7 +41,7 @@ abstract class Database_Testcase extends PHPUnit_Extensions_Database_TestCase im
 			}
 			$this->conn = $this->createDefaultDBConnection(self::$pdo, DBNAME);
 		}
-	
+		
 		return $this->conn;
 	}
 	

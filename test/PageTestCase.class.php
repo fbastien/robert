@@ -25,9 +25,23 @@ require_once __DIR__.'/Database_TestCase.class.php';
  * Les sous-classes doivent utiliser les annotations docblock suivantes pour fonctionner correctement :
  * * @runTestsInSeparateProcesses
  * * @preserveGlobalState disabled
+ * 
+ * De plus, il est conseillé qu'elles définissent une méthode setUpBeforeClass() qui appelle setTestedPage() pour préciser le fichier de la page à tester.
+ * Utiliser ensuite la méthode callTestedPage() dans les différents tests.
  */
 // TODO PHP5.6+ : Passer à PHPUnit 5+ et trouver une autre solution que @preserveGlobalState disabled pour éviter les constantes définies en double
-abstract class PageTestCase extends Database_TestCase {
+abstract class PageTestCase extends Database_TestCase
+{
+	/** @var string Chemin (relatif à la racine du projet) du fichier de la page à tester. */
+	private static $testedPage;
+	
+	/**
+	 * @param string $testedPage Chemin (relatif à la racine du projet) du fichier de la page à tester.
+	 * @see PageTestCase::callTestedFile()
+	 */
+	protected static function setTestedPage($testedPage) {
+		self::$testedPage = dirname(__DIR__).DIRECTORY_SEPARATOR.$testedPage;
+	}
 	
 	/** @before */
 	protected function setUp() {
@@ -50,6 +64,13 @@ abstract class PageTestCase extends Database_TestCase {
 		@unlink(session_save_path().'/sess_'.session_id());
 		
 		parent::tearDown();
+	}
+	
+	protected final function callTestedPage() {
+		if(self::$testedPage === null) {
+			throw new LogicException("setTestedPage() doit être appelée avant callTestedPage()");
+		}
+		require self::$testedPage;
 	}
 	
 	protected function getOutput() {

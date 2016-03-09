@@ -17,7 +17,7 @@
  *
  */
 
-require_once __DIR__.'/../../Database_Testcase.class.php';
+require_once dirname(dirname(__DIR__)).'/Database_Testcase.class.php';
 
 /**
  * Test du script de mise à jour de la base de données des versions 1.0.x vers 1.1.0 (upgrade_1.0.x_to_1.1.0.sql).
@@ -26,22 +26,30 @@ require_once __DIR__.'/../../Database_Testcase.class.php';
  */
 class Upgrade_1_0_x_to_1_1_0_Test extends Database_Testcase {
 	
-	/** DataSet correspondant à la structure attendue de la BDD après mise à jour. */
+	/** @var PHPUnit_Extensions_Database_DataSet_IDataSet DataSet correspondant à la structure attendue de la BDD après mise à jour. */
 	private static $expectedSchema;
 	
-	/** DataSet correspondant au contenu attendu de la BDD après mise à jour. */
+	/** @var PHPUnit_Extensions_Database_DataSet_IDataSet DataSet correspondant au contenu attendu de la BDD après mise à jour. */
 	private static $expectedData;
 	
+	/**
+	 * @return PHPUnit_Extensions_Database_DataSet_IDataSet
+	 * @see PHPUnit_Extensions_Database_TestCase::getDataSet()
+	 */
 	public function getDataSet() {
 		return new PHPUnit_Extensions_Database_DataSet_DefaultDataSet();
 	}
 	
+	/**
+	 * @beforeClass
+	 * @see PHPUnit_Framework_TestCase::setUpBeforeClass()
+	 */
 	public static function setUpBeforeClass() {
 		// Installe la base de données dans la version antérieure
 		$instance = new self();
 		$instance->installDatabase(Version::V1_0_0());
 		// Charge les datasets
-		self::$expectedSchema = $instance->createXmlDataSet(__DIR__.'/../DB_schema/DB_schema_1.1.0_dataset.xml');
+		self::$expectedSchema = $instance->createXmlDataSet(dirname(__DIR__).'/DB_schema/DB_schema_1.1.0_dataset.xml');
 		self::$expectedData = $instance->createXmlDataSet(__DIR__.'/upgrade_1.0.x_to_1.1.0_expected_dataset.xml');
 	}
 	
@@ -50,7 +58,7 @@ class Upgrade_1_0_x_to_1_1_0_Test extends Database_Testcase {
 		// Insertion des données de test
 		$this->insertData($this->createXmlDataSet(__DIR__.'/upgrade_1.0.x_to_1.1.0_fixture_dataset.xml'));
 		
-		$this->executeScript(__DIR__.'/../../../scripts/update/upgrade_1.0.x_to_1.1.0.sql');
+		$this->executeScript(dirname(dirname(dirname(__DIR__))).'/scripts/update/upgrade_1.0.x_to_1.1.0.sql');
 	}
 	
 	/**

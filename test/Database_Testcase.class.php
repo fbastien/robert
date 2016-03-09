@@ -19,7 +19,7 @@
 
 require_once __DIR__.'/Version.class.php';
 
-abstract class Database_Testcase extends PHPUnit_Extensions_Database_TestCase {
+abstract class Database_Testcase extends PHPUnit_Extensions_Database_TestCase implements Serializable {
 	
 	/** @var PDO only instantiate once for test clean-up/fixture load */
 	static private $pdo = null;
@@ -33,19 +33,29 @@ abstract class Database_Testcase extends PHPUnit_Extensions_Database_TestCase {
 		if ($this->conn === null) {
 			// Les variables globales des informations de connexion sont définies dans le fichier phpunit.xml
 			if (self::$pdo == null) {
-				self::$pdo = new PDO( $GLOBALS['PHPUNIT_DB_DSN'], $GLOBALS['PHPUNIT_DB_USER'], $GLOBALS['PHPUNIT_DB_PASSWD'] );
+				self::$pdo = new PDO(DSN, USER, PASS);
 				self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			}
-			$this->conn = $this->createDefaultDBConnection(self::$pdo, $GLOBALS['PHPUNIT_DB_DBNAME']);
+			$this->conn = $this->createDefaultDBConnection(self::$pdo, DBNAME);
 		}
 	
 		return $this->conn;
 	}
 	
+	public function serialize() {
+		$pdoSave = self::$pdo;
+		self::$pdo = null;
+		$string = serialize($this);
+		self::$pdo = $pdoSave;
+		return $string;
+	}
+	
+	public function unserialize($serialized) {}
+	
 	/** Vide la base de données de toutes ses tables. */
 	protected function truncateDatabase() {
 		$pdo = $this->getConnection()->getConnection();
-		$tableList = $pdo->query("SELECT `TABLE_NAME`, `TABLE_TYPE` FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = '{$GLOBALS['PHPUNIT_DB_DBNAME']}'");
+		$tableList = $pdo->query("SELECT `TABLE_NAME`, `TABLE_TYPE` FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = '".DBNAME."'");
 		foreach($tableList as $table) {
 			switch($table['TABLE_TYPE']) {
 				case 'BASE TABLE':
@@ -88,10 +98,11 @@ abstract class Database_Testcase extends PHPUnit_Extensions_Database_TestCase {
 			}
 		}
 		
-		$mysqli = new mysqli($GLOBALS['PHPUNIT_DB_HOST'], $GLOBALS['PHPUNIT_DB_USER'], $GLOBALS['PHPUNIT_DB_PASSWD'], $GLOBALS['PHPUNIT_DB_DBNAME']);
+		$mysqli = new mysqli(HOST, USER, PASS, DBNAME);
 		if ($mysqli->connect_errno) {
 			throw new RuntimeException("Erreur de connexion à la base de données ($mysqli->connect_errno) : $mysqli->connect_error");
 		}
+		//TODO PHP5.5+ : close() dans bloc finally
 		if($mysqli->character_set_name() != 'utf8') {
 			if(!$mysqli->set_charset('utf8')) {
 				$mysqli->close();
@@ -167,7 +178,7 @@ abstract class Database_Testcase extends PHPUnit_Extensions_Database_TestCase {
 		$actual = $this->getConnection()->createQueryTable('TABLES',
 				"  SELECT `TABLE_NAME`, `TABLE_TYPE`, `ENGINE`, `TABLE_COLLATION`"
 				." FROM `information_schema`.`TABLES`"
-				." WHERE `TABLE_SCHEMA` = '{$GLOBALS['PHPUNIT_DB_DBNAME']}'");
+				." WHERE `TABLE_SCHEMA` = '".DBNAME."'");
 		$this->assertTablesEqual($expected, $actual, 'La liste des tables et vues est incorrecte.');
 	}
 	
@@ -180,7 +191,7 @@ abstract class Database_Testcase extends PHPUnit_Extensions_Database_TestCase {
 		$actual = $this->getConnection()->createQueryTable('COLUMNS',
 				" SELECT `TABLE_NAME`, `COLUMN_NAME`, `ORDINAL_POSITION`, `COLUMN_TYPE`, `COLUMN_KEY`, `COLUMN_DEFAULT`, `IS_NULLABLE`, `EXTRA`, `CHARACTER_SET_NAME`, `COLLATION_NAME`"
 				." FROM `information_schema`.`COLUMNS`"
-				." WHERE `TABLE_SCHEMA` = '{$GLOBALS['PHPUNIT_DB_DBNAME']}'"
+				." WHERE `TABLE_SCHEMA` = '".DBNAME."'"
 				."   AND (SELECT `TABLE_TYPE`"
 				."       FROM `information_schema`.`TABLES`"
 				."       WHERE `TABLE_SCHEMA` = `COLUMNS`.`TABLE_SCHEMA`"
@@ -198,7 +209,7 @@ abstract class Database_Testcase extends PHPUnit_Extensions_Database_TestCase {
 		$actual = $this->getConnection()->createQueryTable('VIEW_COLUMNS',
 				" SELECT `TABLE_NAME`, `COLUMN_NAME`, `ORDINAL_POSITION`, `DATA_TYPE`"
 				." FROM `information_schema`.`COLUMNS`"
-				." WHERE `TABLE_SCHEMA` = '{$GLOBALS['PHPUNIT_DB_DBNAME']}'"
+				." WHERE `TABLE_SCHEMA` = '".DBNAME."'"
 				."   AND (SELECT `TABLE_TYPE`"
 				."       FROM `information_schema`.`TABLES`"
 				."       WHERE `TABLE_SCHEMA` = `COLUMNS`.`TABLE_SCHEMA`"
@@ -229,7 +240,7 @@ abstract class Database_Testcase extends PHPUnit_Extensions_Database_TestCase {
 		$viewsFormulaQuery =
 			"  SELECT `TABLE_NAME`, `VIEW_DEFINITION`"
 			." FROM `information_schema`.`VIEWS`"
-			." WHERE `TABLE_SCHEMA` = '{$GLOBALS['PHPUNIT_DB_DBNAME']}'";
+			." WHERE `TABLE_SCHEMA` = '".DBNAME."'";
 		$viewsFromUpdate = $this->getConnection()->createQueryTable('VIEWS', $viewsFormulaQuery);
 		$viewsFromUpdate->getRowCount(); // Force la récupération des données avant réinstallation de la base
 		

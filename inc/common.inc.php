@@ -53,8 +53,10 @@ define ("FOLDER_PLANS_DATA", "data/PLANS_DATA/");
 define ("FOLDER_DUMP_SQL", "data/dumpSQL/");
 
 define ("SALT_PASS",		'G:niUk5!1|WQ');									// Grain de sel (seed) pour la création / récup de password in BDD
+define ("COOKIE_NAME_AUTH",	'auth_type');										// nom du cookie gestion type d'authentification
 define ("COOKIE_NAME_LOG",	'auth_login');										// nom du cookie gestion login
 define ("COOKIE_NAME_PASS", 'auth_password');									// nom du cookie gestion password
+define ("COOKIE_NAME_TOKEN", 'token');											// nom du cookie token
 define ("COOKIE_PEREMPTION", time() + (3600 * 24 * 2));							// péremption des cookies : 2 jours.
 
 date_default_timezone_set('Europe/Paris');										// La timezone par défaut, si introuvable dans le php.ini

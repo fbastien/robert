@@ -28,8 +28,8 @@ require_once('PDOinit.php');
 $Auth = new Connecting($bdd);
 
 // CONNEXION
-if ( isset ($_POST['conx']) &&  isset ($_POST['email']) && isset ($_POST['password']) ) {
-    if (!$Auth->connect($_POST['email'], $_POST['password'])) $errAuth = true;
+if ( isset ($_POST['conx']) &&  isset ($_POST['login']) && isset ($_POST['password']) ) {
+    if (!$Auth->connect($_POST['login'], $_POST['password'])) $errAuth = true;
 	else $errAuth = false;
 }
 else $errAuth = false;

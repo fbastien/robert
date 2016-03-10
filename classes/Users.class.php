@@ -40,6 +40,7 @@ class Users implements Iterator {
 	CONST USERS_LEVEL_READ   = 2 ;						// niveau d'habilitation POPPY
 
 	const USERS_ID               = 'id' ;
+	const USERS_LDAP             = 'ldap_uid' ;
 	const USERS_EMAIL            = 'email' ;
 	const USERS_PASS             = 'password' ;
 	const USERS_NOM              = 'nom' ;
@@ -49,19 +50,16 @@ class Users implements Iterator {
 	const USERS_DATE_INSCRIPTION = 'date_inscription' ;
 
 	private $hide_datas ;                               // tableau contenant les champs qu'on ne peut modifier ds la BDD
-	private $email  ;									// email (= 'id' de l'user, quand il se loggue)
 	private $infos  ;									// instance de Infos (pour récup et update)
 
 
-	public function __construct ($email = 'new') {
+	public function __construct ($login = 'new') {
 		$this->hide_datas = array ( "password", "date_inscription", "date_last_action") ;
 		$this->infos = new Infos( TABLE_USERS ) ;
-		if ( $email == 'new' ) return 1 ;
+		if ( $login === 'new' ) return 1 ;
 
-		// si un email est specifié, on lit l'enregistrement dans la base de données
-		if ($this->checkEmail($email) === false) throw new Exception('Loggin invalide : attendu adresse mail');
-		$this->email = $email ;
-		$this->loadFromBD( Users::USERS_EMAIL , $this->email ) ;
+		// si un identifiant est specifié, on lit l'enregistrement dans la base de données
+		$this->loadFromBD( ($this->checkEmail($login) ? Users::USERS_EMAIL : Users::USERS_LDAP), $login);
 	}
 
 	// Charge les infos d'un user

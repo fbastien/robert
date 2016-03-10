@@ -28,7 +28,6 @@ catch (Exception $e) {
 	echo 'Host = <b>'.$host.'</b><br />';
 	echo 'Server = <b>'.$serverName.'</b><br />';
 	die('Erreur de connexion PDO : '.$e->getMessage());
-	//echo 'Erreur de connexion PDO : '.$e->getMessage();
 }
 
 ?>

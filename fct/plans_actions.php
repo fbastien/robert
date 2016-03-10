@@ -264,7 +264,6 @@ function Matos_getManque( $idPlan, $listMatos ){
 
 	$lmatos = $tmpPlan->getPlanMatos();
 
-//	$retour = $listMatos;
 	foreach( $lmatos as $id => $qte ){
 		if (!isset($lm[$id])) continue;
 		$dispo = $lm[$id]['Qtotale'] - $lm[$id]['panne'];
@@ -723,7 +722,6 @@ function jsonPlan($p) {
 	$list_sousCat = simplifySousCatArray($list_sousCat);
 	$matosPlanBySsCat = creerSousCatArray_showExterieur(@$matosPlanList);
 
-	//echo '<pre>'; var_dump($matosPlanBySsCat);'</pre>';
 	if ($matosPlanBySsCat != false) {
 		foreach($matosPlanBySsCat as $ssCatId => $matosLine) {						// récupération de la liste du matos, des qtés, et recalcul du sous-total
 			$sousCat = $list_sousCat[$ssCatId]['label'];

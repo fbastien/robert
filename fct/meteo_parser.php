@@ -2,8 +2,6 @@
  
 $location	= @$_POST['ville'];
 $date		= @$_POST['date'];
-//$location	= @$_GET['ville'];
-//$date		= @$_GET['date'];
 
 if (!isset($location) && !isset($date)) die();
 
@@ -28,7 +26,6 @@ $xmlStr = ob_get_contents();						// Sauvegarder le 'cache' dans la variable $Re
 ob_end_clean();										// Vider le buffer.
 
 $gotXmlTag = preg_match('/^\<\?xml/', $xmlStr);
-//echo $xmlStr;
 
 if ($gotXmlTag > 0) {
 	$xml = simplexml_load_string(utf8_encode($xmlStr));

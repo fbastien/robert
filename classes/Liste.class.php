@@ -84,7 +84,6 @@ class Liste {
 		else
 			$q = "SELECT $this->what FROM `$this->table` ORDER BY `$this->tri` $this->ordre";
 
-//		echo "REQUETE : $q<p></p>" ;
 		$q = $this->bddCx->prepare ($q) ;
 
 		$q->execute();

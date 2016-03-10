@@ -226,7 +226,6 @@ class Infos implements Iterator {
 		$this->initPDO();
 		if ((strpos('!', $val) !== false) && (strpos('\'', $val) !== false) && (strpos('?', $val) !== false) && (strpos('#', $val) !== false))
 			return false;
-//		echo "<p>ADD CHAMP $row -> $val </p>";
 		$char = '' ;
 		if (is_numeric($val)) {										// check du type de valeur du champ à ajouter
 			$tailleNbre = strlen((string)$val);

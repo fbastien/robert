@@ -34,6 +34,7 @@ class Install_DB_Test extends Database_Testcase {
 		return new PHPUnit_Extensions_Database_DataSet_DefaultDataSet();
 	}
 	
+	/** @beforeClass */
 	public static function setUpBeforeClass() {
 		// Vide la base de données
 		$instance = new self();

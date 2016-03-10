@@ -17,21 +17,21 @@
  *
  */
 
-
-global $install_path;
 define('BF_TIME_LAPS', (60*5)); // 5 minutes		// laps de temps à attendre après avoir fait trop de tentatives (en secondes)
 define('BF_NB_TENTATIVE', 5);	// 5 tentatives		// Nbre de tentatives maxi, tous les TIME_LAPS
-define('BF_DIR', $install_path.'tmp/BFlogs/');		// répertoire de stockage des logs
+define('BF_DIR', dirname(__DIR__).'/tmp/BFlogs/');	// répertoire de stockage des logs
 if (!is_dir(BF_DIR))
 	mkdir(BF_DIR);
 
 
-// CLASSE DE SÉCU ANTI FORCE BRUTE
+/**
+ * CLASSE DE SÉCU ANTI FORCE BRUTE
+ */
 class NoBF {
 
     public function  __construct() { }
 
-    // Teste si le nbre de tentative n'exède pas BF_NB_TENTATIVE dans le laps de temps défini avec BF_TIME_LAPS
+    /** Teste si le nbre de tentative n'exède pas BF_NB_TENTATIVE dans le laps de temps défini avec BF_TIME_LAPS */
     public static function bruteCheck($email) {
         $filename = BF_DIR . $email . '.tmp';
         $deny_access = false;
@@ -63,7 +63,7 @@ class NoBF {
         NoBF::arrayToFile($filename, $infos);
     }
 
-    // Permet de supprimer les enregistrements trop anciens
+    /** Permet de supprimer les enregistrements trop anciens */
     public static function cleanUp($infos) {
         foreach($infos as $n => $date) {
             if((BF_TIME_LAPS + $date) < time())
@@ -72,14 +72,14 @@ class NoBF {
         return array_values($infos);
     }
 
-    // Récupère les infos du fichier et les retourne unserialisé
+    /** Récupère les infos du fichier et les retourne unserialisé */
     public static function fileToArray($filename) {
         $infos = unserialize( file_get_contents($filename) );
         $infos = NoBF::cleanUp($infos);
         return $infos;
     }
 
-    // Enregistre les infos dans le fichier de log serialisé
+    /** Enregistre les infos dans le fichier de log serialisé */
     public static function arrayToFile($filename, $data) {
         $file = fopen ($filename, "w");
         fwrite($file, serialize($data) );
@@ -89,7 +89,9 @@ class NoBF {
 }
 
 
-// CLASSE DE CONNEXION D'UN UTILISATEUR
+/**
+ * CLASSE DE CONNEXION D'UN UTILISATEUR
+ */
 class Connecting {
 
 	private $db;			// Instance de PDO
@@ -107,14 +109,14 @@ class Connecting {
         }
     }
 
-	// Retourne si cette personne est connectée ou pas
+	/** Retourne si cette personne est connectée ou pas */
     public function is_connected() {
 		if ($this->connected)
 			return $_SESSION[ $this->login_cookie ];
 		else return false;
     }
 
-    // Connexion : $email : string (email) / $password : string non crypté (mot de passe)
+    /** Connexion : $email : string (email) / $password : string non crypté (mot de passe) */
     public function connect($email, $password) {
         $deny_login = NoBF::bruteCheck($email);
 		$this->disconnect();
@@ -150,13 +152,13 @@ class Connecting {
     }
 
 
-    // Déconnexion
+    /** Déconnexion */
     public function disconnect() {
         $this->resetSessionData();
         session_unset();
     }
 
-    // Teste la connexion en cours
+    /** Teste la connexion en cours */
     private function testConnexion() {
         // def des vars à tester
         $toTestToken = '';
@@ -207,7 +209,7 @@ class Connecting {
         else return false;
     }
 
-    // Génère le token (jeton) du navigateur en cours
+    /** Génère le token (jeton) du navigateur en cours */
     private function fingerprint() {
         $fingerprint = $this->salt . $_SERVER['HTTP_USER_AGENT'];
         $token = md5($fingerprint . session_id());
@@ -215,7 +217,7 @@ class Connecting {
         return $token;
     }
 
-    // On défini les variables d'identifications (token, login et mot de passe) !! obligation d'avoir défini $this->user avant de l'utiliser !!
+    /** On défini les variables d'identifications (token, login et mot de passe) !! obligation d'avoir défini $this->user avant de l'utiliser !! */
     private function setSecuredData() {
         // declaration des sessions
         $_SESSION[ $this->password_cookie ] = $this->user['password'];
@@ -228,7 +230,7 @@ class Connecting {
         setcookie( 'token' , $_SESSION['token'], COOKIE_PEREMPTION, "/");
     }
 
-    // Reset complet des variables d'identification... C'est une déconnexion !
+    /** Reset complet des variables d'identification... C'est une déconnexion ! */
     private function resetSessionData() {
         // declaration des sessions
         $_SESSION[ $this->password_cookie ] = '';
@@ -246,9 +248,11 @@ class Connecting {
 		session_unset();
     }
 
-    // Mise à jour de divers infos de connexion dans la BDD ($id : int du user) ($connexion : 0 ou 1)
-    //     => 0 : test de connexion
-    //     => 1 : connexion
+    /**
+     * Mise à jour de divers infos de connexion dans la BDD ($id : int du user) ($connexion : 0 ou 1)
+     *     => 0 : test de connexion
+     *     => 1 : connexion
+     */
     private function updateUser($id, $connexion = 0) {
         $date = time();
         $addReq = ($connexion == 1) ? ", `date_last_connexion` = '$date'" : "";

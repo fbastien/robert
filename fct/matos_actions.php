@@ -1,8 +1,8 @@
 <?php
 session_start();
 require_once ('initInclude.php');
-require_once ('common.inc.php');		// OBLIGATOIRE pour les sessions, à placer TOUJOURS EN HAUT du code !!
-require_once ('checkConnect.php' );
+require_once (dirname(__DIR__).'/inc/common.inc.php');		// OBLIGATOIRE pour les sessions, à placer TOUJOURS EN HAUT du code !!
+require_once (dirname(__DIR__).'/inc/checkConnect.php' );
 
 extract($_POST);
 

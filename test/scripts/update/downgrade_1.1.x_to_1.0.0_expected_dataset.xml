@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+<dataset>
+	<table name="robert_users">
+		<column>id</column>
+		<column>email</column>
+		<column>password</column>
+		<column>nom</column>
+		<column>prenom</column>
+		<column>level</column>
+		<column>date_inscription</column>
+		<column>date_last_action</column>
+		<column>date_last_connexion</column>
+		<column>theme</column>
+		<column>yeux</column>
+		<column>cheveux</column>
+		<column>age</column>
+		<column>taille</column>
+		<column>idTekos</column>
+		<row>
+			<value>1</value>
+			<value>root@robertmanager.org</value>
+			<value>8351aaf8480d8135bc77af590c93c1e2</value>
+			<value>DEBUGGER</value>
+			<value>Root</value>
+			<value>9</value>
+			<value>1325615980</value>
+			<value>1356632988</value>
+			<value>1356620371</value>
+			<value>human</value>
+			<value>blancs</value>
+			<value>rouges</value>
+			<value>31</value>
+			<value>1.73</value>
+			<value>0</value>
+		</row>
+		<row>
+			<value>2</value>
+			<value>user@robertmanager.org</value>
+			<value>061d36f3666ce4790c5cfb855fed4658</value>
+			<value>USER</value>
+			<value>Ldap</value>
+			<value>5</value>
+			<value>1325615980</value>
+			<value>1356632988</value>
+			<value>1356620371</value>
+			<value>human</value>
+			<value>blancs</value>
+			<value>rouges</value>
+			<value>31</value>
+			<value>1.73</value>
+			<value>1</value>
+		</row>
+	</table>
+</dataset>

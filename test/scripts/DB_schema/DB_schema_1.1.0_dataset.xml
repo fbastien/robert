@@ -1335,8 +1335,20 @@
 		</row>
 		<row>
 			<value>robert_users</value>
-			<value>email</value>
+			<value>ldap_uid</value>
 			<value>2</value>
+			<value>varchar(255)</value>
+			<value>UNI</value>
+			<null />
+			<value>YES</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_users</value>
+			<value>email</value>
+			<value>3</value>
 			<value>varchar(255)</value>
 			<value>UNI</value>
 			<null />
@@ -1348,11 +1360,11 @@
 		<row>
 			<value>robert_users</value>
 			<value>password</value>
-			<value>3</value>
+			<value>4</value>
 			<value>varchar(32)</value>
 			<value></value>
 			<null />
-			<value>NO</value>
+			<value>YES</value>
 			<value></value>
 			<value>utf8</value>
 			<value>utf8_general_ci</value>
@@ -1360,18 +1372,6 @@
 		<row>
 			<value>robert_users</value>
 			<value>nom</value>
-			<value>4</value>
-			<value>char(30)</value>
-			<value></value>
-			<null />
-			<value>NO</value>
-			<value></value>
-			<value>utf8</value>
-			<value>utf8_general_ci</value>
-		</row>
-		<row>
-			<value>robert_users</value>
-			<value>prenom</value>
 			<value>5</value>
 			<value>char(30)</value>
 			<value></value>
@@ -1383,8 +1383,20 @@
 		</row>
 		<row>
 			<value>robert_users</value>
-			<value>level</value>
+			<value>prenom</value>
 			<value>6</value>
+			<value>char(30)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_users</value>
+			<value>level</value>
+			<value>7</value>
 			<value>int(1)</value>
 			<value></value>
 			<value>1</value>
@@ -1396,18 +1408,6 @@
 		<row>
 			<value>robert_users</value>
 			<value>date_inscription</value>
-			<value>7</value>
-			<value>int(10)</value>
-			<value></value>
-			<null />
-			<value>NO</value>
-			<value></value>
-			<null />
-			<null />
-		</row>
-		<row>
-			<value>robert_users</value>
-			<value>date_last_action</value>
 			<value>8</value>
 			<value>int(10)</value>
 			<value></value>
@@ -1419,7 +1419,7 @@
 		</row>
 		<row>
 			<value>robert_users</value>
-			<value>date_last_connexion</value>
+			<value>date_last_action</value>
 			<value>9</value>
 			<value>int(10)</value>
 			<value></value>
@@ -1431,8 +1431,20 @@
 		</row>
 		<row>
 			<value>robert_users</value>
-			<value>theme</value>
+			<value>date_last_connexion</value>
 			<value>10</value>
+			<value>int(10)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_users</value>
+			<value>theme</value>
+			<value>11</value>
 			<value>varchar(32)</value>
 			<value></value>
 			<null />
@@ -1444,18 +1456,6 @@
 		<row>
 			<value>robert_users</value>
 			<value>yeux</value>
-			<value>11</value>
-			<value>varchar(64)</value>
-			<value></value>
-			<null />
-			<value>NO</value>
-			<value></value>
-			<value>utf8</value>
-			<value>utf8_general_ci</value>
-		</row>
-		<row>
-			<value>robert_users</value>
-			<value>cheveux</value>
 			<value>12</value>
 			<value>varchar(64)</value>
 			<value></value>
@@ -1467,8 +1467,20 @@
 		</row>
 		<row>
 			<value>robert_users</value>
-			<value>age</value>
+			<value>cheveux</value>
 			<value>13</value>
+			<value>varchar(64)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_users</value>
+			<value>age</value>
+			<value>14</value>
 			<value>int(2)</value>
 			<value></value>
 			<null />
@@ -1480,7 +1492,7 @@
 		<row>
 			<value>robert_users</value>
 			<value>taille</value>
-			<value>14</value>
+			<value>15</value>
 			<value>float</value>
 			<value></value>
 			<null />
@@ -1492,7 +1504,7 @@
 		<row>
 			<value>robert_users</value>
 			<value>idTekos</value>
-			<value>15</value>
+			<value>16</value>
 			<value>smallint(3)</value>
 			<value></value>
 			<null />
@@ -1630,6 +1642,7 @@
 	
 	<table name="robert_users">
 		<column>id</column>
+		<column>ldap_uid</column>
 		<column>email</column>
 		<column>password</column>
 		<column>nom</column>
@@ -1646,6 +1659,7 @@
 		<column>idTekos</column>
 		<row>
 			<value>1</value>
+			<null />
 			<value>root@robertmanager.org</value>
 			<value>8351aaf8480d8135bc77af590c93c1e2</value>
 			<value>DEBUGGER</value>

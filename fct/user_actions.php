@@ -155,12 +155,51 @@ if ( $action == "create" ){
 	if ( $_SESSION["user"]->isAdmin() !== true ) { die("Vous n'êtes pas habilité à ajouter des utilisateurs !"); } 
 	else {
 		$tmpUser = new Users () ;
-		if ( isset ($cMail) )  $tmpUser->setEmail	 ( $cMail );
-		if ( isset ($cName) )  $tmpUser->setName	 ( $cName );
-		if ( isset ($cPass) )  $tmpUser->setPassword ( $cPass );
-		if ( isset ($cPren) )  $tmpUser->setPrenom   ( $cPren );
-		if ( isset ($cLevel) ) $tmpUser->setLevel	 ( $cLevel );
-		if ( isset ($cTekos) ) $tmpUser->setTekos	 ( $cTekos );
+		switch( isset($cAuth) ? $cAuth : '' ) {
+			case AUTH_DB:
+				if ( isset($cLogin) ) $tmpUser->setEmail( $cLogin );
+				if ( isset($cPass) )  $tmpUser->setPassword( $cPass );
+				if ( isset($cPren) )  $tmpUser->setPrenom( $cPren );
+				if ( isset($cName) )  $tmpUser->setName( $cName );
+				break;
+			case AUTH_LDAP:
+				if ( isset($cLogin) ) $tmpUser->setLDAP( $cLogin );
+				
+				// Vérification que le compte existe et récupération dans LDAP des informations des autres champs
+				// TODO Déplacer dans une classe dédiée à LDAP
+				$ldap = ldap_connect($config['ldap.host'])
+					or die("Erreur de connexion LDAP");
+				if(! ldap_bind($ldap, $config['ldap.read.dn'], $config['ldap.read.pass'])) {
+					ldap_unbind($ldap);
+					die("Erreur de connexion LDAP");
+				}
+				$ldap_result = ldap_search($ldap, $config['ldap.base'], "(".LDAP_LOGIN."=$cLogin)", array(LDAP_EMAIL, LDAP_PRENOM, LDAP_NOM));
+				if (! $ldap_result) {
+					ldap_unbind($ldap);
+					die("Erreur lors de la récupération du compte LDAP : ".ldap_error($ldap));
+				}
+				$ldap_data = ldap_get_entries($ldap, $ldap_result);
+				ldap_unbind($ldap);
+				if ($ldap_data['count'] == 0) {
+					die("Erreur : Aucun compte LDAP trouvé avec ce login");
+				}
+				if ($ldap_data['count'] != 1) {
+					die("Erreur : Plusieurs comptes LDAP trouvés avec ce login");
+				}
+				if( $ldap_data[0][LDAP_EMAIL]['count'] != 1
+						|| $ldap_data[0][LDAP_PRENOM]['count'] != 1
+						|| $ldap_data[0][LDAP_NOM]['count'] != 1) {
+					die("Erreur lors de la récupération du compte LDAP : Certains champs n'ont pas exactement une valeur.");
+				}
+				$tmpUser->setEmail( $ldap_data[0][LDAP_EMAIL][0] );
+				$tmpUser->setPrenom( $ldap_data[0][LDAP_PRENOM][0] );
+				$tmpUser->setName( $ldap_data[0][LDAP_NOM][0] );
+				break;
+			default:
+				die("Erreur d'authentification !");
+		}
+		if ( isset($cLevel) ) $tmpUser->setLevel( $cLevel );
+		if ( isset($cTekos) ) $tmpUser->setTekos( $cTekos );
 		saveTmpUser();
 	}
 }

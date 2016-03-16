@@ -59,6 +59,15 @@ define ("COOKIE_NAME_PASS", 'auth_password');									// nom du cookie gestion p
 define ("COOKIE_NAME_TOKEN", 'token');											// nom du cookie token
 define ("COOKIE_PEREMPTION", time() + (3600 * 24 * 2));							// péremption des cookies : 2 jours.
 
+define('AUTH_DB', 'DB');														// Type d'authentification par email et mot de passe dans la base de données
+define('AUTH_LDAP', 'LDAP');													// Type d'authentification par LDAP
+
+define('LDAP_DN', 'dn');														// Champ LDAP permettant d'identifier de manière unique l'utilisateur
+define('LDAP_LOGIN', 'uid');													// Champ LDAP du login de l'utilisateur
+define('LDAP_EMAIL', 'mail');													// Champ LDAP du login de l'utilisateur
+define('LDAP_PRENOM', 'givenname');												// Champ LDAP du login de l'utilisateur
+define('LDAP_NOM', 'sn');														// Champ LDAP du login de l'utilisateur
+
 date_default_timezone_set('Europe/Paris');										// La timezone par défaut, si introuvable dans le php.ini
 
 // Lecture du fichier de propriétés

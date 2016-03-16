@@ -22,25 +22,49 @@ $liste_tekos = $l->getListe(TABLE_TEKOS, '*', 'surnom', 'ASC', 'idUser', '<', 1)
 		
 		// on cache le bouton de recherche (pas besoin ici)
 		$('#chercheDiv').hide(300);
+
+		// Fonction de mise à jour des champs en fonction du type d'authentification
+		$("#createUser input:radio[name='auth']").change(function(eventObject) {
+			if($('#cAuthDB').is(':checked')) {
+				$('#lLogin').html('Email');
+				$('#lPass').html('*');
+				$('#cPass').prop('disabled', false).val('').prop('title', '');
+				$('#cPren').prop('disabled', false).val('').prop('title', '');
+				$('#cName').prop('disabled', false).val('').prop('title', '');
+			} else if($('#cAuthLDAP').is(':checked')) {
+				$('#lLogin').html('Login');
+				$('#lPass').html('');
+				$('#cPass').prop('disabled', true).val('').prop('title', 'Ce champ sera rempli avec les données LDAP');
+				$('#cPren').prop('disabled', true).val(' (automatique)').prop('title', 'Ce champ sera rempli avec les données LDAP');
+				$('#cName').prop('disabled', true).val(' (automatique)').prop('title', 'Ce champ sera rempli avec les données LDAP');
+			}
+		});
 	});
 </script>
 
 <div id="createUser" class="debugSection ui-widget-content ui-corner-all ajouteurPage">
 	<div class="ui-widget-header ui-corner-all">Créer un utilisateur</div>
 	<br />
+	<div class="inline top" style="width: 500px;">
+		<div class="ui-widget-header ui-corner-all">Authentification : <b class="red">*</b></div>
+		<input type="radio" id="cAuthDB" name="auth" value="<?php echo AUTH_DB; ?>" /> <label for="cAuthDB">Par email et mot de passe</label>
+		<input type="radio" id="cAuthLDAP" name="auth" value="<?php echo AUTH_LDAP; ?>" /> <label for="cAuthLDAP">Avec un compte LDAP</label>
+	</div>
+	<br />
+	<br />
 	<div class="inline top" style="width: 200px;">
-		<div class="ui-widget-header ui-corner-all">Email : <b class="red">*</b></div>
-		<input type="text" id='cMail' size="20" />
+		<div class="ui-widget-header ui-corner-all"><span id="lLogin">Email</span> : <b class="red">*</b></div>
+		<input type="text" id="cLogin" size="20" />
 		<br />
-		<div class="ui-widget-header ui-corner-all">Mot de passe : <b class="red">*</b></div>
-		<input type="password" id='cPass' size="20" />
+		<div class="ui-widget-header ui-corner-all">Mot de passe : <b class="red" id="lPass">*</b></div>
+		<input type="password" id="cPass" size="20" />
 	</div>
 	<div class="inline top" style="width: 200px;">
 		<div class="ui-widget-header ui-corner-all">Prénom :</div>
-		<input type="text" id='cPren' size="20" />
+		<input type="text" id="cPren" size="20" />
 		<br />
 		<div class="ui-widget-header ui-corner-all">Nom :</div>
-		<input type="text" id='cName' size="20" />
+		<input type="text" id="cName" size="20" />
 	</div>
 	<div class="inline top" style="width: 200px;">
 		<div class="ui-widget-header ui-corner-all">Niveau d'habilitation :</div>

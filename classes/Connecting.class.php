@@ -23,10 +23,6 @@ define('BF_DIR', dirname(__DIR__).'/tmp/BFlogs/');	// répertoire de stockage de
 if (!is_dir(BF_DIR))
 	mkdir(BF_DIR);
 
-// Valeurs possibles du cookie COOKIE_NAME_AUTH pour le type d'authentification
-define('AUTH_DB', 'DB');
-define('AUTH_LDAP', 'LDAP');
-
 
 /**
  * CLASSE DE SÉCU ANTI FORCE BRUTE
@@ -233,6 +229,7 @@ class Connecting {
 			}
 			// Authentification par LDAP
 			else {
+				// TODO Déplacer dans une classe dédiée à LDAP
 				// Le mot de passe ne doit pas être vide pour ne pas être considéré comme une connexion LDAP anonyme
 				if ($password === '') {
 					return false;
@@ -248,7 +245,7 @@ class Connecting {
 					throw new Exception("Erreur LDAP : ".@ldap_error($ldap));
 				}
 				// Vérification que l'utilisateur existe dans LDAP et récupération de son DN
-				$ldap_result = ldap_search($ldap, $config['ldap.base'], "(uid=$login)", array('dn'));
+				$ldap_result = ldap_search($ldap, $config['ldap.base'], "(".LDAP_LOGIN."=$login)", array(LDAP_DN));
 				if (! $ldap_result) {
 					ldap_unbind($ldap);
 					throw new Exception("Erreur LDAP : ".ldap_error($ldap), ldap_errno($ldap));
@@ -256,7 +253,7 @@ class Connecting {
 				$ldap_data = ldap_get_entries($ldap, $ldap_result);
 				if ($ldap_data['count'] == 1) {
 					// Test de connexion avec le DN récupéré et le mot de passe fourni
-					if(@ldap_bind($ldap, $ldap_data[0]['dn'], $password)) {
+					if(@ldap_bind($ldap, $ldap_data[0][LDAP_DN], $password)) {
 						ldap_unbind($ldap);
 						$this->user['password'] = $password;
 						return true;

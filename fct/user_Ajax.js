@@ -34,16 +34,30 @@ $(document).ready(function() {
 	});
 	
 	// Création d'un user
-    $("#btncreateUser").click ( function () {
-		var name  = $("#cName").val();
-		var pren  = $("#cPren").val();
+	$("#btncreateUser").click ( function () {
+		var auth  = $("input:radio[name='auth']:checked").val();
+		var login = $("#cLogin").val();
 		var pass  = $("#cPass").val();
-		var email = $("#cMail").val();
+		var pren  = $("#cPren").val();
+		var name  = $("#cName").val();
 		var level = $("#cLevel").val();
 		var tekos = $("#cTekosAssoc").val();
-		if ( email == '' || pass == '' ) { alert("Vous devez remplir tous les champs marqués d'une étoile !"); return; }
-		if ( pass.length <= 4  ) { alert("Mot de passe trop court ! Il doit être supérieur à 4 caractères."); return; }
-		var dataStr  = "action=create&cMail="+email+"&cName="+name+"&cPren="+pren+"&cPass="+pass+"&cLevel="+level+"&cTekos="+tekos ;
+		var dataStr = "action=create&cAuth="+auth;
+		switch(auth) {
+			case 'DB':
+				if ( login == '' || pass == '' ) { alert("Vous devez remplir tous les champs marqués d'une étoile !"); return; }
+				if ( pass.length <= 4  ) { alert("Mot de passe trop court ! Il doit être supérieur à 4 caractères."); return; }
+				dataStr += "&cLogin="+login+"&cPass="+pass+"&cName="+name+"&cPren="+pren;
+				break;
+			case 'LDAP':
+				if ( login == '' ) { alert("Vous devez remplir tous les champs marqués d'une étoile !"); return; }
+				dataStr += "&cLogin="+login;
+				break;
+			default:
+				alert("Vous devez saisir le type d'authentification !");
+				return; 
+		}
+		dataStr += "&cLevel="+level+"&cTekos="+tekos ;
 		AjaxFct(dataStr, 'user_actions', false, 'retourAjax', 'personnel_list_utilisateurs');
 	});
 	

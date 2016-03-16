@@ -173,9 +173,11 @@ class Users implements Iterator {
 		// verification des infos minimales pour autoriser la sauvegarde
 		if ( ! $this->infos->getInfo( Users::USERS_EMAIL) ||
 			 ! $this->infos->getInfo( Users::USERS_NOM)   ||
-			 ! $this->infos->getInfo( Users::USERS_PASS)    )
-
+			 ( ! $this->infos->getInfo( Users::USERS_PASS)
+				&& ! $this->infos->getInfo( Users::USERS_LDAP) ) )
+		{
 			throw new Exception (Users::SAVE_LOSS) ;
+		}
 
 		// nouvel User ? création de la date d'inscription
 		if ( ! $this->infos->getInfo( Users::USERS_DATE_INSCRIPTION ) )
@@ -246,6 +248,10 @@ class Users implements Iterator {
 	public function setEmail ( $email ){
 		if ( ! $this->checkEmail ($email) ) return Users::USERS_ERROR ;
 		$this->infos->addInfo ( Users::USERS_EMAIL, $email );
+		return Users::USERS_OK;
+	}
+	public function setLDAP ( $uid ){
+		$this->infos->addInfo ( Users::USERS_LDAP, $uid );
 		return Users::USERS_OK;
 	}
 	public function setTekos ( $idTekos ) {

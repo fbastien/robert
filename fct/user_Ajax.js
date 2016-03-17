@@ -1,6 +1,6 @@
 
 $(document).ready(function() {
-    $('.selectUser').click(function() {
+	$('.selectUser').click(function() {
 		var selected = $(this).attr('id');
 		var prenomUser = $(this).attr('nom');
 		var ajaxStr  = 'action=select&id='+selected;
@@ -13,6 +13,9 @@ $(document).ready(function() {
 	// modification d'un user
 	$('#modifieurPage').on('click', '.modif', function () {
 		var idUser		= $('#modUserId').val() ;
+		var curAuth		= $("#modUserCurAuth").val();
+		var auth		= $("#modifieurPage input:radio[name='auth']:checked").val();
+		var ldap		= $('#modUserLDAP').val();
 		var email		= $('#modUserEmail').val() ;
 		var passw		= $('#modUserPass').val() ;
 		var prenom		= $('#modUserPrenom').val() ;
@@ -20,22 +23,57 @@ $(document).ready(function() {
 		var level		= $('#modUserLevel').val() ;
 		var tekosAssoc	= $('#modUserTekos').val() ;
 		
-		var AjaxStr = 'action=modif&id='+idUser+'&email='+email+'&prenom='+prenom+'&nom='+nom
+		if ( email == '' ) {
+			alert("Vous devez saisir l'adresse email !");
+			return;
+		}
+		var AjaxStr = 'action=modif&id='+idUser+'&auth='+auth+'&email='+email+'&prenom='+prenom+'&nom='+nom
 						+'&level='+level+'&idTekos='+tekosAssoc ;
-		if (passw != '') {
-			if (passw.length < 4) {
-				alert('Mot de passe trop court !');
-				return;
-			}
-			else AjaxStr += '&password='+passw ;
+		switch(auth) {
+			case 'DB':
+				if (passw != '' || curAuth != auth) {
+					if (passw.length < 4) {
+						alert('Mot de passe trop court !');
+						return;
+					}
+					AjaxStr += '&password='+passw;
+				}
+				break;
+			case 'LDAP':
+				if ( ldap == '' ) {
+					alert("Vous devez saisir le login LDAP !");
+					return;
+				}
+				AjaxStr += '&ldap='+ldap ;
+				if (idUser == $('#modifInfoUserActif').val() && ldap != $('#modUserActifCurLDAP').val()) {
+					passw = $('#modUserLDAPPass').val();
+					if(passw == '') {
+						alert('Si vous changez votre compte LDAP, vous devez saisir son mot de passe !');
+						return;
+					}
+					AjaxStr += '&password='+passw;
+				}
+				break;
+			default:
+				alert("Vous devez saisir le type d'authentification !");
+				return; 
 		}
 		
 		AjaxFct(AjaxStr, 'user_actions', false, 'retourAjax', 'personnel_list_utilisateurs');
 	});
+	$('#modUserLDAP').on('blur', function() {
+		var divLDAPPass = $('#modUserDivAuthLDAPPass');
+		var curLDAP = $('#modUserActifCurLDAP').val();
+		if($('#modUserId').val() == $('#modifInfoUserActif').val() && ($(this).val() != curLDAP || curLDAP == '')) {
+			divLDAPPass.show();
+		} else {
+			divLDAPPass.hide();
+		}
+	});
 	
 	// Création d'un user
 	$("#btncreateUser").click ( function () {
-		var auth  = $("input:radio[name='auth']:checked").val();
+		var auth  = $("#createUser input:radio[name='auth']:checked").val();
 		var login = $("#cLogin").val();
 		var pass  = $("#cPass").val();
 		var pren  = $("#cPren").val();
@@ -148,8 +186,27 @@ $(document).ready(function() {
 
 	
 function displaySelUser (data) {
+	if(data.ldap_uid) {
+		$("#modUserCurAuth").val('LDAP');
+		$('#modUserAuthLDAP').prop('checked', true);
+		$('#modUserDivAuthDB').hide();
+		$('#modUserDivAuthLDAP').show();
+		$('#modUserDivAuthLDAPPass').hide();
+		$('#modUserPass').prop('title', '');
+	} else {
+		$("#modUserCurAuth").val('DB');
+		$('#modUserAuthDB').prop('checked', true);
+		$('#modUserDivAuthDB').show();
+		$('#modUserDivAuthLDAP').hide();
+		if(data.id == $('#modifInfoUserActif').val()) {
+			$('#modUserDivAuthLDAPPass').show();
+		}
+		$('#modUserPass').prop('title', 'Laissez vide si pas de modif.');
+	}
 	$('#modUserId').val(data.id);
 	$('#modUserEmail').val(data.email);
+	$('#modUserLDAP').val(data.ldap_uid);
+	$('#modUserLDAPPass').val('');
 	$('#modUserPrenom').val(data.prenom);
 	$('#modUserNom').val(data.nom);
 	$('#modUserLevel').val(data.level);

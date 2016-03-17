@@ -51,22 +51,65 @@ if ( $action == 'modif') {
 	unset($_POST['action']);
 	if ( !isset($id) )
 		die("Il manque l'id de l'utilisateur à modifier...");
+	if ( !isset($auth) )
+		die("Il manque le type d'authentification");
 	if ( $_SESSION["user"]->isAdmin() !== true )
 		die("Vous n'êtes pas habilité à modifier cet utilisateur ! $id");
+	
+	// Cas de modification de ses propres infos
 	if ( ($_SESSION["user"]->getUserInfos('id') == $id) ) {
 		$retourModif = json_decode(modifOwnUser(), true);
 		if ( $retourModif['error'] == 'OK')
-			 die( "Sauvegarde de l'utilisateur OK !" ) ;
-		else die( nl2br($retourModif['error']) );
+			die( "Sauvegarde de l'utilisateur OK !" ) ;
+		else
+			die( nl2br($retourModif['error']) );
 	}
-	createTmpUser($id) ;
+	
+	createTmpUser($id);
 	foreach ( $_POST as $key => $val ) {
-		if ( $key == 'id' || $key == 'password') continue ; 
+		if ( $key == 'id' || $key == 'password' || $key == 'auth' || $key == 'ldap')
+			continue; 
 		$tmpUser->setUserInfos ( $key, $val ) ;
 	}
-	if (isset($_POST['password']) && $_POST['password'] != '') {
-		if ($tmpUser->setPassword($_POST['password']) != true)
-			echo "Le mot de passe est trop court !";
+	switch($auth) {
+		case AUTH_DB:
+			if (isset($_POST['password']) && $_POST['password'] != '') {
+				if ($tmpUser->setPassword($_POST['password']) != true)
+					echo "Le mot de passe est trop court !";
+			}
+			$tmpUser->setLDAP(null);
+			break;
+		case AUTH_LDAP:
+			if (!isset($_POST['ldap']) || $_POST['ldap'] == '')
+				die("Il manque le login LDAP");
+			
+			// Vérification que le compte LDAP existe
+			// TODO Déplacer dans une classe dédiée à LDAP
+			$ldap = ldap_connect($config['ldap.host'])
+				or die("Erreur de connexion LDAP");
+			if(! ldap_bind($ldap, $config['ldap.read.dn'], $config['ldap.read.pass'])) {
+				ldap_unbind($ldap);
+				die("Erreur de connexion LDAP");
+			}
+			$ldap_result = ldap_search($ldap, $config['ldap.base'], "(".LDAP_LOGIN."=".$_POST['ldap'].")", array(LDAP_DN));
+			if (! $ldap_result) {
+				ldap_unbind($ldap);
+				die("Erreur lors de la récupération du compte LDAP : ".ldap_error($ldap));
+			}
+			$ldap_count = ldap_count_entries($ldap, $ldap_result);
+			ldap_unbind($ldap);
+			if ($ldap_count == 0) {
+				die("Erreur : Aucun compte LDAP trouvé avec ce login");
+			}
+			if ($ldap_count > 1) {
+				die("Erreur : Plusieurs comptes LDAP trouvés avec ce login");
+			}
+			
+			$tmpUser->setLDAP($_POST['ldap']);
+			$tmpUser->setPassword(null);
+			break;
+		default:
+			die("Il manque le type d'authentification...");
 	}
 	saveTmpUser();
 }
@@ -76,7 +119,8 @@ if ( $action == 'modifOwnUser') {
 	echo modifOwnUser();
 }
 function modifOwnUser () {
-	global $tmpUser; global $bdd;
+	global $tmpUser;
+	global $bdd;
 	unset($_POST['action']);
 	$reconnect = false;
 	if ( !isset($_POST['id']) ) {
@@ -88,26 +132,49 @@ function modifOwnUser () {
 	createTmpUser($_POST['id']) ;
 	
 	foreach ( $_POST as $key => $val ) {
-		if ($key == 'id' || $key == 'password') continue ; 
+		if ($key == 'id' || $key == 'password' || $key == 'ldap' || $key == 'auth')
+			continue; 
 		$tmpUser->setUserInfos ( $key, $val ) ;
 	}
-	if (isset($_POST['password']) && $_POST['password'] != '') {				// et/ou si le password est redéfini
-		$reconnect = true;
-		if ($tmpUser->setPassword($_POST['password']) != true)
-			$retour['error'] = "Le mot de passe est trop court !";
+	
+	$isAuthLDAP = (isset($_POST['ldap']) && $_POST['ldap'] != '');
+	// Authentification par LDAP
+	if ($isAuthLDAP) {
+		if ($_POST['ldap'] != $_SESSION['user']->getUserInfos(Users::USERS_LDAP)) {
+			$reconnect = true;
+			$tmpUser->setLDAP($_POST['ldap']);
+			if(! isset($_POST['password'])) {
+				$retour['error'] = "Il manque le mot de passe du nouveau comtpe LDAP.";
+			}
+		}
+		$tmpUser->setPassword(null);
 	}
-	if ($_POST['email'] != $_SESSION['user']->getUserInfos('email')) {					// Si le mail est redéfini
-		$reconnect = true;
+	// Authentification par email / mot de passe
+	else {
+		// Si le password est redéfini
+		if (isset($_POST['password']) && $_POST['password'] != '') {
+			$reconnect = true;
+			if ($tmpUser->setPassword($_POST['password']) != true)
+				$retour['error'] = "Le mot de passe est trop court !";
+		}
+		// Si le mail est redéfini
+		if ($_POST['email'] != $_SESSION['user']->getUserInfos('email')) {
+			$reconnect = true;
+		}
+		$tmpUser->setLDAP(null);
 	}
 	if (!isset($retour['error'])) {
 		try {
 			if ( $tmpUser->save() ) {
-				if ($reconnect == true) {										// ALORS on reconnecte le user pour remettre les bons mail / MDP dans les cookies et la session
+				// Si le login et/ou le mot de passe ont été modifiés, on reconnecte le user pour remettre les bons identifiants dans les cookies et la session
+				if ($reconnect == true) {
 					$Auth = new Connecting($bdd);
-					if (!$Auth->connect($_POST['email'], @$_POST['password'])) $errAuth = true;
-					else $errAuth = false;
+					if (!$Auth->connect( ($isAuthLDAP ? $_POST['ldap'] : $_POST['email']), $_POST['password']))
+						$errAuth = true;
+					else
+						$errAuth = false;
 					if ($errAuth == true) {
-						$retour['error'] = "Impossible de vous reconnecter automatiquement !\nIl doit manquer le mot de passe...\n\nMerci de vous reconnecter manuellement.";
+						$retour['error'] = "Impossible de vous reconnecter automatiquement !\nLe mot de passe doit être erroné...\n\nMerci de vous reconnecter manuellement.";
 						$retour['type'] = "reloadPage";
 					}
 					else {
@@ -126,8 +193,8 @@ function modifOwnUser () {
 		catch (Exception $e){
 			$retour['error'] =  "Impossible de sauvegarder l'utilisateur : " . $e->getMessage(); 
 		}
-		unset ($tmpUser);
 	}
+	unset ($tmpUser);
 	return json_encode($retour);
 }
 

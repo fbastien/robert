@@ -35,7 +35,17 @@ if ( $_SESSION["user"]->isAdmin() !== true ) die('Vous n\'avez pas accès à cet
 		);
 		$('#chercheInput').val('');							// vide l'input de recherche
 		$('#chercheDiv').show(300);							// affiche le module de recherche
-
+		
+		// Affichage des champs en fonction du type d'authentification
+		$("#modifieurPage input:radio[name='auth']").change(function(eventObject) {
+			if($('#modUserAuthDB').is(':checked')) {
+				$('#modUserDivAuthDB').show();
+				$('#modUserDivAuthLDAP').hide();
+			} else if($('#modUserAuthLDAP').is(':checked')) {
+				$('#modUserDivAuthDB').hide();
+				$('#modUserDivAuthLDAP').show();
+			}
+		});
 	});
 </script>
 
@@ -52,10 +62,11 @@ if ( $_SESSION["user"]->isAdmin() !== true ) die('Vous n\'avez pas accès à cet
 			<th></th>
 		</tr>
 		
-		<?php
+<?php
 		if (is_array($liste_Users)) {
 			foreach ($liste_Users as $info) {
-				$tekos = ' --- '; $tekosInfo = array();
+				$tekos = ' --- ';
+				$tekosInfo = array();
 				if (is_array($liste_tekos)) {
 					foreach ($liste_tekos as $tekosInfo)
 						if ($tekosInfo['idUser'] == $info['id'])
@@ -101,10 +112,12 @@ if ( $_SESSION["user"]->isAdmin() !== true ) die('Vous n\'avez pas accès à cet
 				<td colspan="6">Aucun utilisateur enregistré ';
 			if (isset($_POST['searchingfor']))
 				echo 'pour la recherche <b>"'.$_POST['searchingfor'].'"</b> ';
-			else echo '!! Comment c\'est possible ??? ';
+			else
+				echo '!! Comment c\'est possible ??? ';
 			echo '!!</td></tr>';
 		}
-	?></table>
+?>
+	</table>
 	<br />
 </div>
 
@@ -113,12 +126,30 @@ if ( $_SESSION["user"]->isAdmin() !== true ) die('Vous n\'avez pas accès à cet
 	<div class="ui-widget-header ui-corner-all pad3">Modifier l'utilisateur "<span id="nomUserModif"></span>"</div>
 	<br />
 	<input type="hidden" id="modUserId" />
+	<input type="hidden" id="modUserCurAuth" />
+	<div class="inline top" style="width: 500px;">
+		<div class="ui-widget-header ui-corner-all">Authentification :</div>
+		<input type="radio" id="modUserAuthDB" name="auth" value="<?php echo AUTH_DB; ?>" /> <label for="modUserAuthDB">Par email et mot de passe</label>
+		<input type="radio" id="modUserAuthLDAP" name="auth" value="<?php echo AUTH_LDAP; ?>" /> <label for="modUserAuthLDAP">Avec un compte LDAP</label>
+	</div>
+	<br />
+	<br />
 	<div class="inline top" style="width: 200px;">
 		<div class="ui-widget-header ui-corner-all">Adresse Email :</div>
 		<input type="text" id="modUserEmail" size="20" />
 		<br />
-		<div class="ui-widget-header ui-corner-all">Mot de passe :</div>
-		<input type="text" id="modUserPass" size="20" title="Laissez vide si pas de modif." />
+		<div id="modUserDivAuthDB">
+			<div class="ui-widget-header ui-corner-all">Mot de passe :</div>
+			<input type="text" id="modUserPass" size="20" />
+		</div>
+		<div id="modUserDivAuthLDAP">
+			<div class="ui-widget-header ui-corner-all">Login LDAP :</div>
+			<input type="text" id="modUserLDAP" size="20" />
+			<div id="modUserDivAuthLDAPPass" style="display: none;">
+				<div class="ui-widget-header ui-corner-all">Mot de passe LDAP :</div>
+				<input type="password" id="modUserLDAPPass" size="20" />
+			</div>
+		</div>
 	</div>
 	<div class="inline top" style="width: 200px;">
 		<div class="ui-widget-header ui-corner-all">Prénom :</div>

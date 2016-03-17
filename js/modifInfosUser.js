@@ -1,10 +1,8 @@
 var oldEmail = '';
 var forceRetapePass = false;
 $(function() {
-	$('#divAddInfoUsers').appendTo('#infosUserDiv');
-
 	$('#modifInfoUserActif').click(function() {
-		var idUser = $(this).attr('idUser');
+		var idUser = $(this).val();
 		$( "#dialogMyInfos" ).dialog({
 			autoOpen: true, height: 450, width: 680, modal: true,
 			buttons: {"Enregistrer" : function() {saveUserActifInfos(idUser);},
@@ -19,24 +17,49 @@ $(function() {
 			oldEmail = $(this).val();
 	});
 	$('#infosUserDiv').on('blur', '#modUserActif-email', function() {
-		var newEmail = $(this).val();
-		if (newEmail != oldEmail) {
+		if($('#modUserActifCurAuth').val() == 'DB') {
+			var newEmail = $(this).val();
+			if (newEmail != oldEmail) {
+				if (forceRetapePass == false) {
+					$('#infosUserDiv').append('<div class="inline top center marge30l mini ui-state-error ui-corner-all pad5 messageSpecial" style="width: 175px;">'
+												+'Vous venez de changer votre adresse email ! Merci de retaper votre mot de passe.<br /><i class="petit">C\'est aussi l\'occasion de le changer !</i>'
+											+'</div>');
+					forceRetapePass = true;
+					$('#modUserActif-Pass').focus();
+				}
+			}
+			else
+				forceRetapePass = false;
+			
 			if (forceRetapePass == false) {
-				$('#infosUserDiv').append('<div class="inline top center marge30l mini ui-state-error ui-corner-all pad5 messageSpecial" style="width: 175px;">'
-											+'Vous venez de changer votre adresse email ! Merci de retaper votre mot de passe.<br /><i class="petit">C\'est aussi l\'occasion de le changer !</i>'
-										+'</div>');
-				forceRetapePass = true;
-				$('#modUserActif-Pass').focus();
+				$('#infosUserDiv .messageSpecial').remove();
 			}
 		}
-		else forceRetapePass = false;
-		
-		if (forceRetapePass == false) {
-			$('.messageSpecial').remove();
+	});
+	
+	// Affichage des champs en fonction du type d'authentification
+	$("#dialogMyInfos input:radio[name='userActifAuth']").change(function(eventObject) {
+		if($('#modUserActifAuthDB').is(':checked')) {
+			$('#modUserActifDivAuthDB').show();
+			$('#modUserActifDivAuthLDAP').hide();
+			$('#infosUserDiv .messageSpecial').show();
+		} else if($('#modUserActifAuthLDAP').is(':checked')) {
+			$('#modUserActifDivAuthDB').hide();
+			$('#modUserActifDivAuthLDAP').show();
+			$('#infosUserDiv .messageSpecial').hide();
+		}
+	});
+	$('#modUserActif-LDAP').on('blur', function() {
+		var divLDAPPass = $('#modUserActifDivAuthLDAPPass');
+		if($(this).val() == $('#modUserActifCurLDAP').val()) {
+			divLDAPPass.hide();
+		} else {
+			divLDAPPass.show();
 		}
 	});
 	
 /// Pour Admin seulement : -------------------------------------------------------------------------------------------------------------------------------------
+	$('#divAddInfoUsers').appendTo('#infosUserDiv');
 	$('#infosUserDiv').on('click', '#addInfoUsers', function() {
 		var objDivAddBtn = $('#divAddInfoUsers');
 		$('#divAddInfoUsers').remove();
@@ -67,7 +90,8 @@ $(function() {
 
 
 function saveUserActifInfos (idUser) {
-	var infos = {}; var abort = false;
+	var infos = {};
+	var abort = false;
 	$('.blockModInfo').each(function() {
 		var infoKey = $(this).children('input').attr('id');
 		infoKey = infoKey.substr(13);
@@ -75,7 +99,8 @@ function saveUserActifInfos (idUser) {
 		infos[infoKey] = infoVal;
 		if (infoKey == 'email') {
 			if(!verifyEmail(infoVal)) {
-				alert('l\'email n\'est pas valide !');abort = true;
+				alert('l\'email n\'est pas valide !');
+				abort = true;
 			}
 		}
 	});
@@ -93,19 +118,45 @@ function saveUserActifInfos (idUser) {
 			abort = true;
 		}
 	});
-	var newPassword = $('#modUserActif-Pass').val();
-	if (forceRetapePass == true && (newPassword == '' || newPassword.length < 4)) {
-		alert('Vous devez obligatoirement retaper ou modifier votre mot de passe si vous changez d\'adresse email !');
-		abort = true;
+	var curAuth = $('#modUserActifCurAuth').val();
+	var auth = $("#dialogMyInfos input:radio[name='userActifAuth']:checked").val();
+	var newPassword;
+	switch(auth) {
+		case 'DB':
+			newPassword = $('#modUserActif-Pass').val();
+			if (forceRetapePass == true && (newPassword == '' || newPassword.length < 4)) {
+				alert('Vous devez obligatoirement retaper ou modifier votre mot de passe si vous changez d\'adresse email !');
+				abort = true;
+			}
+			if (newPassword != '' || curAuth != auth) {
+				if (newPassword.length < 4 ) {
+					alert('Le mot de passe doit faire au moins 4 caractères !');
+					abort = true;
+				}
+				infos['password'] = newPassword;
+			}
+			break;
+		case 'LDAP':
+			var curLdap = $('#modUserActifCurLDAP').val();
+			var ldap = $('#modUserActif-LDAP').val();
+			if (ldap == '') {
+				alert('Le login LDAP n\'est pas valide !');
+				abort = true;
+			}
+			infos['ldap'] = ldap;
+			newPassword = $('#modUserActif-LDAPPass').val();
+			if(ldap != curLdap && newPassword == '') {
+				alert('Si vous changez votre compte LDAP, vous devez saisir son mot de passe !');
+				abort = true;
+			}
+			infos['password'] = newPassword;
+			break;
+		default:
+			alert('Le type d\'authentification n\'est pas valide !');
+			break;
 	}
-	if (newPassword != '') {
-		if (newPassword.length < 4 ) {
-			alert('Le mot de passe doit faire au moins 4 caractères !');
-			abort = true;
-		}
-		infos['password'] = newPassword;
-	}
-	if (abort == true) return;
+	if (abort == true)
+		return;
 	
 	var ajaxStr = 'action=modifOwnUser&id='+idUser;
 	$.each(infos, function(key, val) {

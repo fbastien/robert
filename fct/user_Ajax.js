@@ -36,7 +36,7 @@ $(document).ready(function() {
 						alert('Mot de passe trop court !');
 						return;
 					}
-					AjaxStr += '&password='+passw;
+					AjaxStr += '&password='+encodeURIComponent(passw);
 				}
 				break;
 			case 'LDAP':
@@ -51,7 +51,7 @@ $(document).ready(function() {
 						alert('Si vous changez votre compte LDAP, vous devez saisir son mot de passe !');
 						return;
 					}
-					AjaxStr += '&password='+passw;
+					AjaxStr += '&password='+encodeURIComponent(passw);
 				}
 				break;
 			default:
@@ -85,7 +85,7 @@ $(document).ready(function() {
 			case 'DB':
 				if ( login == '' || pass == '' ) { alert("Vous devez remplir tous les champs marqués d'une étoile !"); return; }
 				if ( pass.length <= 4  ) { alert("Mot de passe trop court ! Il doit être supérieur à 4 caractères."); return; }
-				dataStr += "&cLogin="+login+"&cPass="+pass+"&cName="+name+"&cPren="+pren;
+				dataStr += "&cLogin="+login+"&cPass="+encodeURIComponent(pass)+"&cName="+name+"&cPren="+pren;
 				break;
 			case 'LDAP':
 				if ( login == '' ) { alert("Vous devez remplir tous les champs marqués d'une étoile !"); return; }

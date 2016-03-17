@@ -133,7 +133,7 @@ function saveUserActifInfos (idUser) {
 					alert('Le mot de passe doit faire au moins 4 caractères !');
 					abort = true;
 				}
-				infos['password'] = newPassword;
+				infos['password'] = encodeURIComponent(newPassword);
 			}
 			break;
 		case 'LDAP':
@@ -149,7 +149,7 @@ function saveUserActifInfos (idUser) {
 				alert('Si vous changez votre compte LDAP, vous devez saisir son mot de passe !');
 				abort = true;
 			}
-			infos['password'] = newPassword;
+			infos['password'] = encodeURIComponent(newPassword);
 			break;
 		default:
 			alert('Le type d\'authentification n\'est pas valide !');

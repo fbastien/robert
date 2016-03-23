@@ -124,11 +124,14 @@ if ($_SESSION['user']->getUserInfos('prenom') != "Demo") : ?>
 	<br />
 	<div class="ui-state-default ui-corner-all center">
 		<div class="ui-widget-header ui-corner-all">Authentification</div>
-		<input type="hidden" id="modUserActifCurAuth" value="<?php echo ( $isAuthLDAP ? AUTH_LDAP : AUTH_DB ); ?>" />
-		<input type="hidden" id="modUserActifCurLDAP" value="<?php echo ( $curLDAP === false ? '' : $curLDAP ); ?>" />
-		<input type="radio" id="modUserActifAuthDB" name="userActifAuth" value="<?php echo AUTH_DB; ?>" <?php echo ( $isAuthLDAP ? '' : 'checked="cheched"' ); ?> /> <label for="modUserActifAuthDB">Par email et mot de passe</label>
-		<input type="radio" id="modUserActifAuthLDAP" name="userActifAuth" value="<?php echo AUTH_LDAP; ?>" <?php echo ( $isAuthLDAP ? 'checked="cheched"' : '' ); ?> /> <label for="modUserActifAuthLDAP">Avec un compte LDAP</label>
-		<br />
+		<div id="modUserActifDivAuthType" <?php echo ($isAuthLDAP ? !$config[CONF_AUTH_DB] : !$config[CONF_AUTH_LDAP]) ? 'style="display: none;"' : '' ; ?>>
+			<input type="hidden" id="modUserActifCurAuth" value="<?php echo ( $isAuthLDAP ? AUTH_LDAP : AUTH_DB ); ?>" />
+			<input type="hidden" id="modUserActifCurLDAP" value="<?php echo ( $isAuthLDAP ? $curLDAP : ''); ?>" />
+			<input type="radio" id="modUserActifAuthDB" name="userActifAuth" value="<?php echo AUTH_DB; ?>" <?php echo ( $isAuthLDAP ? '' : 'checked="checked"' ); ?> />
+			<label for="modUserActifAuthDB">Par email et mot de passe</label>
+			<input type="radio" id="modUserActifAuthLDAP" name="userActifAuth" value="<?php echo AUTH_LDAP; ?>" <?php echo ( $isAuthLDAP ? 'checked="checked"' : '' ); ?> />
+			<label for="modUserActifAuthLDAP">Avec un compte LDAP</label>
+		</div>
 		<br />
 		<div id="modUserActifDivAuthDB" <?php echo ( $isAuthLDAP ? 'style="display: none;"' : '' ); ?>>
 			<?php echo ( $isAuthLDAP ? 'Mot de passe' : 'Modifier le mot de passe' ); ?> :

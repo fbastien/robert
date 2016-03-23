@@ -184,7 +184,6 @@ $(document).ready(function() {
 	
 });
 
-	
 function displaySelUser (data) {
 	if(data.ldap_uid) {
 		$("#modUserCurAuth").val('LDAP');
@@ -203,6 +202,16 @@ function displaySelUser (data) {
 		}
 		$('#modUserPass').prop('title', 'Laissez vide si pas de modif.');
 	}
+	
+	// Masquage du choix du type d'authentification s'il n'y en a qu'un possible
+	// (sauf si l'utilisateur sélectionné est configuré avec un autre type, pour lui permettre de changer)
+	var authDiv = $('#modUserDivAuth');
+	if($('#modifieurPage input:radio[name="auth"]:not(:disabled)').is(':not(:checked)')) {
+		authDiv.show();
+	} else {
+		authDiv.hide();
+	}
+	
 	$('#modUserId').val(data.id);
 	$('#modUserEmail').val(data.email);
 	$('#modUserLDAP').val(data.ldap_uid);

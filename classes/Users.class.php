@@ -141,9 +141,9 @@ class Users implements Iterator {
 
 	// Verifie si la syntaxte d'un email est valide
 	public function checkEmail ( $addresse ) {
-		if (count($addresse) == 0) return false ;
-		$validMail = filter_var($addresse, FILTER_VALIDATE_EMAIL);
-		return $validMail;
+		if (count($addresse) == 0)
+			return false ;
+		return (filter_var($addresse, FILTER_VALIDATE_EMAIL) !== false);
 	}
 
 	// Check si l'user a le niveau DEV

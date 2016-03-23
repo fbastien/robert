@@ -73,25 +73,30 @@ if ( $action == 'modif') {
 	}
 	switch($auth) {
 		case AUTH_DB:
+			if (! $config[CONF_AUTH_DB])
+				die("L'authentification par email et mot de passe est désactivée.");
 			if (isset($_POST['password']) && $_POST['password'] != '') {
 				if ($tmpUser->setPassword($_POST['password']) != true)
 					echo "Le mot de passe est trop court !";
 			}
+			
 			$tmpUser->setLDAP(null);
 			break;
 		case AUTH_LDAP:
+			if (! $config[CONF_AUTH_LDAP])
+				die("L'authentification par LDAP est désactivée.");
 			if (!isset($_POST['ldap']) || $_POST['ldap'] == '')
 				die("Il manque le login LDAP");
 			
 			// Vérification que le compte LDAP existe
 			// TODO Déplacer dans une classe dédiée à LDAP
-			$ldap = ldap_connect($config['ldap.host'])
+			$ldap = ldap_connect($config[CONF_LDAP_HOST])
 				or die("Erreur de connexion LDAP");
-			if(! ldap_bind($ldap, $config['ldap.read.dn'], $config['ldap.read.pass'])) {
+			if(! ldap_bind($ldap, $config[CONF_LDAP_RDN], $config[CONF_LDAP_PASS])) {
 				ldap_unbind($ldap);
 				die("Erreur de connexion LDAP");
 			}
-			$ldap_result = ldap_search($ldap, $config['ldap.base'], "(".LDAP_LOGIN."=".$_POST['ldap'].")", array(LDAP_DN));
+			$ldap_result = ldap_search($ldap, $config[CONF_LDAP_BASE], "(".LDAP_LOGIN."=".$_POST['ldap'].")", array(LDAP_DN));
 			if (! $ldap_result) {
 				ldap_unbind($ldap);
 				die("Erreur lors de la récupération du compte LDAP : ".ldap_error($ldap));
@@ -121,11 +126,14 @@ if ( $action == 'modifOwnUser') {
 function modifOwnUser () {
 	global $tmpUser;
 	global $bdd;
+	global $config;
 	unset($_POST['action']);
 	$reconnect = false;
 	if ( !isset($_POST['id']) ) {
 		$retour['error'] = "Il manque l'id de l'utilisateur à modifier...";
 	}
+	if ( !isset($_POST['auth']) )
+		die("Il manque le type d'authentification.");
 	if ( ($_SESSION["user"]->getUserInfos('id') != $_POST['id']) )
 		$retour['error'] = "Vous devez être l'utilisateur concerné ! (No " . $_POST['id'] . ")";
 	
@@ -137,31 +145,47 @@ function modifOwnUser () {
 		$tmpUser->setUserInfos ( $key, $val ) ;
 	}
 	
-	$isAuthLDAP = (isset($_POST['ldap']) && $_POST['ldap'] != '');
-	// Authentification par LDAP
-	if ($isAuthLDAP) {
-		if ($_POST['ldap'] != $_SESSION['user']->getUserInfos(Users::USERS_LDAP)) {
-			$reconnect = true;
-			$tmpUser->setLDAP($_POST['ldap']);
-			if(! isset($_POST['password'])) {
-				$retour['error'] = "Il manque le mot de passe du nouveau comtpe LDAP.";
+	switch($_POST['auth']) {
+		// Authentification par LDAP
+		case AUTH_LDAP:
+			if (! $config[CONF_AUTH_LDAP]) {
+				$retour['error'] = "L'authentification par LDAP est désactivée.";
+				break;
 			}
-		}
-		$tmpUser->setPassword(null);
-	}
-	// Authentification par email / mot de passe
-	else {
-		// Si le password est redéfini
-		if (isset($_POST['password']) && $_POST['password'] != '') {
-			$reconnect = true;
-			if ($tmpUser->setPassword($_POST['password']) != true)
-				$retour['error'] = "Le mot de passe est trop court !";
-		}
-		// Si le mail est redéfini
-		if ($_POST['email'] != $_SESSION['user']->getUserInfos('email')) {
-			$reconnect = true;
-		}
-		$tmpUser->setLDAP(null);
+			if (! isset($_POST['ldap']) || $_POST['ldap'] == '') {
+				$retour['error'] = "Il manque le login du compte LDAP.";
+				break;
+			}
+			if ($_POST['ldap'] != $_SESSION['user']->getUserInfos(Users::USERS_LDAP)) {
+				$reconnect = true;
+				$tmpUser->setLDAP($_POST['ldap']);
+				if(! isset($_POST['password'])) {
+					$retour['error'] = "Il manque le mot de passe du nouveau comtpe LDAP.";
+				}
+			}
+			$tmpUser->setPassword(null);
+			break;
+		// Authentification par email / mot de passe
+		case AUTH_DB:
+			if (! $config[CONF_AUTH_DB]) {
+				$retour['error'] = "L'authentification par email et mot de passe est désactivée.";
+				break;
+			}
+			// Si le password est redéfini
+			if (isset($_POST['password']) && $_POST['password'] != '') {
+				$reconnect = true;
+				if ($tmpUser->setPassword($_POST['password']) != true)
+					$retour['error'] = "Le mot de passe est trop court !";
+			}
+			// Si le mail est redéfini
+			if ($_POST['email'] != $_SESSION['user']->getUserInfos('email')) {
+				$reconnect = true;
+			}
+			$tmpUser->setLDAP(null);
+			break;
+		default:
+			$retour['error'] = "Il manque le type d'authentification...";
+			break;
 	}
 	if (!isset($retour['error'])) {
 		try {
@@ -169,7 +193,7 @@ function modifOwnUser () {
 				// Si le login et/ou le mot de passe ont été modifiés, on reconnecte le user pour remettre les bons identifiants dans les cookies et la session
 				if ($reconnect == true) {
 					$Auth = new Connecting($bdd);
-					if (!$Auth->connect( ($isAuthLDAP ? $_POST['ldap'] : $_POST['email']), $_POST['password']))
+					if (!$Auth->connect( ($_POST['auth'] == AUTH_LDAP ? $_POST['ldap'] : $_POST['email']), $_POST['password']))
 						$errAuth = true;
 					else
 						$errAuth = false;
@@ -224,23 +248,29 @@ if ( $action == "create" ){
 		$tmpUser = new Users () ;
 		switch( isset($cAuth) ? $cAuth : '' ) {
 			case AUTH_DB:
+				if (! $config[CONF_AUTH_DB])
+					die("L'authentification par email et mot de passe est désactivée.");
+				
 				if ( isset($cLogin) ) $tmpUser->setEmail( $cLogin );
 				if ( isset($cPass) )  $tmpUser->setPassword( $cPass );
 				if ( isset($cPren) )  $tmpUser->setPrenom( $cPren );
 				if ( isset($cName) )  $tmpUser->setName( $cName );
 				break;
 			case AUTH_LDAP:
+				if (! $config[CONF_AUTH_LDAP])
+					die("L'authentification par LDAP est désactivée.");
+				
 				if ( isset($cLogin) ) $tmpUser->setLDAP( $cLogin );
 				
 				// Vérification que le compte existe et récupération dans LDAP des informations des autres champs
 				// TODO Déplacer dans une classe dédiée à LDAP
-				$ldap = ldap_connect($config['ldap.host'])
+				$ldap = ldap_connect($config[CONF_LDAP_HOST])
 					or die("Erreur de connexion LDAP");
-				if(! ldap_bind($ldap, $config['ldap.read.dn'], $config['ldap.read.pass'])) {
+				if(! ldap_bind($ldap, $config[CONF_LDAP_RDN], $config[CONF_LDAP_PASS])) {
 					ldap_unbind($ldap);
 					die("Erreur de connexion LDAP");
 				}
-				$ldap_result = ldap_search($ldap, $config['ldap.base'], "(".LDAP_LOGIN."=$cLogin)", array(LDAP_EMAIL, LDAP_PRENOM, LDAP_NOM));
+				$ldap_result = ldap_search($ldap, $config[CONF_LDAP_BASE], "(".LDAP_LOGIN."=$cLogin)", array(LDAP_EMAIL, LDAP_PRENOM, LDAP_NOM));
 				if (! $ldap_result) {
 					ldap_unbind($ldap);
 					die("Erreur lors de la récupération du compte LDAP : ".ldap_error($ldap));
@@ -274,7 +304,10 @@ if ( $action == "create" ){
 
 // crée un utilisateur à partir d'un technicien
 if ( $action == "createFromTekos" ){
-	if ( $_SESSION["user"]->isAdmin() !== true ) { die("Vous n'êtes pas habilité à ajouter des utilisateurs !"); }
+	if ( $_SESSION["user"]->isAdmin() !== true )
+		die("Vous n'êtes pas habilité à ajouter des utilisateurs !");
+	if (! $config[CONF_AUTH_DB])
+		die("L'authentification par email et mot de passe est désactivée.");
 	
 	$tekosToUse = new Tekos($idTekos);
 	$cMail = $tekosToUse->getTekosInfos('email');

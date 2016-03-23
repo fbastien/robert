@@ -212,7 +212,14 @@ class Connecting {
 	private function authenticate($login, $password, $isPwdHashed = false) {
 		global $config;
 		
-		$isLoginEmail = filter_var($login, FILTER_VALIDATE_EMAIL);
+		if ($config[CONF_AUTH_DB] && $config[CONF_AUTH_LDAP])
+			$isLoginEmail = (filter_var($login, FILTER_VALIDATE_EMAIL) !== false);
+		elseif ($config[CONF_AUTH_DB])
+			$isLoginEmail = true;
+		elseif ($config[CONF_AUTH_LDAP])
+			$isLoginEmail = false;
+		else
+			return false;
 		
 		$q = $this->db->prepare("SELECT `id`, `ldap_uid`, `email`, `password`
 									FROM `".TABLE_USERS."`
@@ -235,17 +242,17 @@ class Connecting {
 					return false;
 				}
 				
-				$ldap = ldap_connect($config['ldap.host']);
+				$ldap = ldap_connect($config[CONF_LDAP_HOST]);
 				if (! $ldap) {
 					throw new Exception("Erreur de connexion LDAP");
 				}
 				
-				if(! ldap_bind($ldap, $config['ldap.read.dn'], $config['ldap.read.pass'])) {
+				if(! ldap_bind($ldap, $config[CONF_LDAP_RDN], $config[CONF_LDAP_PASS])) {
 					ldap_unbind($ldap);
 					throw new Exception("Erreur LDAP : ".@ldap_error($ldap));
 				}
 				// Vérification que l'utilisateur existe dans LDAP et récupération de son DN
-				$ldap_result = ldap_search($ldap, $config['ldap.base'], "(".LDAP_LOGIN."=$login)", array(LDAP_DN));
+				$ldap_result = ldap_search($ldap, $config[CONF_LDAP_BASE], "(".LDAP_LOGIN."=$login)", array(LDAP_DN));
 				if (! $ldap_result) {
 					ldap_unbind($ldap);
 					throw new Exception("Erreur LDAP : ".ldap_error($ldap), ldap_errno($ldap));

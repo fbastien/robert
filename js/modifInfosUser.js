@@ -153,10 +153,12 @@ function saveUserActifInfos (idUser) {
 			break;
 		default:
 			alert('Le type d\'authentification n\'est pas valide !');
+			abort = true;
 			break;
 	}
 	if (abort == true)
 		return;
+	infos['auth'] = auth;
 	
 	var ajaxStr = 'action=modifOwnUser&id='+idUser;
 	$.each(infos, function(key, val) {

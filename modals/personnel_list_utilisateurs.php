@@ -90,8 +90,8 @@ if ( $_SESSION["user"]->isAdmin() !== true ) die('Vous n\'avez pas accès à cet
 						<td><img src="gfx/icones/users/level-'.$info['level'].'.png" alt="'.$levelTxt.'" popup="'.$levelTxt.'" /></td>
 						<td width="130">'.$tekos.'</td>
 						<td class="rightText">
-							<button class="bouton selectUser" id="'.$info['id'].'" nom="'.$info['prenom'].'" title="modifier"><span class="ui-icon ui-icon-pencil"></span></button>
-							<button class="bouton deleteUser" id="'.$info['id'].'" nom="'.$info['prenom'].'" title="supprimer"><span class="ui-icon ui-icon-trash"></span></button>
+							<button class="bouton selectUser" id="'.$info['id'].'" nom="'.($info['prenom'] != '' ? $info['prenom'] : $info['nom']).'" title="modifier"><span class="ui-icon ui-icon-pencil"></span></button>
+							<button class="bouton deleteUser" id="'.$info['id'].'" nom="'.($info['prenom'] != '' ? $info['prenom'] : $info['nom']).'" title="supprimer"><span class="ui-icon ui-icon-trash"></span></button>
 						</td>
 					</tr>';
 			}

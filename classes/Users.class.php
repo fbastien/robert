@@ -75,17 +75,22 @@ class Users implements Iterator {
 	public function setUserInfos ( $key, $value ) {
 		switch ($key) {
 			case Users::USERS_EMAIL :
-				if ( $this->setEmail ($value) == false ) echo 'email impossible à sauver !<br />';
+				if ( $this->setEmail ($value) == false ) {
+					echo 'email impossible à sauver !<br />';
+					return false;
+				}
 				break ;
-
 			case Users::USERS_PASS :
-				if ( $this->setPassword ($value) == false ) echo 'mot de passe impossible à sauver !<br />' ;
+				if ( $this->setPassword ($value) == false ) {
+					echo 'mot de passe impossible à sauver !<br />' ;
+					return false;
+				}
 				break ;
-
 			default :
 				$this->infos->addInfo ( $key, $value ) ;
 				break;
 		}
+		return true;
 	}
 
 

@@ -62,7 +62,7 @@ if ( $action == 'modif') {
 	createTmpUser($id) ;
 	foreach ( $_POST as $key => $val ) {
 		if ( $key == 'id' || $key == 'password') continue ; 
-		$tmpUser->setUserInfos ( $key, $val ) ;
+		$tmpUser->setUserInfos ( $key, $val ) or die;
 	}
 	if (isset($_POST['password']) && $_POST['password'] != '') {
 		if ($tmpUser->setPassword($_POST['password']) != true)
@@ -89,7 +89,8 @@ function modifOwnUser () {
 	
 	foreach ( $_POST as $key => $val ) {
 		if ($key == 'id' || $key == 'password') continue ; 
-		$tmpUser->setUserInfos ( $key, $val ) ;
+		$tmpUser->setUserInfos ( $key, $val )
+			or $retour['error'] = "";
 	}
 	if (isset($_POST['password']) && $_POST['password'] != '') {				// et/ou si le password est redéfini
 		$reconnect = true;

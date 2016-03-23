@@ -41,7 +41,7 @@ $(document).ready(function() {
 		var email = $("#cMail").val();
 		var level = $("#cLevel").val();
 		var tekos = $("#cTekosAssoc").val();
-		if ( email == '' || pass == '' ) { alert("Vous devez remplir tous les champs marqués d'une étoile !"); return; }
+		if ( email == '' || pass == '' || name == '') { alert("Vous devez remplir tous les champs marqués d'une étoile !"); return; }
 		if ( pass.length <= 4  ) { alert("Mot de passe trop court ! Il doit être supérieur à 4 caractères."); return; }
 		var dataStr  = "action=create&cMail="+email+"&cName="+name+"&cPren="+pren+"&cPass="+pass+"&cLevel="+level+"&cTekos="+tekos ;
 		AjaxFct(dataStr, 'user_actions', false, 'retourAjax', 'personnel_list_utilisateurs');

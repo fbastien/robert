@@ -12,7 +12,7 @@ $(function() {
 	});
 	
 	$('input').focus(function() {
-		if ($(this).val() == 'votre email' || $(this).val() == 'pass')
+		if ($(this).val() == 'votre login' || $(this).val() == 'pass')
 			$(this).val('');
 	});
 

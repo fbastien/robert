@@ -25,7 +25,7 @@ echo 'Hello <b>'.$_SESSION['user']->getUserInfos('prenom').'</b> !
 	</p>';
 
 if ($_SESSION['user']->getUserInfos('prenom') != "Demo") : ?>
-	<button class="bouton" id="modifInfoUserActif" idUser="<?php echo $_SESSION['user']->getUserInfos('id'); ?>">Mes infos</button>
+	<button class="bouton" id="modifInfoUserActif" value="<?php echo $_SESSION['user']->getUserInfos('id'); ?>">Mes infos</button>
 <?php endif; ?>
 
 <br />
@@ -91,11 +91,11 @@ if ($_SESSION['user']->getUserInfos('prenom') != "Demo") : ?>
 <div id="dialogMyInfos" title="Modifier mes infos" class="petit hide">
 	<div id="retourModUserAjax" class="ui-state-error ui-corner-all pad5 marge15bot gros hide"></div>
 	<div id="infosUserDiv">
-	<?php
+<?php
 	$info = $_SESSION['user']->getUserInfos();
 	foreach ($info as $k => $v) {
 		$boutonDelInfo = '';
-		if ($k != 'id' && $k != 'level'  && $k != 'theme' && $k != 'idTekos' && $k != 'date_inscription' && $k != 'date_last_action' && $k != 'date_last_connexion') {
+		if ($k != 'id' && $k != 'ldap_uid' && $k != 'level'  && $k != 'theme' && $k != 'idTekos' && $k != 'date_inscription' && $k != 'date_last_action' && $k != 'date_last_connexion') {
 			if ($_SESSION['user']->isAdmin() === true && $k != 'email' && $k != 'nom' && $k != 'prenom')
 				$boutonDelInfo = '<div class="inline nano"><button class="bouton delInfoUsers" id="del-'.$k.'"><span class="ui-icon ui-icon-minus"></span></button></div>';
 
@@ -107,9 +107,9 @@ if ($_SESSION['user']->getUserInfos('prenom') != "Demo") : ?>
 				  </div>';
 		}
 	}
-	?>
+?>
 	</div>
-	<?php
+<?php
 	if ($_SESSION['user']->isAdmin() === true) {
 		echo '<div class="inline top marge30l" id="divAddInfoUsers" style="width: 175px;">
 				 <div class="big" title="Ajouter une info">
@@ -117,14 +117,46 @@ if ($_SESSION['user']->getUserInfos('prenom') != "Demo") : ?>
 				 </div>
 			  </div>';
 	}
-	?>
+	
+	$curLDAP = $_SESSION['user']->getUserInfos(Users::USERS_LDAP);
+	$isAuthLDAP = ($curLDAP !== false );
+?>
 	<br />
 	<div class="ui-state-default ui-corner-all center">
-		<div class="ui-widget-header ui-corner-all">Modifier le mot de passe</div>
+		<div class="ui-widget-header ui-corner-all">Authentification</div>
+		<div id="modUserActifDivAuthType" <?php echo ($isAuthLDAP ? !$config[CONF_AUTH_DB] : !$config[CONF_AUTH_LDAP]) ? 'style="display: none;"' : '' ; ?>>
+			<input type="hidden" id="modUserActifCurAuth" value="<?php echo ( $isAuthLDAP ? AUTH_LDAP : AUTH_DB ); ?>" />
+			<input type="hidden" id="modUserActifCurLDAP" value="<?php echo ( $isAuthLDAP ? $curLDAP : ''); ?>" />
+			<input type="radio" id="modUserActifAuthDB" name="userActifAuth" value="<?php echo AUTH_DB; ?>" <?php echo ( $isAuthLDAP ? '' : 'checked="checked"' ); ?> />
+			<label for="modUserActifAuthDB">Par email et mot de passe</label>
+			<input type="radio" id="modUserActifAuthLDAP" name="userActifAuth" value="<?php echo AUTH_LDAP; ?>" <?php echo ( $isAuthLDAP ? 'checked="checked"' : '' ); ?> />
+			<label for="modUserActifAuthLDAP">Avec un compte LDAP</label>
+		</div>
 		<br />
-		<input type="password" id="modUserActif-Pass" size="18" />
-		<br />
-		<span class="red petit">(laissez vide si pas de modif.)</span>
+		<div id="modUserActifDivAuthDB" <?php echo ( $isAuthLDAP ? 'style="display: none;"' : '' ); ?>>
+			<?php echo ( $isAuthLDAP ? 'Mot de passe' : 'Modifier le mot de passe' ); ?> :
+			<input type="password" id="modUserActif-Pass" size="18" />
+<?php
+	if (! $isAuthLDAP)
+	{
+?>
+			<br />
+			<span class="red petit">(laissez vide si pas de modif.)</span>
+<?php
+	}
+?>
+		</div>
+		<div id="modUserActifDivAuthLDAP"  <?php echo ( $isAuthLDAP ? '' : 'style="display: none;"'); ?>>
+			Login du compte LDAP :
+			<input type="text" id="modUserActif-LDAP" size="18" value="<?php echo $_SESSION['user']->getUserInfos(Users::USERS_LDAP); ?>" />
+			<div id="modUserActifDivAuthLDAPPass" style="display: none;">
+				Mot de passe :
+				<input type="password" id="modUserActif-LDAPPass" size="18" />
+			</div>
+		</div>
 		<br />
 	</div>
+<?php
+//	}
+?>
 </div>

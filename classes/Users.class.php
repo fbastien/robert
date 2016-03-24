@@ -40,6 +40,7 @@ class Users implements Iterator {
 	CONST USERS_LEVEL_READ   = 2 ;						// niveau d'habilitation POPPY
 
 	const USERS_ID               = 'id' ;
+	const USERS_LDAP             = 'ldap_uid' ;
 	const USERS_EMAIL            = 'email' ;
 	const USERS_PASS             = 'password' ;
 	const USERS_NOM              = 'nom' ;
@@ -49,19 +50,16 @@ class Users implements Iterator {
 	const USERS_DATE_INSCRIPTION = 'date_inscription' ;
 
 	private $hide_datas ;                               // tableau contenant les champs qu'on ne peut modifier ds la BDD
-	private $email  ;									// email (= 'id' de l'user, quand il se loggue)
 	private $infos  ;									// instance de Infos (pour récup et update)
 
 
-	public function __construct ($email = 'new') {
+	public function __construct ($login = 'new') {
 		$this->hide_datas = array ( "password", "date_inscription", "date_last_action") ;
 		$this->infos = new Infos( TABLE_USERS ) ;
-		if ( $email == 'new' ) return 1 ;
+		if ( $login === 'new' ) return 1 ;
 
-		// si un email est specifié, on lit l'enregistrement dans la base de données
-		if ($this->checkEmail($email) === false) throw new Exception('Loggin invalide : attendu adresse mail');
-		$this->email = $email ;
-		$this->loadFromBD( Users::USERS_EMAIL , $this->email ) ;
+		// si un identifiant est specifié, on lit l'enregistrement dans la base de données
+		$this->loadFromBD( ($this->checkEmail($login) ? Users::USERS_EMAIL : Users::USERS_LDAP), $login);
 	}
 
 	// Charge les infos d'un user
@@ -148,9 +146,9 @@ class Users implements Iterator {
 
 	// Verifie si la syntaxte d'un email est valide
 	public function checkEmail ( $addresse ) {
-		if (count($addresse) == 0) return false ;
-		$validMail = filter_var($addresse, FILTER_VALIDATE_EMAIL);
-		return $validMail;
+		if (count($addresse) == 0)
+			return false ;
+		return (filter_var($addresse, FILTER_VALIDATE_EMAIL) !== false);
 	}
 
 	// Check si l'user a le niveau DEV
@@ -180,9 +178,11 @@ class Users implements Iterator {
 		// verification des infos minimales pour autoriser la sauvegarde
 		if ( ! $this->infos->getInfo( Users::USERS_EMAIL) ||
 			 ! $this->infos->getInfo( Users::USERS_NOM)   ||
-			 ! $this->infos->getInfo( Users::USERS_PASS)    )
-
+			 ( ! $this->infos->getInfo( Users::USERS_PASS)
+				&& ! $this->infos->getInfo( Users::USERS_LDAP) ) )
+		{
 			throw new Exception (Users::SAVE_LOSS) ;
+		}
 
 		// nouvel User ? création de la date d'inscription
 		if ( ! $this->infos->getInfo( Users::USERS_DATE_INSCRIPTION ) )
@@ -245,14 +245,22 @@ class Users implements Iterator {
 		return Users::USERS_OK;
 	}
 	public function setPassword ( $newpass ) {
-		if ( strlen ($newpass) < 4  ) return Users::USERS_ERROR_PASSSHORT ;
-		$crypt = md5(SALT_PASS.$newpass);
+		if ( $newpass === null ) {
+			$crypt = null;
+		} else {
+			if ( strlen ($newpass) < 4  ) return Users::USERS_ERROR_PASSSHORT ;
+			$crypt = md5(SALT_PASS.$newpass);
+		}
 		$this->infos->addInfo ( Users::USERS_PASS, $crypt );
 		return Users::USERS_OK;
 	}
 	public function setEmail ( $email ){
 		if ( ! $this->checkEmail ($email) ) return Users::USERS_ERROR ;
 		$this->infos->addInfo ( Users::USERS_EMAIL, $email );
+		return Users::USERS_OK;
+	}
+	public function setLDAP ( $uid ){
+		$this->infos->addInfo ( Users::USERS_LDAP, $uid );
 		return Users::USERS_OK;
 	}
 	public function setTekos ( $idTekos ) {

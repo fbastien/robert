@@ -121,11 +121,16 @@ class Infos implements Iterator {
 		// Construction de la chaine des clés et valeurs SQL pour la requête
 		$keys   = ''; 	$vals   = '';  $up = '' ;
 		foreach ( $this->datas as $k => $v ) {
-			if ( is_array($v) ) continue ;
-			if ( is_string($v)) $v = addslashes($v);
 			$keys .= "`$k`, " ;
-			$vals .= "'$v', " ;
-			$up   .= "$k='$v', ";
+			if($v === null) {
+				$vals .= "NULL, ";
+				$up .= "$k = NULL, ";
+			} else {
+				if ( is_array($v) ) continue ;
+				if ( is_string($v) ) $v = addslashes($v);
+				$vals .= "'$v', " ;
+				$up   .= "$k='$v', ";
+			}
 		}
 		// suppression de la dernière virgule
 		$keys = substr($keys, 0 , strlen($keys) -2 );

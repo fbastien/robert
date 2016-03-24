@@ -53,9 +53,27 @@ define ("FOLDER_PLANS_DATA", "data/PLANS_DATA/");
 define ("FOLDER_DUMP_SQL", "data/dumpSQL/");
 
 define ("SALT_PASS",		'G:niUk5!1|WQ');									// Grain de sel (seed) pour la création / récup de password in BDD
+define ("COOKIE_NAME_AUTH",	'auth_type');										// nom du cookie gestion type d'authentification
 define ("COOKIE_NAME_LOG",	'auth_login');										// nom du cookie gestion login
 define ("COOKIE_NAME_PASS", 'auth_password');									// nom du cookie gestion password
+define ("COOKIE_NAME_TOKEN", 'token');											// nom du cookie token
 define ("COOKIE_PEREMPTION", time() + (3600 * 24 * 2));							// péremption des cookies : 2 jours.
+
+define('CONF_AUTH_DB', 'auth.email');											// Propriété de conf pour activer l'authentification par email et mot de passe en base de données
+define('CONF_AUTH_LDAP', 'auth.ldap');											// Propriété de conf pour activer l'authentification par LDAP
+define('CONF_LDAP_HOST', 'auth.ldap.host');										// Propriété de conf pour la connexion LDAP
+define('CONF_LDAP_RDN', 'auth.ldap.read.dn');									// Propriété de conf pour la connexion LDAP
+define('CONF_LDAP_PASS', 'auth.ldap.read.pass');								// Propriété de conf pour la connexion LDAP
+define('CONF_LDAP_BASE', 'auth.ldap.base');										// Propriété de conf pour la connexion LDAP
+
+define('AUTH_DB', 'DB');														// Type d'authentification par email et mot de passe dans la base de données
+define('AUTH_LDAP', 'LDAP');													// Type d'authentification par LDAP
+
+define('LDAP_DN', 'dn');														// Champ LDAP permettant d'identifier de manière unique l'utilisateur
+define('LDAP_LOGIN', 'uid');													// Champ LDAP du login de l'utilisateur
+define('LDAP_EMAIL', 'mail');													// Champ LDAP du login de l'utilisateur
+define('LDAP_PRENOM', 'givenname');												// Champ LDAP du login de l'utilisateur
+define('LDAP_NOM', 'sn');														// Champ LDAP du login de l'utilisateur
 
 date_default_timezone_set('Europe/Paris');										// La timezone par défaut, si introuvable dans le php.ini
 

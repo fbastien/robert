@@ -1,6 +1,6 @@
 
 $(document).ready(function() {
-    $('.selectUser').click(function() {
+	$('.selectUser').click(function() {
 		var selected = $(this).attr('id');
 		var prenomUser = $(this).attr('nom');
 		var ajaxStr  = 'action=select&id='+selected;
@@ -13,6 +13,9 @@ $(document).ready(function() {
 	// modification d'un user
 	$('#modifieurPage').on('click', '.modif', function () {
 		var idUser		= $('#modUserId').val() ;
+		var curAuth		= $("#modUserCurAuth").val();
+		var auth		= $("#modifieurPage input:radio[name='auth']:checked").val();
+		var ldap		= $('#modUserLDAP').val();
 		var email		= $('#modUserEmail').val() ;
 		var passw		= $('#modUserPass').val() ;
 		var prenom		= $('#modUserPrenom').val() ;
@@ -20,30 +23,79 @@ $(document).ready(function() {
 		var level		= $('#modUserLevel').val() ;
 		var tekosAssoc	= $('#modUserTekos').val() ;
 		
-		var AjaxStr = 'action=modif&id='+idUser+'&email='+email+'&prenom='+prenom+'&nom='+nom
+		if ( email == '' ) {
+			alert("Vous devez saisir l'adresse email !");
+			return;
+		}
+		var AjaxStr = 'action=modif&id='+idUser+'&auth='+auth+'&email='+email+'&prenom='+prenom+'&nom='+nom
 						+'&level='+level+'&idTekos='+tekosAssoc ;
-		if (passw != '') {
-			if (passw.length < 4) {
-				alert('Mot de passe trop court !');
-				return;
-			}
-			else AjaxStr += '&password='+passw ;
+		switch(auth) {
+			case 'DB':
+				if (passw != '' || curAuth != auth) {
+					if (passw.length < 4) {
+						alert('Mot de passe trop court !');
+						return;
+					}
+					AjaxStr += '&password='+encodeURIComponent(passw);
+				}
+				break;
+			case 'LDAP':
+				if ( ldap == '' ) {
+					alert("Vous devez saisir le login LDAP !");
+					return;
+				}
+				AjaxStr += '&ldap='+ldap ;
+				if (idUser == $('#modifInfoUserActif').val() && ldap != $('#modUserActifCurLDAP').val()) {
+					passw = $('#modUserLDAPPass').val();
+					if(passw == '') {
+						alert('Si vous changez votre compte LDAP, vous devez saisir son mot de passe !');
+						return;
+					}
+					AjaxStr += '&password='+encodeURIComponent(passw);
+				}
+				break;
+			default:
+				alert("Vous devez saisir le type d'authentification !");
+				return; 
 		}
 		
 		AjaxFct(AjaxStr, 'user_actions', false, 'retourAjax', 'personnel_list_utilisateurs');
 	});
+	$('#modUserLDAP').on('blur', function() {
+		var divLDAPPass = $('#modUserDivAuthLDAPPass');
+		var curLDAP = $('#modUserActifCurLDAP').val();
+		if($('#modUserId').val() == $('#modifInfoUserActif').val() && ($(this).val() != curLDAP || curLDAP == '')) {
+			divLDAPPass.show();
+		} else {
+			divLDAPPass.hide();
+		}
+	});
 	
 	// Création d'un user
-    $("#btncreateUser").click ( function () {
-		var name  = $("#cName").val();
-		var pren  = $("#cPren").val();
+	$("#btncreateUser").click ( function () {
+		var auth  = $("#createUser input:radio[name='auth']:checked").val();
+		var login = $("#cLogin").val();
 		var pass  = $("#cPass").val();
-		var email = $("#cMail").val();
+		var pren  = $("#cPren").val();
+		var name  = $("#cName").val();
 		var level = $("#cLevel").val();
 		var tekos = $("#cTekosAssoc").val();
-		if ( email == '' || pass == '' || name == '') { alert("Vous devez remplir tous les champs marqués d'une étoile !"); return; }
-		if ( pass.length <= 4  ) { alert("Mot de passe trop court ! Il doit être supérieur à 4 caractères."); return; }
-		var dataStr  = "action=create&cMail="+email+"&cName="+name+"&cPren="+pren+"&cPass="+pass+"&cLevel="+level+"&cTekos="+tekos ;
+		var dataStr = "action=create&cAuth="+auth;
+		switch(auth) {
+			case 'DB':
+				if ( login == '' || pass == '' || name == '' ) { alert("Vous devez remplir tous les champs marqués d'une étoile !"); return; }
+				if ( pass.length <= 4  ) { alert("Mot de passe trop court ! Il doit être supérieur à 4 caractères."); return; }
+				dataStr += "&cLogin="+login+"&cPass="+encodeURIComponent(pass)+"&cName="+name+"&cPren="+pren;
+				break;
+			case 'LDAP':
+				if ( login == '' ) { alert("Vous devez remplir tous les champs marqués d'une étoile !"); return; }
+				dataStr += "&cLogin="+login;
+				break;
+			default:
+				alert("Vous devez saisir le type d'authentification !");
+				return; 
+		}
+		dataStr += "&cLevel="+level+"&cTekos="+tekos ;
 		AjaxFct(dataStr, 'user_actions', false, 'retourAjax', 'personnel_list_utilisateurs');
 	});
 	
@@ -132,10 +184,38 @@ $(document).ready(function() {
 	
 });
 
-	
 function displaySelUser (data) {
+	if(data.ldap_uid) {
+		$("#modUserCurAuth").val('LDAP');
+		$('#modUserAuthLDAP').prop('checked', true);
+		$('#modUserDivAuthDB').hide();
+		$('#modUserDivAuthLDAP').show();
+		$('#modUserDivAuthLDAPPass').hide();
+		$('#modUserPass').prop('title', '');
+	} else {
+		$("#modUserCurAuth").val('DB');
+		$('#modUserAuthDB').prop('checked', true);
+		$('#modUserDivAuthDB').show();
+		$('#modUserDivAuthLDAP').hide();
+		if(data.id == $('#modifInfoUserActif').val()) {
+			$('#modUserDivAuthLDAPPass').show();
+		}
+		$('#modUserPass').prop('title', 'Laissez vide si pas de modif.');
+	}
+	
+	// Masquage du choix du type d'authentification s'il n'y en a qu'un possible
+	// (sauf si l'utilisateur sélectionné est configuré avec un autre type, pour lui permettre de changer)
+	var authDiv = $('#modUserDivAuth');
+	if($('#modifieurPage input:radio[name="auth"]:not(:disabled)').is(':not(:checked)')) {
+		authDiv.show();
+	} else {
+		authDiv.hide();
+	}
+	
 	$('#modUserId').val(data.id);
 	$('#modUserEmail').val(data.email);
+	$('#modUserLDAP').val(data.ldap_uid);
+	$('#modUserLDAPPass').val('');
 	$('#modUserPrenom').val(data.prenom);
 	$('#modUserNom').val(data.nom);
 	$('#modUserLevel').val(data.level);

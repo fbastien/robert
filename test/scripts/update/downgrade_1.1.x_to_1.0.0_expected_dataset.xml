@@ -17,48 +17,203 @@
 		<column>remarque</column>
 		<row>
 			<value>1</value>
-			<value>Micro Shure SM58</value>
-			<value>MIC-SM58</value>
-			<value>3</value>
-			<value>1</value>
+			<value>Non identifié unitairement</value>
+			<value>Downgrade_1_1_x_to_1_0_0_Test::1</value>
+			<value>0</value>
+			<value>0</value>
 			<value>son</value>
-			<value>9</value>
-			<value>8</value>
 			<value>5</value>
-			<value>50</value>
-			<value>0000-00-00</value>
-			<value>Prestataire 1, Prestataire 2</value>
-			<value>Avec pince</value>
+			<value>1</value>
+			<value>2.5</value>
+			<value>12.5</value>
+			<value>2016-05-31</value>
+			<value></value>
+			<value>Remarque 1</value>
 		</row>
 		<row>
 			<value>2</value>
-			<value>Câble XLR</value>
-			<value>CAB-XLR</value>
-			<value>1</value>
+			<value>Partiellement identifié unitairement</value>
+			<value>Downgrade_1_1_x_to_1_0_0_Test::2</value>
 			<value>0</value>
-			<value>son</value>
-			<value>7</value>
-			<value>11</value>
+			<value>0</value>
+			<value>structure</value>
+			<value>10</value>
+			<value>2</value>
 			<value>1</value>
 			<value>10</value>
-			<value>2015-11-10</value>
+			<value>2016-05-30</value>
 			<value></value>
-			<value>Avec attache</value>
+			<value>Remarque 2
+Downgrade_1_1_x_to_1_0_0_Test::14 : Remarque unité 1</value>
 		</row>
 		<row>
 			<value>3</value>
-			<value>Projecteur PAR64</value>
-			<value>PRJ-P64</value>
+			<value>Entièrement identifié unitairement</value>
+			<value>Downgrade_1_1_x_to_1_0_0_Test::3</value>
 			<value>0</value>
 			<value>0</value>
 			<value>lumiere</value>
+			<value>16</value>
+			<value>2</value>
+			<value>3</value>
+			<value>25</value>
+			<value>2016-05-29</value>
+			<value></value>
+			<value>Remarque 3
+Downgrade_1_1_x_to_1_0_0_Test::15 : Remarque unité 2
+Downgrade_1_1_x_to_1_0_0_Test::16 : Remarque unité 3</value>
+		</row>
+		<row>
+			<value>4</value>
+			<value>Interne mais aucune date d'achat</value>
+			<value>Downgrade_1_1_x_to_1_0_0_Test::4</value>
+			<value>0</value>
+			<value>0</value>
+			<value>transport</value>
+			<value>22</value>
+			<value>2</value>
+			<value>1</value>
+			<value>3</value>
+			<value>0000-00-00</value>
+			<value></value>
+			<value>Remarque 4</value>
+		</row>
+		<row>
+			<value>5</value>
+			<value>Date d'achat globale mais aucune unité</value>
+			<value>Downgrade_1_1_x_to_1_0_0_Test::5</value>
+			<value>0</value>
+			<value>0</value>
+			<value>son</value>
+			<value>5</value>
+			<value>2</value>
 			<value>6</value>
+			<value>18</value>
+			<value>2016-05-28</value>
+			<value></value>
+			<value>Remarque 5</value>
+		</row>
+		<row>
+			<value>6</value>
+			<value>Date d'achat sur unité mais pas globale</value>
+			<value>Downgrade_1_1_x_to_1_0_0_Test::6</value>
+			<value>0</value>
+			<value>0</value>
+			<value>structure</value>
+			<value>10</value>
 			<value>3</value>
+			<value>7</value>
+			<value>21</value>
+			<value>2016-05-27</value>
+			<value></value>
+			<value>Remarque 6</value>
+		</row>
+		<row>
+			<value>7</value>
+			<value>Date d'achat d'unité antérieure à la date globale</value>
+			<value>Downgrade_1_1_x_to_1_0_0_Test::7</value>
+			<value>0</value>
+			<value>0</value>
+			<value>lumiere</value>
+			<value>16</value>
 			<value>3</value>
+			<value>8</value>
+			<value>24</value>
+			<value>2016-05-25</value>
+			<value></value>
+			<value>Remarque 7</value>
+		</row>
+		<row>
+			<value>8</value>
+			<value>Externe mais prestataire vide</value>
+			<value>Downgrade_1_1_x_to_1_0_0_Test::8</value>
+			<value>0</value>
+			<value>1</value>
+			<value>transport</value>
+			<value>22</value>
+			<value>1</value>
+			<value>9</value>
+			<value>27</value>
+			<value>0000-00-00</value>
+			<value></value>
+			<value>Remarque 8</value>
+		</row>
+		<row>
+			<value>9</value>
+			<value>Externe et prestataire non renseigné sur les unités</value>
+			<value>Downgrade_1_1_x_to_1_0_0_Test::9</value>
+			<value>0</value>
+			<value>1</value>
+			<value>son</value>
+			<value>5</value>
+			<value>2</value>
+			<value>10</value>
 			<value>30</value>
-			<value>2015-11-02</value>
+			<value>0000-00-00</value>
+			<value>Prestataire 1</value>
+			<value>Remarque 9</value>
+		</row>
+		<row>
+			<value>10</value>
+			<value>Externe et prestataire renseigné sur plusieurs unités</value>
+			<value>Downgrade_1_1_x_to_1_0_0_Test::10</value>
+			<value>0</value>
+			<value>1</value>
+			<value>structure</value>
+			<value>10</value>
+			<value>3</value>
+			<value>11</value>
+			<value>33</value>
+			<value>0000-00-00</value>
+			<value>Prestataire 2, Prestataire 3, Prestataire 4</value>
+			<value>Remarque 10</value>
+		</row>
+		<row>
+			<value>11</value>
+			<value>Sans remarque</value>
+			<value>Downgrade_1_1_x_to_1_0_0_Test::11</value>
+			<value>0</value>
+			<value>0</value>
+			<value>lumiere</value>
+			<value>16</value>
+			<value>1</value>
+			<value>12</value>
+			<value>36</value>
+			<value>0000-00-00</value>
 			<value></value>
 			<value></value>
+		</row>
+		<row>
+			<value>12</value>
+			<value>Sans remarque globale mais unités avec remarque</value>
+			<value>Downgrade_1_1_x_to_1_0_0_Test::12</value>
+			<value>0</value>
+			<value>0</value>
+			<value>transport</value>
+			<value>22</value>
+			<value>2</value>
+			<value>13</value>
+			<value>39</value>
+			<value>2016-05-24</value>
+			<value></value>
+			<value>Downgrade_1_1_x_to_1_0_0_Test::26 : Remarque unité 13</value>
+		</row>
+		<row>
+			<value>13</value>
+			<value>Remarques globale et sur unités</value>
+			<value>Downgrade_1_1_x_to_1_0_0_Test::13</value>
+			<value>0</value>
+			<value>0</value>
+			<value>son</value>
+			<value>5</value>
+			<value>3</value>
+			<value>14</value>
+			<value>42</value>
+			<value>2016-05-23</value>
+			<value></value>
+			<value>Remarque 13
+Downgrade_1_1_x_to_1_0_0_Test::27 : Remarque unité 14
+Downgrade_1_1_x_to_1_0_0_Test::28 : Remarque unité 15</value>
 		</row>
 	</table>
 </dataset>

@@ -17,7 +17,7 @@
  *
  */
 
-require_once dirname(dirname(__DIR__)).'/Database_Testcase.class.php';
+require_once dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR.'Database_Testcase.class.php';
 
 /**
  * Test du script d'installation de la base de données (install_DB.sql).
@@ -46,7 +46,8 @@ class Install_DB_Test extends Database_Testcase {
 		$instance = new self();
 		$instance->truncateDatabase();
 		// Charge le dataset de la structure de la BDD
-		self::$dataset = $instance->createXmlDataSet(dirname(__DIR__).'/DB_schema/DB_schema_'.Version::last()->value().'_dataset.xml');
+		self::$dataset = new PHPUnit_Extensions_Database_DataSet_XmlDataSet(
+				dirname(__DIR__).DIRECTORY_SEPARATOR.'DB_schema'.DIRECTORY_SEPARATOR.'DB_schema_'.Version::last()->value().'_dataset.xml');
 	}
 	
 	/**
@@ -57,7 +58,7 @@ class Install_DB_Test extends Database_Testcase {
 	 * @test
 	 */
 	public function testScript() {
-		$this->executeScript(dirname(dirname(dirname(__DIR__))).'/scripts/install/install_DB.sql');
+		$this->executeScript(dirname(dirname(dirname(__DIR__))).DIRECTORY_SEPARATOR.'scripts'.DIRECTORY_SEPARATOR.'install'.DIRECTORY_SEPARATOR.'install_DB.sql');
 	}
 	
 	/**

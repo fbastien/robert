@@ -22,6 +22,22 @@ require_once dirname(dirname(__DIR__)).'/Database_Testcase.class.php';
 /**
  * Test du script de retour en arrière de la base de données des versions 1.1.x vers 1.0.0 (downgrade_1.1.x_to_1.0.0.sql).
  * 
+ * Cas de test (des données en version 1.1.x) :
+ * 1. Matériel non identifié unitairement
+ * 2. Matériel partiellement identifié unitairement
+ * 3. Matériel entièrement identifié unitairement
+ * 4. Matériel interne avec unités identifiées et sans aucune date d'achat renseignée
+ * 5. Matériel interne avec date d'achat globale renseignée, mais renseignée sur aucune de ses unités
+ * 6. Matériel interne avec date d'achat globale non renseignée, mais renseignée sur au moins une unité (et aussi non renseignée sur au moins une autre unité)
+ * 7. Matériel interne avec date d'achat d'une unité antérieure à la date d'achat globale
+ * 8. Matériel externe avec prestataire global renseigné à vide
+ * 9. Matériel externe avec prestataire renseigné sur aucune de ses unités
+ * 10. Matériel externe avec prestataire renseigné sur au moins 2 unités (et aussi non renseigné sur au moins un autre unité)
+ * 11. Matériel sans remarque
+ * 12. Matériel avec remarque globale mais aucune remarque sur ses unités
+ * 13. Matériel sans remarque globale mais avec remarques sur ses unités (et au moins une unité sans remarque)
+ * 14. Matériel avec remarque globale et remarques sur ses unités (au moins 2)
+ * 
  * @group db
  */
 class Downgrade_1_1_x_to_1_0_0_Test extends Database_Testcase {
@@ -49,16 +65,20 @@ class Downgrade_1_1_x_to_1_0_0_Test extends Database_Testcase {
 		$instance = new self();
 		$instance->installDatabase(Version::V1_1_0());
 		// Charge les datasets
-		self::$expectedSchema = $instance->createXmlDataSet(dirname(__DIR__).'/DB_schema/DB_schema_1.0.0_dataset.xml');
-		self::$expectedData = $instance->createXmlDataSet(__DIR__.'/downgrade_1.1.x_to_1.0.0_expected_dataset.xml');
+		self::$expectedSchema = new PHPUnit_Extensions_Database_DataSet_XmlDataSet(
+				dirname(__DIR__).DIRECTORY_SEPARATOR.'DB_schema'.DIRECTORY_SEPARATOR.'DB_schema_1.0.0_dataset.xml');
+		self::$expectedData = new PHPUnit_Extensions_Database_DataSet_XmlDataSet(
+				__DIR__.DIRECTORY_SEPARATOR.'downgrade_1.1.x_to_1.0.0_expected_dataset.xml');
 	}
 	
 	/** @test */
 	public function testScript() {
 		// Insertion des données de test
-		$this->insertData($this->createXmlDataSet(__DIR__.'/downgrade_1.1.x_to_1.0.0_fixture_dataset.xml'));
+		$this->insertData($this->createXmlDataSet(
+				__DIR__.DIRECTORY_SEPARATOR.'downgrade_1.1.x_to_1.0.0_fixture_dataset.xml'));
 		
-		$this->executeScript(dirname(dirname(dirname(__DIR__))).'/scripts/update/downgrade_1.1.x_to_1.0.0.sql');
+		$this->executeScript(
+				dirname(dirname(dirname(__DIR__))).DIRECTORY_SEPARATOR.'scripts'.DIRECTORY_SEPARATOR.'update'.DIRECTORY_SEPARATOR.'downgrade_1.1.x_to_1.0.0.sql');
 	}
 	
 	/**

@@ -17,31 +17,21 @@
  *
  */
 
-require_once dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR.'Database_Testcase.class.php';
+require_once dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR.'CustomDatabaseTestCase.class.php';
 
 /**
  * Test du script d'installation de la base de données (install_DB.sql).
  * 
  * @group db
  */
-class Install_DB_Test extends Database_Testcase {
+class Install_DB_Test extends CustomDatabaseTestCase {
 	
 	/** @var PHPUnit_Extensions_Database_DataSet_IDataSet DataSet correspondant à la structure attendue de la BDD. */
 	private static $dataset;
 	
-	/**
-	 * @return PHPUnit_Extensions_Database_DataSet_IDataSet
-	 * @see PHPUnit_Extensions_Database_TestCase::getDataSet()
-	 */
-	public function getDataSet() {
-		return new PHPUnit_Extensions_Database_DataSet_DefaultDataSet();
-	}
-	
-	/**
-	 * @beforeClass
-	 * @see PHPUnit_Framework_TestCase::setUpBeforeClass()
-	 */
+	/** @see PHPUnit_Framework_TestCase::setUpBeforeClass() */
 	public static function setUpBeforeClass() {
+		parent::setUpBeforeClass();
 		// Vide la base de données
 		$instance = new self();
 		$instance->truncateDatabase();

@@ -17,34 +17,75 @@
  *
  */
 
-require_once __DIR__.'/Version.class.php';
+require_once __DIR__.DIRECTORY_SEPARATOR.'Version.class.php';
 
-abstract class Database_Testcase extends PHPUnit_Extensions_Database_TestCase implements Serializable {
-	
+abstract class DatabaseTestCase extends PHPUnit_Extensions_Database_TestCase implements Serializable
+{
 	/** @var PDO only instantiate once for test clean-up/fixture load */
-	static private $pdo = null;
+	private static $pdo;
+	/** @var PHPUnit_Extensions_Database_DataSet_IDataSet Dataset des données communes à tous les cas de test. */
+	private static $defaultDataset;
 	
 	/** @var PHPUnit_Extensions_Database_DB_IDatabaseConnection only instantiate once per test */
-	private $conn = null;
+	private $conn;
+	
+	/** Initialise les propriétés de classe (appelé après la définition de la classe). */
+	static function staticInit() {
+		self::$pdo = new PDO(DSN, USER, PASS);
+		self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		self::$defaultDataset = new PHPUnit_Extensions_Database_DataSet_XmlDataSet(__DIR__.DIRECTORY_SEPARATOR.'common_fixture_dataset.xml');
+	}
+	
+	/** {@inheritDoc} */
+	public function __construct($name = null, array $data = array(), $dataName = '') {
+		parent::__construct($name, $data, $dataName);
+		$this->conn = $this->createDefaultDBConnection(self::$pdo, DBNAME);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * Installe la base de données dans sa dernière version.
+	 * 
+	 * @see PHPUnit_Framework_TestCase::setUpBeforeClass()
+	 */
+	public static function setUpBeforeClass() {
+		parent::setUpBeforeClass();
+		
+		self::doInstallDatabase(self::$pdo);
+	}
 	
 	/**
 	 * @return PHPUnit_Extensions_Database_DB_IDatabaseConnection
 	 * @see PHPUnit_Extensions_Database_TestCase::getConnection()
 	 */
-	final public function getConnection()
+	public final function getConnection()
 	{
-		if ($this->conn === null) {
-			// Les variables globales des informations de connexion sont définies dans le fichier phpunit.xml
-			if (self::$pdo == null) {
-				self::$pdo = new PDO(DSN, USER, PASS);
-				self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			}
-			$this->conn = $this->createDefaultDBConnection(self::$pdo, DBNAME);
-		}
-		
 		return $this->conn;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * @return PHPUnit_Extensions_Database_DataSet_IDataSet
+	 * @see PHPUnit_Extensions_Database_TestCase::getDataSet()
+	 */
+	public function getDataSet() {
+		return self::$defaultDataset;
+	}
+	
+	/**
+	 * Récupère le dataset par défaut pour les données de test, indépendemment du fait que la méthode getDataSet() soit redéfinie.
+	 * 
+	 * @return PHPUnit_Extensions_Database_DataSet_IDataSet
+	 */
+	protected final function getDefaultDataSet() {
+		return self::$defaultDataset;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * @see Serializable::serialize()
+	 */
 	public function serialize() {
 		$pdoSave = self::$pdo;
 		self::$pdo = null;
@@ -53,11 +94,13 @@ abstract class Database_Testcase extends PHPUnit_Extensions_Database_TestCase im
 		return $string;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * @see Serializable::unserialize()
+	 */
 	public function unserialize($serialized) {}
 	
-	/** Vide la base de données de toutes ses tables. */
-	protected function truncateDatabase() {
-		$pdo = $this->getConnection()->getConnection();
+	private static function doTruncateDatabase(PDO $pdo) {
 		$tableList = $pdo->query("SELECT `TABLE_NAME`, `TABLE_TYPE` FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = '".DBNAME."'");
 		foreach($tableList as $table) {
 			switch($table['TABLE_TYPE']) {
@@ -74,38 +117,26 @@ abstract class Database_Testcase extends PHPUnit_Extensions_Database_TestCase im
 		}
 	}
 	
-	/**
-	 * Exécute un fichier de script SQL.
-	 * 
-	 * Nécessite l'extension MySQLi (car PDO ne permet pas d'exécuter plusieurs requêtes à la fois).
-	 * Le script doit être encodé en UTF-8.
-	 * 
-	 * @param string $file Chemin du fichier à exécuter.
-	 * @param boolean $isTest
-	 *     Indique si cette méthode est appelée dans le cadre d'un test unitaire (true, par défaut) ou autre (setUp ou tearDown par exemple).
-	 *     En cas d'erreur dans le script, dans le premier cas cela fera échouer le test, alors que sinon c'est une exception qui sera levée.
-	 * @throws RuntimeException En cas d'erreur de connexion ou pendant l'exécution du script, ou si le script n'est pas encodé en UTF-8.
-	 */
-	protected function executeScript($file, $isTest = true) {
+	/** Vide la base de données de toutes ses tables. */
+	protected function truncateDatabase() {
+		self::doTruncateDatabase(self::$pdo);
+	}
+	
+	private static function doExecuteScript(PDO $pdo, $file) {
 		if(!extension_loaded('mysqli')) {
 			throw new RuntimeException('Extension MySQLi manquante');
 		}
 		
 		$script = file_get_contents($file);
 		if(mb_detect_encoding($script, 'UTF-8', true) != 'UTF-8') {
-			$errMessage = "L'encodage du script \"$file\" n'est pas UTF-8";
-			if($isTest) {
-				$this->fail($errMessage);
-			} else {
-				throw new RuntimeException($errMessage);
-			}
+			throw new PHPUnit_Framework_AssertionFailedError("L'encodage du script \"$file\" n'est pas UTF-8");
 		}
 		
 		$mysqli = new mysqli(HOST, USER, PASS, DBNAME);
 		if ($mysqli->connect_errno) {
 			throw new RuntimeException("Erreur de connexion à la base de données ($mysqli->connect_errno) : $mysqli->connect_error");
 		}
-		//TODO PHP5.5+ : close() dans bloc finally
+		// TODO PHP5.5+ : close() dans bloc finally
 		if($mysqli->character_set_name() != 'utf8') {
 			if(!$mysqli->set_charset('utf8')) {
 				$mysqli->close();
@@ -119,11 +150,7 @@ abstract class Database_Testcase extends PHPUnit_Extensions_Database_TestCase im
 			if(!$isSuccess) {
 				$errMessage = "Erreur lors de l'exécution du script \"$file\" ($mysqli->errno/$mysqli->sqlstate) : $mysqli->error";
 				$mysqli->close();
-				if($isTest) {
-					$this->fail($errMessage);
-				} else {
-					throw new RuntimeException($errMessage);
-				}
+				throw new PHPUnit_Framework_AssertionFailedError($errMessage);
 			}
 			if(!$mysqli->more_results()) {
 				break;
@@ -134,23 +161,59 @@ abstract class Database_Testcase extends PHPUnit_Extensions_Database_TestCase im
 	}
 	
 	/**
-	 * Vide la base de données et la réinstalle dans une version donnée.
+	 * Exécute un fichier de script SQL.
 	 * 
-	 * @param Version $version Version à installer.
+	 * Nécessite l'extension MySQLi (car PDO ne permet pas d'exécuter plusieurs requêtes à la fois).
+	 * Le script doit être encodé en UTF-8.
+	 * 
+	 * @param string $file Chemin du fichier à exécuter.
+	 * @param boolean $isTest
+	 *     Indique si cette méthode est appelée dans le cadre d'un test unitaire (true, par défaut) ou autre (setUp ou tearDown par exemple).
+	 *     En cas d'erreur dans le script, dans le premier cas cela fera échouer le test, alors que sinon c'est une exception qui sera levée.
+	 * @throws RuntimeException En cas d'erreur de connexion ou pendant l'exécution du script, ou si le script n'est pas encodé en UTF-8.
 	 */
-	protected function installDatabase(Version $version) {
+	protected function executeScript($file, $isTest = true) {
+		try {
+			self::doExecuteScript(self::$pdo, $file);
+		} catch(PHPUnit_Framework_AssertionFailedError $error) {
+			if($isTest) {
+				$this->fail($error->getMessage());
+			} else {
+				throw new RuntimeException($error->getMessage());
+			}
+		}
+	}
+	
+	private static function doInstallDatabase(PDO $pdo, Version $version = null) {
 		// Vide la base de données
-		$this->truncateDatabase();
+		self::doTruncateDatabase($pdo);
 		
 		// Détermine le script à exécuter
+		if($version == null) {
+			$version = Version::last();
+		}
+		$script = dirname(__DIR__).DIRECTORY_SEPARATOR.'scripts'.DIRECTORY_SEPARATOR.'install'.DIRECTORY_SEPARATOR;
 		if($version == Version::last()) {
-			$script = __DIR__.'/../scripts/install/install_DB.sql';
+			$script .= 'install_DB.sql';
 		} else {
-			$script = __DIR__."/../scripts/install/old/install_DB_{$version->value()}.sql";
+			$script .= 'old'.DIRECTORY_SEPARATOR."install_DB_{$version->value()}.sql";
 		}
 		
 		// Installe la base de données (cf. Install_DB_Test)
-		$this->executeScript($script, false);
+		try {
+			self::doExecuteScript($pdo, $script);
+		} catch (PHPUnit_Framework_AssertionFailedError $error) {
+			throw new RuntimeException($error->getMessage());
+		}
+	}
+	
+	/**
+	 * Vide la base de données et la réinstalle dans une version donnée.
+	 * 
+	 * @param Version $version Version à installer (la dernière par défaut).
+	 */
+	protected function installDatabase(Version $version = null) {
+		self::doInstallDatabase(self::$pdo, $version);
 	}
 	
 	/**
@@ -254,4 +317,7 @@ abstract class Database_Testcase extends PHPUnit_Extensions_Database_TestCase im
 		$this->assertTablesEqual($viewsFromInstall, $viewsFromUpdate, 'Le code des vues est différent entre le script d\'installation et le script de mise à jour');
 	}
 }
+
+DatabaseTestCase::staticInit();
+
 ?>

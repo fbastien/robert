@@ -20,7 +20,6 @@
 
 global $install_path;
 require_once ($install_path . FOLDER_INC . 'common.inc.php' );
-global $bdd;
 
 class Infos implements Iterator
 {

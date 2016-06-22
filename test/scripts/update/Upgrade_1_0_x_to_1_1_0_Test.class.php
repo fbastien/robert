@@ -17,7 +17,7 @@
  *
  */
 
-require_once dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR.'Database_Testcase.class.php';
+require_once dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR.'CustomDatabaseTestCase.class.php';
 
 /**
  * Test du script de mise à jour de la base de données des versions 1.0.x vers 1.1.0 (upgrade_1.0.x_to_1.1.0.sql).
@@ -30,27 +30,16 @@ require_once dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR.'Database_Testcase.cl
  * 
  * @group db
  */
-class Upgrade_1_0_x_to_1_1_0_Test extends Database_Testcase {
+class Upgrade_1_0_x_to_1_1_0_Test extends CustomDatabaseTestCase {
 	
 	/** @var PHPUnit_Extensions_Database_DataSet_IDataSet DataSet correspondant à la structure attendue de la BDD après mise à jour. */
 	private static $expectedSchema;
-	
 	/** @var PHPUnit_Extensions_Database_DataSet_IDataSet DataSet correspondant au contenu attendu de la BDD après mise à jour. */
 	private static $expectedData;
 	
-	/**
-	 * @return PHPUnit_Extensions_Database_DataSet_IDataSet
-	 * @see PHPUnit_Extensions_Database_TestCase::getDataSet()
-	 */
-	public function getDataSet() {
-		return new PHPUnit_Extensions_Database_DataSet_DefaultDataSet();
-	}
-	
-	/**
-	 * @beforeClass
-	 * @see PHPUnit_Framework_TestCase::setUpBeforeClass()
-	 */
+	/** @see PHPUnit_Framework_TestCase::setUpBeforeClass() */
 	public static function setUpBeforeClass() {
+		parent::setUpBeforeClass();
 		// Installe la base de données dans la version antérieure
 		$instance = new self();
 		$instance->installDatabase(Version::V1_0_0());

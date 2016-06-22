@@ -17,18 +17,11 @@ rendez-vous à http://www.gnu.org/licenses/agpl.txt (en Anglais)
 *
 */
 
-require_once dirname(__DIR__).'/PageTestCase.class.php';
+require_once dirname(__DIR__).DIRECTORY_SEPARATOR.'PageTestCase.class.php';
 
-/**
- * Test des actions liées au matériel (fct/matos_actions.php).
- * 
- * @runTestsInSeparateProcesses
- * @preserveGlobalState disabled
- */
-class Matos_Actions_Test extends PageTestCase {
-	
-	/** @var PHPUnit_Extensions_Database_DataSet_IDataSet Dataset des données communes à tous les cas de test. */
-	private static $dataset;
+/** Test des actions liées au matériel (fct/matos_actions.php). */
+class Matos_Actions_Test extends PageTestCase
+{
 	/** @var PHPUnit_Extensions_Database_DataSet_IDataSet Dataset d'un matériel supplémentaire appartenant au stock interne. */
 	private static $matosInterneDataset;
 	/** @var PHPUnit_Extensions_Database_DataSet_IDataSet Dataset d'un matériel supplémentaire appartenant à un prestataire externe. */
@@ -41,19 +34,11 @@ class Matos_Actions_Test extends PageTestCase {
 	 * @see PHPUnit_Framework_TestCase::setUpBeforeClass()
 	 */
 	public static function setUpBeforeClass() {
-		self::setTestedPage("fct/matos_actions.php");
-		$instance = new self();
-		self::$dataset = $instance->createXmlDataSet(dirname(__DIR__).'/common_fixture_dataset.xml');
-		self::$matosInterneDataset = $instance->createXmlDataSet(__DIR__.'/matos_actions_interne_dataset.xml');
-		self::$matosExterneDataset = $instance->createXmlDataSet(__DIR__.'/matos_actions_externe_dataset.xml');
-	}
-	
-	/**
-	 * @return PHPUnit_Extensions_Database_DataSet_IDataSet
-	 * @see PHPUnit_Extensions_Database_TestCase::getDataSet()
-	 */
-	public function getDataSet() {
-		return self::$dataset;
+		parent::setUpBeforeClass();
+		
+		self::setTestedPage('fct'.DIRECTORY_SEPARATOR.'matos_actions.php');
+		self::$matosInterneDataset = new PHPUnit_Extensions_Database_DataSet_XmlDataSet(__DIR__.DIRECTORY_SEPARATOR.'matos_actions_interne_dataset.xml');
+		self::$matosExterneDataset = new PHPUnit_Extensions_Database_DataSet_XmlDataSet(__DIR__.DIRECTORY_SEPARATOR.'matos_actions_externe_dataset.xml');
 	}
 	
 	/**
@@ -86,6 +71,10 @@ class Matos_Actions_Test extends PageTestCase {
 				'ownerExt' => $matos['ownerExt'],
 				'remarque' => $matos['remarque'] );
 		$this->assertJsonStringEqualsJsonString(json_encode($expectedJson), $this->getOutput());
+		// Vérification que le contenu de la base de données n'a pas changé
+		foreach (self::$tables as $tableName) {
+			$this->assertTableContents($this->getDataSet()->getTable($tableName), $tableName);
+		}
 	}
 	
 	/**
@@ -362,7 +351,7 @@ class Matos_Actions_Test extends PageTestCase {
 				'type' => 'reloadPage');
 		$this->assertJsonStringEqualsJsonString(json_encode($expectedJson), $this->getOutput());
 		foreach (self::$tables as $tableName) {
-			$this->assertTableContents(self::$dataset->getTable($tableName), $tableName);
+			$this->assertTableContents($this->getDefaultDataSet()->getTable($tableName), $tableName);
 		}
 	}
 }

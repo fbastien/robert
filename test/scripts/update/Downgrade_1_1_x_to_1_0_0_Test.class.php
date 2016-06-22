@@ -17,7 +17,7 @@
  *
  */
 
-require_once dirname(dirname(__DIR__)).'/Database_Testcase.class.php';
+require_once dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR.'CustomDatabaseTestCase.class.php';
 
 /**
  * Test du script de retour en arrière de la base de données des versions 1.1.x vers 1.0.0 (downgrade_1.1.x_to_1.0.0.sql).
@@ -40,27 +40,16 @@ require_once dirname(dirname(__DIR__)).'/Database_Testcase.class.php';
  * 
  * @group db
  */
-class Downgrade_1_1_x_to_1_0_0_Test extends Database_Testcase {
-	
+class Downgrade_1_1_x_to_1_0_0_Test extends CustomDatabaseTestCase
+{
 	/** @var PHPUnit_Extensions_Database_DataSet_IDataSet DataSet correspondant à la structure attendue de la BDD après mise à jour. */
 	private static $expectedSchema;
-	
 	/** @var PHPUnit_Extensions_Database_DataSet_IDataSet DataSet correspondant au contenu attendu de la BDD après mise à jour. */
 	private static $expectedData;
 	
-	/**
-	 * @return PHPUnit_Extensions_Database_DataSet_IDataSet
-	 * @see PHPUnit_Extensions_Database_TestCase::getDataSet()
-	 */
-	public function getDataSet() {
-		return new PHPUnit_Extensions_Database_DataSet_DefaultDataSet();
-	}
-	
-	/**
-	 * @beforeClass
-	 * @see PHPUnit_Framework_TestCase::setUpBeforeClass()
-	 */
+	/** @see PHPUnit_Framework_TestCase::setUpBeforeClass() */
 	public static function setUpBeforeClass() {
+		parent::setUpBeforeClass();
 		// Installe la base de données dans la version postérieure
 		$instance = new self();
 		$instance->installDatabase(Version::V1_1_0());

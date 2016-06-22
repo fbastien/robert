@@ -17,30 +17,27 @@
  *
  */
 
-require_once __DIR__.'/../../Database_Testcase.class.php';
+require_once dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR.'CustomDatabaseTestCase.class.php';
 
 /**
  * Test du script d'installation de la base de données (install_DB.sql).
  * 
  * @group db
  */
-class Install_DB_Test extends Database_Testcase {
+class Install_DB_Test extends CustomDatabaseTestCase {
 	
-	/** DataSet correspondant à la structure attendue de la BDD. */
+	/** @var PHPUnit_Extensions_Database_DataSet_IDataSet DataSet correspondant à la structure attendue de la BDD. */
 	private static $dataset;
 	
-	/** @return PHPUnit_Extensions_Database_DataSet_IDataSet */
-	public function getDataSet() {
-		return new PHPUnit_Extensions_Database_DataSet_DefaultDataSet();
-	}
-	
-	/** @beforeClass */
+	/** @see PHPUnit_Framework_TestCase::setUpBeforeClass() */
 	public static function setUpBeforeClass() {
+		parent::setUpBeforeClass();
 		// Vide la base de données
 		$instance = new self();
 		$instance->truncateDatabase();
 		// Charge le dataset de la structure de la BDD
-		self::$dataset = $instance->createXmlDataSet(__DIR__.'/../DB_schema/DB_schema_'.Version::last()->value().'_dataset.xml');
+		self::$dataset = new PHPUnit_Extensions_Database_DataSet_XmlDataSet(
+				dirname(__DIR__).DIRECTORY_SEPARATOR.'DB_schema'.DIRECTORY_SEPARATOR.'DB_schema_'.Version::last()->value().'_dataset.xml');
 	}
 	
 	/**
@@ -51,7 +48,7 @@ class Install_DB_Test extends Database_Testcase {
 	 * @test
 	 */
 	public function testScript() {
-		$this->executeScript(__DIR__.'/../../../scripts/install/install_DB.sql');
+		$this->executeScript(dirname(dirname(dirname(__DIR__))).DIRECTORY_SEPARATOR.'scripts'.DIRECTORY_SEPARATOR.'install'.DIRECTORY_SEPARATOR.'install_DB.sql');
 	}
 	
 	/**

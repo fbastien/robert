@@ -105,7 +105,7 @@ class SortiePDF {
 
 			// Infos du Matos
 			$l = new Liste();
-			$list_Matos   = $l->getListe( TABLE_MATOS, 'id, ref, label, externe, tarifLoc, valRemp, categorie, sousCateg');
+			$list_Matos   = $l->getListe( TABLE_MATOS, 'id, ref, label, tarifLoc, valRemp, categorie, sousCateg, ownerExt');
 			$list_sousCat = $l->getListe ( TABLE_MATOS_CATEG, '*', 'ordre', 'ASC' );
 			$this->list_sousCat = simplifySousCatArray($list_sousCat);
 
@@ -117,7 +117,7 @@ class SortiePDF {
 					$this->retour['matos'][$matos['id']]['PU'] = $matos['tarifLoc'];
 					$this->retour['matos'][$matos['id']]['valRemp'] = $matos['valRemp'];
 					$this->retour['matos'][$matos['id']]['cat'] = $matos['categorie'];
-					$this->retour['matos'][$matos['id']]['ext'] = $matos['externe'];
+					$this->retour['matos'][$matos['id']]['ext'] = ($matos['ownerExt'] === null ? '0' : '1');
 					$this->retour['matos'][$matos['id']]['sousCateg'] = $matos['sousCateg'];
 					$this->matosForBD[$matos['id']] = $this->matosPlan[$matos['id']];
 				}
@@ -128,10 +128,9 @@ class SortiePDF {
 		}
 		catch (Exception $e) { throw new Exception ('Création PDF : Impossible de récupérer une info... '.$e->getMessage()); }
 	}
-
-
-
-	// CRÉATION D'UN DEVIS EN PDF, PUIS AJOUT EN BDD (table 'devis')
+	
+	
+	/** Création d'un devis en PDF, puis ajout en BDD (table 'devis') */
 	public function createDevis ( $salaires, $remise = 0, $contratTxt = false ) {
 		global $config;
 		
@@ -392,18 +391,9 @@ class SortiePDF {
 		catch (Exception $e) { throw new Exception('Impossible de sauver le devis en BDD : ' . $e->getMessage()); return; }
 
 	}
-
-
-
-
-
-
-
-
-
-
-
-	// CREATION D'UNE FACTURE EN PDF (overwrite)
+	
+	
+	/** Création d'une facture en PDF (overwrite) */
 	public function createFacture ( $remise = 0) {
 		global $config;
 		
@@ -629,9 +619,13 @@ class SortiePDF {
 			return;
 		}
 	}
-
-
-	// CHECK DE L'EXISTENCE DU DOSSIER DE CONTENU DU PLAN, sinon on le crée, ainsi que le sous dossier "devis"
+	
+	
+	/**
+	 * Vérifie l'existence du dossier de contenu du plan.
+	 * 
+	 * Sinon il est créé, ainsi que le sous dossier "devis"
+	 */
 	private function createDossierContenu ( $type = 'devis') {
 		if ( ! is_dir($this->pathPDF) ) {
 			if ( ! @mkdir($this->pathPDF) ) {

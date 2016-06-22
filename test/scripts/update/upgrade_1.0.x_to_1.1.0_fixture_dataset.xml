@@ -6,6 +6,7 @@
 		<column>label</column>
 		<column>ref</column>
 		<column>panne</column>
+		<column>externe</column>
 		<column>categorie</column>
 		<column>sousCateg</column>
 		<column>Qtotale</column>
@@ -19,13 +20,14 @@
 			<value>Interne</value>
 			<value>Upgrade_1_0_x_to_1_1_0_Test::1</value>
 			<value>1</value>
+			<value>0</value>
 			<value>son</value>
 			<value>5</value>
 			<value>10</value>
 			<value>2.5</value>
 			<value>12.5</value>
 			<value>2016-05-31</value>
-			<null />
+			<value></value>
 			<value>Remarque 1</value>
 		</row>
 		<row>
@@ -33,12 +35,13 @@
 			<value>Externe</value>
 			<value>Upgrade_1_0_x_to_1_1_0_Test::2</value>
 			<value>0</value>
+			<value>1</value>
 			<value>structure</value>
 			<value>10</value>
 			<value>1</value>
 			<value>3</value>
 			<value>9</value>
-			<null />
+			<value></value>
 			<value>Prestataire 1</value>
 			<value>Remarque 2</value>
 		</row>
@@ -47,61 +50,15 @@
 			<value>Sans remarque</value>
 			<value>Upgrade_1_0_x_to_1_1_0_Test::3</value>
 			<value>0</value>
+			<value>0</value>
 			<value>lumiere</value>
 			<value>16</value>
 			<value>5</value>
 			<value>4</value>
 			<value>12</value>
 			<value>2016-05-30</value>
-			<null />
-			<null />
-		</row>
-	</table>
-	
-	<table name="robert_matos_unit">
-		<column>id_matosunit</column>
-		<column>id_matosdetail</column>
-		<column>ref</column>
-		<column>panne</column>
-		<column>dateAchat</column>
-		<column>ownerExt</column>
-		<column>remarque</column>
-	</table>
-	
-	<table name="robert_users">
-		<column>id</column>
-		<column>ldap_uid</column>
-		<column>email</column>
-		<column>password</column>
-		<column>nom</column>
-		<column>prenom</column>
-		<column>level</column>
-		<column>date_inscription</column>
-		<column>date_last_action</column>
-		<column>date_last_connexion</column>
-		<column>theme</column>
-		<column>yeux</column>
-		<column>cheveux</column>
-		<column>age</column>
-		<column>taille</column>
-		<column>idTekos</column>
-		<row>
-			<value>1</value>
-			<null />
-			<value>root@robertmanager.org</value>
-			<value>8351aaf8480d8135bc77af590c93c1e2</value>
-			<value>DEBUGGER</value>
-			<value>Root</value>
-			<value>9</value>
-			<value>1325615980</value>
-			<value>1356632988</value>
-			<value>1356620371</value>
-			<value>human</value>
-			<value>blancs</value>
-			<value>rouges</value>
-			<value>31</value>
-			<value>1.73</value>
-			<value>0</value>
+			<value></value>
+			<value></value>
 		</row>
 	</table>
 </dataset>

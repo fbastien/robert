@@ -7,8 +7,8 @@ require_once ('checkConnect.php' );
 $l = new Liste();
 
 if ( isset($_POST['searchingfor']) ) {
-	 $liste_matos = $l->getListe(TABLE_MATOS, '*', 'ref', 'ASC', $_POST['searchingwhat'], 'LIKE', '%'.$_POST['searchingfor'].'%');
-	 $modeRecherche = true;
+	$liste_matos = $l->getListe(TABLE_MATOS, '*', 'ref', 'ASC', $_POST['searchingwhat'], 'LIKE', '%'.$_POST['searchingfor'].'%');
+	$modeRecherche = true;
 }
 else $liste_matos = $l->getListe(TABLE_MATOS, '*', 'ref');
 unset($l);
@@ -23,13 +23,13 @@ $liste_ssCat = $lm->getListe(TABLE_MATOS_CATEG, '*', 'ordre', 'ASC');
 	$(function() {
 		$('.bouton').button();
 		initToolTip('.tableListe', -120);
-
+		
 		// highlight des mini sous-menus
 		$('.detailMiniSsMenu').addClass('ui-state-highlight');
 		$('.miniSmenuBtn').removeClass('ui-state-highlight');
 		$('#matos_list_detail').addClass('ui-state-highlight');
 		$('.detailMiniSsMenu').next().children().show(300);
-
+		
 		// init du system de recherche
 		$('.chercheBtn').attr('id', 'matos_list_detail');	// ajoute le nom du fichier actuel (en id du bouton) pour la recherche
 		$('#filtreCherche').html(							// Ajout des options de filtrage pour la recherche
@@ -42,7 +42,7 @@ $liste_ssCat = $lm->getListe(TABLE_MATOS_CATEG, '*', 'ordre', 'ASC');
 		$('#filtresDiv').show(300);							// affiche le module des filtres
 		$('#polyvalent').hide();							// sauf le 'polyvalent' (existe que pour les packs)
 		$('.filtre').removeClass('ui-state-error');
-
+		
 		$(".inputCal2").datepicker({dateFormat: 'yy-mm-dd', firstDay: 1, changeMonth: true, changeYear: true});
 	});
 </script>
@@ -62,13 +62,13 @@ $liste_ssCat = $lm->getListe(TABLE_MATOS_CATEG, '*', 'ordre', 'ASC');
 			<th class="ui-state-disabled">En panne</th>
 			<th class="ui-state-disabled">Actions</th>
 		</tr>
-
+		
 		<?php
 		include('matos_tri_sousCat.php');
-
+		
 		$matos_by_categ = creerSousCatArray($liste_matos);
 		$categById		= simplifySousCatArray($liste_ssCat);
-
+		
 		if (is_array($matos_by_categ)) {
 			foreach ($categById as $catInfo) {
 				$index = $catInfo['id'];
@@ -79,24 +79,24 @@ $liste_ssCat = $lm->getListe(TABLE_MATOS_CATEG, '*', 'ordre', 'ASC');
 						$boutonsModo = '<button class="bouton selectMatos" id="'.$info['id'].'" nom="'.$info['ref'].'" title="modifier"><span class="ui-icon ui-icon-pencil"></span></button>
 										<button class="bouton deleteMatos" id="'.$info['id'].'" nom="'.$info['ref'].'" title="supprimer"><span class="ui-icon ui-icon-trash"></span></button>';
 					} else $boutonsModo = '';
-
+					
 					$popupExterne = '';
 					$hideExterne = 'matosInterne';
-					if ($info['externe'] == '1') {
+					if ($info['ownerExt'] !== null) {
 						$popupExterne = ' class="ui-state-error" popup="EXTERNE AU PARC !<br /><br />A louer chez : <b>'.$info['ownerExt'].'</b>"';
 						$hideExterne = 'matosExterne ';
 						if (@$modeRecherche != true) $hideExterne .= 'hide';
 						else $hideExterne .= 'ui-state-active';
 					}
-
+					
 					$remark = addslashes($info['remarque']);
 					$remark = preg_replace('/\\n/', '<br />', $remark);
-
+					
 					$qteDispo = $info['panne'] ;
-
+					
 					$popupPanne = '';
 					if ($info['panne'] >= 1) $popupPanne = 'ui-state-error';
-
+					
 					echo '<tr class="ui-state-default matosLine '.$hideExterne.' cat-'.$info['categorie'].'">
 							<td>'.$info['ref'].'</td>
 							<td popup="'.$remark.'">'.$info['label'].'</td>

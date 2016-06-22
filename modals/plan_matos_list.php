@@ -108,7 +108,7 @@
 					$qte        = $v['Qtotale'];
 					$panne      = $v['panne'];
 					$pu         = $v['tarifLoc'];
-					$ext		= $v['externe'];
+					$ext        = ($v['ownerExt'] === null ? '0' : '1');
 					$extChezQui = $v['ownerExt'];
 
 					$qte -= $panne ; 

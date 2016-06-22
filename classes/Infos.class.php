@@ -20,60 +20,55 @@
 
 global $install_path;
 require_once ($install_path . FOLDER_INC . 'common.inc.php' );
-global $bdd;
 
-class Infos implements Iterator {
-
+class Infos implements Iterator
+{
 	const ALL_DATAS			= '*' ;									// truc par défaut pour la récup de toutes les données
 	const UPDATE_OK			= true;									// si un update a fonctionné, on renvoie cela
 	const UPDATE_ERROR		= 'erreur SQL lors de la modif !';		// erreur, si un update n'a pas fonctionné
 	const NO_INFO			= "Pas d'enregistrement";				// erreur, si aucun enregistrement trouvé dans la table
 	const FILTRE_NON_UNIQUE	= "Choix du filtre dangereux : NON UNIQUE en BDD !";
-
-
+	
 	private $bddCx		;	// instance de PDO
 	private $table      ;	// table de la BDD où travailler
 	private $filtre     ;	// nom de la colonne de la table, pour la recherche
 	private $filtre_key ;	// valeur à rechercher
-
+	
 	private $datas      ;	// tableau clé/valeur de tous les champs de la table
 	private $loaded     ;   // definit si la BDD est lue (update ou insert -> cf. méthode save() )
-
-
+	
+	
 	public function __construct( $table ) {
 		$this->loaded = false ;
 		$this->table = $table ;
 		$this->datas = array();
 	}
-
-
-	// destruction de l'instance PDO
+	
+	/** destruction de l'instance PDO */
 	public function __destruct () {
 		$this->bddCx = null;
 	}
-
-
-	// définition de l'objet PDO si pas encore en mémoire
+	
+	/** définition de l'objet PDO si pas encore en mémoire */
 	private function initPDO () {
 		$this->bddCx = null;
 		$this->bddCx = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => true));
 		$this->bddCx->query("SET NAMES 'utf8'");
 		$this->bddCx->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	}
-
-
-	// Charge toutes les infos de l'enregistrement en mémoire
+	
+	/** Charge toutes les infos de l'enregistrement en mémoire */
 	public function loadInfos ($filtre, $filtre_key ) {
 		$this->initPDO();
 		$this->filtre      = addslashes($filtre);
 		$this->filtre_key  = $filtre_key;
-
+		
 		$sqlReq = "SELECT * FROM `$this->table` WHERE `$filtre` = '$filtre_key'";
 		$q = $this->bddCx->prepare($sqlReq) ;
 		$q->execute();
 		$nbResults = $q->rowCount();
 		// vérifie si un enregistrement a été trouvé
-	    if ($nbResults == 0) { throw new Exception(Infos::NO_INFO." pour $filtre = $filtre_key dans ".$this->table) ; }
+		if ($nbResults == 0) { throw new Exception(Infos::NO_INFO." pour $filtre = $filtre_key dans ".$this->table) ; }
 		elseif ($nbResults == 1) $result = $q->fetch(PDO::FETCH_ASSOC) ;
 		elseif ($nbResults > 1) $result = $q->fetchAll(PDO::FETCH_ASSOC) ;
 		foreach ( $result as $key => $val ){
@@ -82,33 +77,29 @@ class Infos implements Iterator {
 		$this->loaded = true ;
 		$this->bddCx = null;
 	}
-
-	// oblige à updater un champ lors de la sauvegarde au lieu de creer un enregistrement.				@OBSOLTETE : pas utilisé, mais conservé au cas ou
+	
+	/** oblige à updater un champ lors de la sauvegarde au lieu de creer un enregistrement. */
+	// @OBSOLTETE : pas utilisé, mais conservé au cas ou
 	public function forceLoaded ($etat){ $this->loaded = $etat ; }
-
-
-	// Ajoute / modifie une info dans la mémoire
+	
+	/** Ajoute / modifie une info dans la mémoire */
 	public function addInfo ( $key , $val ){
 		$this->datas[$key] = $val ;
 	}
-
-
-	// Compte le nombre d'infos en mémoire
+	
+	/** Compte le nombre d'infos en mémoire */
 	public function nbInfos (){
 		return count ( $this->datas ) ;
 	}
-
-
-	// Récupération d'info en mémoire
+	
+	/** Récupération d'info en mémoire */
 	public function getInfo ( $champ = Infos::ALL_DATAS ){
 		if ( $champ == Infos::ALL_DATAS )       { return $this->datas ; }
-		if ( ! isset ( $this->datas[$champ] ) ) { return false; }
+		if ( ! array_key_exists( $champ, $this->datas ) ) { return false; }
 		return $this->datas[$champ] ;
 	}
-
-
-
-	// MISE À JOUR d'un enregistrement dans la table courante
+	
+	/** MISE À JOUR d'un enregistrement dans la table courante */
 	public function save ( $filterKey = 'id', $filter='this' ) {
 		$this->initPDO();
 		// sauvegarde, si pas d'argument on va chercher l'id, si pas d'id dans les data, on met 0 pour éviter les 'Notices' (pas grave mais propre)
@@ -119,7 +110,7 @@ class Infos implements Iterator {
 		// Vérifie si tous les champs existent, sinon crée le champ
 		$this->updateBDD();
 		// Construction de la chaine des clés et valeurs SQL pour la requête
-		$keys   = ''; 	$vals   = '';  $up = '' ;
+		$keys = $vals = $up = '';
 		foreach ( $this->datas as $k => $v ) {
 			$keys .= "`$k`, " ;
 			if($v === null) {
@@ -136,13 +127,12 @@ class Infos implements Iterator {
 		$keys = substr($keys, 0 , strlen($keys) -2 );
 		$vals = substr($vals, 0 , strlen($vals) -2 );
 		$up   = substr($up,   0 , strlen($up)   -2 );
-
+		
 		// Insertion ou Update de l'enregistrement
 		if ( $this->loaded )
 			$req = "UPDATE `$this->table` SET $up WHERE `$filterKey` LIKE '$filter'";
 		else
 			$req = "INSERT INTO `$this->table` ($keys) VALUES ($vals)";
-//		echo $req;
 		$q = $this->bddCx->prepare($req) ;
 		try { $q->execute() ; }
 		catch (Exception $e) {
@@ -152,19 +142,18 @@ class Infos implements Iterator {
 				$key = substr( $msg, $keyOffset  );
 				throw new Exception('ERREUR SQL de Infos::save() : Entree dupliquée ' . $key);
 			}
-
+			
 			throw new Exception('ERREUR SQL de Infos::save() : ' . $e->getMessage());
 		}
-
+		
 		$bad = $q->errorInfo() ;
 		if ($bad[0] == 0 )
 			return $req ;
 		else
 			throw new Exception('ERREUR SQL de Infos::save() : ' . $bad[2]) ;
 	}
-
-
-	// Lit tous les champs de la table, si une nouvelle valeur existe en mémoire on ajoute un champ
+	
+	/** Lit tous les champs de la table, si une nouvelle valeur existe en mémoire on ajoute un champ */
 	private function updateBDD () {
 		$this->initPDO();
 		$q = $this->bddCx->prepare("SHOW COLUMNS FROM `$this->table`");
@@ -180,9 +169,9 @@ class Infos implements Iterator {
 			}
 		}
 	}
-
+	
 	// @OBSOLETE ? (enfin je crois) REMPLACÉ PAR SAVE() (à confirmer par Moutew)
-	// MODIFICATEUR de donnée(s) dans la BDD (et, si le champs n'existe pas, création de la donnée)
+	/** MODIFICATEUR de donnée(s) dans la BDD (et, si le champs n'existe pas, création de la donnée) */
 	public function update ($row, $val) {
 		if ($this->rowExist($row) == true) {
 			if ($this->updateChamp($row, $val)) return Infos::UPDATE_OK ;
@@ -196,9 +185,8 @@ class Infos implements Iterator {
 			else throw new Exception(Infos::UPDATE_ERROR . ' ::addChamp() IMPOSSIBLE !');
 		}
 	}
-
-
-	// Check si un champ existe dans la table courante
+	
+	/** Check si un champ existe dans la table courante */
 	private function rowExist ($row) {
 		$this->initPDO();
 		$sqlReq = "SELECT $row FROM `$this->table` WHERE `$this->filtre` = '$this->filtre_key'";
@@ -207,9 +195,9 @@ class Infos implements Iterator {
 		if ($q->rowCount() == 1) return true;
 		else return false;
 	}
-
-
-	// Check si un champ est un index unique en BDD (CAD si le champ peut avoir plusieurs fois la même valeur)			// non utilisé pour le moment
+	
+	/** Check si un champ est un index unique en BDD (CAD si le champ peut avoir plusieurs fois la même valeur) */
+	// non utilisé pour le moment
 	private function checkFiltreUnique ($champ) {
 		$this->initPDO();
 		$sqlReq = "SHOW INDEXES FROM ".$this->table ;
@@ -224,9 +212,8 @@ class Infos implements Iterator {
 		}
 		return $is_unique;
 	}
-
-
-	// Ajout d'un champ à la table courante
+	
+	/** Ajout d'un champ à la table courante */
 	private function addChamp ($row, $val) {
 		$this->initPDO();
 		if ((strpos('!', $val) !== false) && (strpos('\'', $val) !== false) && (strpos('?', $val) !== false) && (strpos('#', $val) !== false))
@@ -250,9 +237,8 @@ class Infos implements Iterator {
 		if ($a->execute()) return true;
 		else return false;
 	}
-
-
-	// Mise à jour d'un champ dans la table courante
+	
+	/** Mise à jour d'un champ dans la table courante */
 	private function updateChamp ($row, $val) {
 		$this->initPDO();
 		$sqlReq = "UPDATE `$this->table` SET `$row` = '$val' WHERE `$this->filtre` = '$this->filtre_key' " ;
@@ -260,8 +246,8 @@ class Infos implements Iterator {
 		if ($q->execute()) return true;
 		else return false;
 	}
-
-	// Supprime une colonne d'une table de la base de données (fonction statique, peut être appellée sans créer d'instance de Infos)
+	
+	/** Supprime une colonne d'une table de la base de données (fonction statique, peut être appellée sans créer d'instance de Infos) */
 	public static function removeChamp ($table = '', $row = '') {
 		if ($table == '' && $row == '') return false;
 		if ($row == 'id') return false;
@@ -279,13 +265,12 @@ class Infos implements Iterator {
 			unset($pdoTmp);
 		}
 	}
-
-
-	// efface un enregistrement de la BDD
+	
+	/** efface un enregistrement de la BDD */
 	public function delete ( $filterKey = 'id', $filter='this', $filtrePlus = null ) {
 		$this->initPDO();
 		if ( $filter == 'this') $filter = $this->datas[$filterKey] ;
-
+		
 		$sqlReq = "DELETE FROM `$this->table` WHERE `$filterKey` = \"$filter\"";
 		if ($filtrePlus != null) {
 			$sqlReq .= " AND ".$filtrePlus;
@@ -298,17 +283,17 @@ class Infos implements Iterator {
 		else
 			throw new Exception($bad[2]) ;
 	}
-
-
-	// Méthodes de l'iterator
+	
+	/** @see Iterator::current() */
 	public function current() { return current ($this->datas); }
+	/** @see Iterator::key() */
 	public function key()     { return key ($this->datas) ; }
-	public function next()	  {	next ( $this->datas );  	}
+	/** @see Iterator::next() */
+	public function next()	  {	next ( $this->datas ); }
+	/** @see Iterator::rewind() */
 	public function rewind()  { reset ( $this->datas ); }
-	public function valid()   { if ( current ($this->datas) === false  ) return false ; else 	return true ; }
-
-
+	/** @see Iterator::valid() */
+	public function valid()   { if ( current ($this->datas) === false ) return false ; else return true ; }
 }
-
 
 ?>

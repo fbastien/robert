@@ -32,7 +32,7 @@ try {
 
 	$l = new Liste();
 
-	$list_Matos   = $l->getListe( TABLE_MATOS, 'id, ref, tarifLoc, externe, categorie, sousCateg, ownerExt');
+	$list_Matos   = $l->getListe( TABLE_MATOS, 'id, ref, tarifLoc, categorie, sousCateg, ownerExt');
 	$list_sousCat = $l->getListe ( TABLE_MATOS_CATEG, '*', 'ordre', 'ASC' );
 	array_push($list_sousCat, array ( 'id' => 999, 'label' => 'A louer' ));
 	$list_sousCat = simplifySousCatArray($list_sousCat);
@@ -66,7 +66,7 @@ try {
 			$retour['matos'][$matos['id']]['qte'] = $matos_plan[$matos['id']];
 			$retour['matos'][$matos['id']]['ref'] = $matos['ref'];
 			$retour['matos'][$matos['id']]['prix'] = $matos['tarifLoc'] * $matos_plan[$matos['id']];
-			$retour['matos'][$matos['id']]['externe'] = $matos['externe'];
+			$retour['matos'][$matos['id']]['externe'] = ($matos['ownerExt'] === null ? '0' : '1');
 			$retour['matos'][$matos['id']]['cat'] = $matos['categorie'];
 			$retour['matos'][$matos['id']]['sousCateg'] = $matos['sousCateg'];
 			$retour['matos'][$matos['id']]['ownerExt'] = $matos['ownerExt'];

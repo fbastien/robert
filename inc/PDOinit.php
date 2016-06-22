@@ -22,7 +22,6 @@ try {
 	$bdd = new PDO(DSN, USER, PASS, array(PDO::ATTR_PERSISTENT => true));
 	$bdd->query("SET NAMES 'utf8'");
 	$bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	global $bdd;
 }
 catch (Exception $e) {
 	echo 'Host = <b>'.$host.'</b><br />';

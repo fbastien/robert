@@ -18,15 +18,14 @@
  */
 
 
-$install_path = dirname(__FILE__). '/';
-global $install_path;
+$install_path = __DIR__.DIRECTORY_SEPARATOR;
 
-$pathInc   = "inc";
-$pathFct   = "fct";
-$pathConf  = "config";
-$pathClass = "classes";
-$pathModals= "modals";
-$pathFonts = "font";
+$pathInc   = $install_path."inc";
+$pathFct   = $install_path."fct";
+$pathConf  = $install_path."config";
+$pathClass = $install_path."classes";
+$pathModals= $install_path."modals";
+$pathFonts = $install_path."font";
 set_include_path(get_include_path() . PATH_SEPARATOR . $pathInc . PATH_SEPARATOR . $pathFct . PATH_SEPARATOR . $pathConf . PATH_SEPARATOR . $pathClass . PATH_SEPARATOR . $pathModals . PATH_SEPARATOR . $pathFonts);
 
 ?>

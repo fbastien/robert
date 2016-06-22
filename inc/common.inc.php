@@ -29,6 +29,7 @@ define ("TABLE_USERS",			"robert_users");								// table des utilisateurs dans 
 define ("TABLE_CAL"  ,			"robert_calendar");								// table du calendrier
 define ("TABLE_MATOS",			"robert_matos_detail");							// table du matos au détail
 define ("TABLE_MATOS_CATEG",	"robert_matos_sous_cat");						// table des sous-catégories de matos
+define ("TABLE_MATOS_ID",		"robert_matos_ident");							// table du matos identifié individuellement
 define ("TABLE_PACKS",			"robert_matos_packs");							// table des packs de matos
 define ("TABLE_TEKOS",			"robert_tekos");								// table des techniciens
 define ("TABLE_PLANS",			"robert_plans");								// table des plans
@@ -81,9 +82,9 @@ date_default_timezone_set('Europe/Paris');										// La timezone par défaut, 
 $config = parse_ini_file($install_path . FOLDER_CONFIG . 'config.ini');
 $config['boite.TVA.val'] = (float) $config['boite.TVA.val'];
 
-define ("DSN",  'mysql:dbname=' . $config['db.base'] . ';host=' . $config['db.host']);		// données de connexion à la BDD via PDO
-define ("USER", $config['db.user']);
-define ("PASS", $config['db.pass']);
+defined('DSN') or define ("DSN",  'mysql:dbname=' . $config['db.base'] . ';host=' . $config['db.host']);		// données de connexion à la BDD via PDO
+defined('USER') or define ("USER", $config['db.user']);
+defined('PASS') or define ("PASS", $config['db.pass']);
 
 
 // fonction de suppression de dossier, vite fait, dispo pour tout le monde !

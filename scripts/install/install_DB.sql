@@ -84,16 +84,15 @@ CREATE TABLE `robert_matos_detail` (
 		`id`        INT(6)       NOT NULL AUTO_INCREMENT,
 		`label`     VARCHAR(256) NOT NULL,
 		`ref`       VARCHAR(128) NOT NULL,
-		`panne`     INT(3)       NOT NULL,
-		`externe`   TINYINT(1)   NOT NULL,
+		`panne`     INT(4)       NOT NULL,
 		`categorie` VARCHAR(128) NOT NULL,
 		`sousCateg` INT(4)       NOT NULL,
 		`Qtotale`   INT(4)       NOT NULL,
 		`tarifLoc`  FLOAT        NOT NULL,
 		`valRemp`   FLOAT        NOT NULL,
-		`dateAchat` DATE         NOT NULL,
-		`ownerExt`  VARCHAR(256) NOT NULL,
-		`remarque`  TEXT         NOT NULL,
+		`dateAchat` DATE         DEFAULT NULL,
+		`ownerExt`  VARCHAR(256) DEFAULT NULL,
+		`remarque`  TEXT         DEFAULT NULL,
 		PRIMARY KEY (`id`),
 		UNIQUE KEY `ref` (`ref`),
 		KEY `sousCateg` (`sousCateg`) )
@@ -158,6 +157,25 @@ VALUES
 	(20, 'Divers', 20),
 	(21, 'Véhicules', 21),
 	(22, 'Divers transport', 22);
+
+-- TABLE matos_unit
+
+DROP TABLE IF EXISTS `robert_matos_unit`;
+
+CREATE TABLE `robert_matos_unit` (
+		`id_matosunit`   INT(6)       NOT NULL AUTO_INCREMENT,
+		`id_matosdetail` INT(6)       NOT NULL,
+		`ref`            VARCHAR(128) NOT NULL,
+		`panne`          BOOL         NOT NULL,
+		`dateAchat`      DATE         DEFAULT NULL,
+		`ownerExt`       VARCHAR(256) DEFAULT NULL,
+		`remarque`       TEXT         DEFAULT NULL,
+		PRIMARY KEY (`id_matosunit`),
+		UNIQUE KEY `ref` (`ref`),
+		KEY `id_matosdetail` (`id_matosdetail`) )
+	ENGINE = MyISAM,
+	AUTO_INCREMENT = 1,
+	DEFAULT CHARSET = utf8;
 
 -- TABLE notes
 

@@ -27,31 +27,46 @@ if ( $action == 'addMatos') {
 }
 
 if ( $action == 'addMatosJson') {
-	if ($label == '' || $ref == '' || $Qtotale == '' || $tarifLoc == '' || $valRemp == '') { $result['success'] = 'Pas assez de données... '; return; }
+	if ($label == '' || $ref == '' || $Qtotale == '' || $tarifLoc == '' || $valRemp == '') {
+		$result['success'] = 'Pas assez de données... ';
+		return;
+	}
 	unset($_POST['action']);
 	$tmpMatos = new Matos ();
 	$tmpMatos->setVals ($_POST);
 	
-	try { if ( $tmpMatos->save() ) $result['success'] = 'SUCCESS'; }
-	catch (Exception $e) { $result['success'] = $e->getMessage(); }
-	unset ($tmpMatos) ;
-
-	$tmpMatos = new Matos ();
-	$tmpMatos->loadFromBD( 'ref' , $ref ); 
-
-	foreach ($tmpMatos as $k => $v ){
-		$result['matos'][$k] = $v ;
+	try {
+		if ( $tmpMatos->save() )
+			$result['success'] = 'SUCCESS';
+	} catch (Exception $e) {
+		$result['success'] = $e->getMessage();
+	}
+	unset ($tmpMatos);
+	
+	if($result['success'] === 'SUCCESS') {
+		$tmpMatos = new Matos ();
+		$tmpMatos->loadFromBD( 'ref' , $ref ); 
+		foreach ($tmpMatos as $k => $v ){
+			$result['matos'][$k] = $v ;
+		}
+		$result['matos']['externe'] = $tmpMatos->getExterne();
 	}
 	echo json_encode($result);
 }
 
 if ( $action == 'modif') {
-	unset($_POST['action']); unset($_POST['id']);
+	unset($_POST['action']);
+	unset($_POST['id']);
 	$modMatos = new Matos ('id', $id);
 	$modMatos->setVals ($_POST);
-	if ($modMatos->save())
-		echo 'Matériel sauvegardé !';
-	else echo 'Impossible de sauvegarder.';
+	try {
+		if ($modMatos->save())
+			echo 'Matériel sauvegardé !';
+		else
+			echo 'Impossible de sauvegarder.';
+	} catch (Exception $e) {
+		echo $e->getMessage();
+	}
 }
 
 if ( $action == 'delete') {

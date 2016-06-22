@@ -43,6 +43,12 @@
 			<value>utf8_general_ci</value>
 		</row>
 		<row>
+			<value>robert_matos_unit</value>
+			<value>BASE TABLE</value>
+			<value>MyISAM</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
 			<value>robert_notes</value>
 			<value>BASE TABLE</value>
 			<value>MyISAM</value>
@@ -545,19 +551,7 @@
 			<value>robert_matos_detail</value>
 			<value>panne</value>
 			<value>4</value>
-			<value>int(3)</value>
-			<value></value>
-			<null />
-			<value>NO</value>
-			<value></value>
-			<null />
-			<null />
-		</row>
-		<row>
-			<value>robert_matos_detail</value>
-			<value>externe</value>
-			<value>5</value>
-			<value>tinyint(1)</value>
+			<value>int(4)</value>
 			<value></value>
 			<null />
 			<value>NO</value>
@@ -568,7 +562,7 @@
 		<row>
 			<value>robert_matos_detail</value>
 			<value>categorie</value>
-			<value>6</value>
+			<value>5</value>
 			<value>varchar(128)</value>
 			<value></value>
 			<null />
@@ -580,7 +574,7 @@
 		<row>
 			<value>robert_matos_detail</value>
 			<value>sousCateg</value>
-			<value>7</value>
+			<value>6</value>
 			<value>int(4)</value>
 			<value>MUL</value>
 			<null />
@@ -592,7 +586,7 @@
 		<row>
 			<value>robert_matos_detail</value>
 			<value>Qtotale</value>
-			<value>8</value>
+			<value>7</value>
 			<value>int(4)</value>
 			<value></value>
 			<null />
@@ -604,7 +598,7 @@
 		<row>
 			<value>robert_matos_detail</value>
 			<value>tarifLoc</value>
-			<value>9</value>
+			<value>8</value>
 			<value>float</value>
 			<value></value>
 			<null />
@@ -616,7 +610,7 @@
 		<row>
 			<value>robert_matos_detail</value>
 			<value>valRemp</value>
-			<value>10</value>
+			<value>9</value>
 			<value>float</value>
 			<value></value>
 			<null />
@@ -628,11 +622,11 @@
 		<row>
 			<value>robert_matos_detail</value>
 			<value>dateAchat</value>
-			<value>11</value>
+			<value>10</value>
 			<value>date</value>
 			<value></value>
 			<null />
-			<value>NO</value>
+			<value>YES</value>
 			<value></value>
 			<null />
 			<null />
@@ -640,11 +634,11 @@
 		<row>
 			<value>robert_matos_detail</value>
 			<value>ownerExt</value>
-			<value>12</value>
+			<value>11</value>
 			<value>varchar(256)</value>
 			<value></value>
 			<null />
-			<value>NO</value>
+			<value>YES</value>
 			<value></value>
 			<value>utf8</value>
 			<value>utf8_general_ci</value>
@@ -652,11 +646,11 @@
 		<row>
 			<value>robert_matos_detail</value>
 			<value>remarque</value>
-			<value>13</value>
+			<value>12</value>
 			<value>text</value>
 			<value></value>
 			<null />
-			<value>NO</value>
+			<value>YES</value>
 			<value></value>
 			<value>utf8</value>
 			<value>utf8_general_ci</value>
@@ -804,6 +798,90 @@
 			<value></value>
 			<null />
 			<null />
+		</row>
+		<row>
+			<value>robert_matos_unit</value>
+			<value>id_matosunit</value>
+			<value>1</value>
+			<value>int(6)</value>
+			<value>PRI</value>
+			<null />
+			<value>NO</value>
+			<value>auto_increment</value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_matos_unit</value>
+			<value>id_matosdetail</value>
+			<value>2</value>
+			<value>int(6)</value>
+			<value>MUL</value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_matos_unit</value>
+			<value>ref</value>
+			<value>3</value>
+			<value>varchar(128)</value>
+			<value>UNI</value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_matos_unit</value>
+			<value>panne</value>
+			<value>4</value>
+			<value>tinyint(1)</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_matos_unit</value>
+			<value>dateAchat</value>
+			<value>5</value>
+			<value>date</value>
+			<value></value>
+			<null />
+			<value>YES</value>
+			<value></value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>robert_matos_unit</value>
+			<value>ownerExt</value>
+			<value>6</value>
+			<value>varchar(256)</value>
+			<value></value>
+			<null />
+			<value>YES</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_matos_unit</value>
+			<value>remarque</value>
+			<value>7</value>
+			<value>text</value>
+			<value></value>
+			<null />
+			<value>YES</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
 		</row>
 		<row>
 			<value>robert_notes</value>

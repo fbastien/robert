@@ -17,38 +17,45 @@
  *
  */
 
-require_once __DIR__.'/../../Database_Testcase.class.php';
+require_once dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR.'CustomDatabaseTestCase.class.php';
 
 /**
  * Test du script de mise à jour de la base de données des versions 1.0.x vers 1.1.0 (upgrade_1.0.x_to_1.1.0.sql).
  * 
+ * Cas de test (des données en version 1.0.x) :
+ * 1. Matériel interne
+ * 2. Matériel externe
+ * 3. Matériel avec remarque
+ * 4. Matériel sans remarque
+ * 
  * @group db
  */
-class Upgrade_1_0_x_to_1_1_0_Test extends Database_Testcase {
+class Upgrade_1_0_x_to_1_1_0_Test extends CustomDatabaseTestCase {
 	
-	/** DataSet correspondant à la structure attendue de la BDD après mise à jour. */
+	/** @var PHPUnit_Extensions_Database_DataSet_IDataSet DataSet correspondant à la structure attendue de la BDD après mise à jour. */
 	private static $expectedSchema;
-	
-	/** DataSet correspondant au contenu attendu de la BDD après mise à jour. */
+	/** @var PHPUnit_Extensions_Database_DataSet_IDataSet DataSet correspondant au contenu attendu de la BDD après mise à jour. */
 	private static $expectedData;
 	
-	public function getDataSet() {
-		return new PHPUnit_Extensions_Database_DataSet_DefaultDataSet();
-	}
-	
-	/** @beforeClass */
+	/** @see PHPUnit_Framework_TestCase::setUpBeforeClass() */
 	public static function setUpBeforeClass() {
+		parent::setUpBeforeClass();
 		// Installe la base de données dans la version antérieure
 		$instance = new self();
 		$instance->installDatabase(Version::V1_0_0());
 		// Charge les datasets
-		self::$expectedSchema = $instance->createXmlDataSet(__DIR__.'/../DB_schema/DB_schema_1.1.0_dataset.xml');
-		self::$expectedData = $instance->createXmlDataSet(__DIR__.'/upgrade_1.0.x_to_1.1.0_expected_dataset.xml');
+		self::$expectedSchema = new PHPUnit_Extensions_Database_DataSet_XmlDataSet(
+			dirname(__DIR__).DIRECTORY_SEPARATOR.'DB_schema'.DIRECTORY_SEPARATOR.'DB_schema_1.1.0_dataset.xml');
+		self::$expectedData = new PHPUnit_Extensions_Database_DataSet_XmlDataSet(
+			__DIR__.DIRECTORY_SEPARATOR.'upgrade_1.0.x_to_1.1.0_expected_dataset.xml');
 	}
 	
 	/** @test */
 	public function testScript() {
-		$this->executeScript(__DIR__.'/../../../scripts/update/upgrade_1.0.x_to_1.1.0.sql');
+		// Insertion des données de test
+		$this->insertData($this->createXmlDataSet(__DIR__.DIRECTORY_SEPARATOR.'upgrade_1.0.x_to_1.1.0_fixture_dataset.xml'));
+		
+		$this->executeScript(dirname(dirname(dirname(__DIR__))).DIRECTORY_SEPARATOR.'scripts'.DIRECTORY_SEPARATOR.'update'.DIRECTORY_SEPARATOR.'upgrade_1.0.x_to_1.1.0.sql');
 	}
 	
 	/**
@@ -65,11 +72,14 @@ class Upgrade_1_0_x_to_1_1_0_Test extends Database_Testcase {
 	 */
 	public function testTableColumns() {
 		$this->assertTableColumns(self::$expectedSchema->getTable('COLUMNS'));
+		$this->assertViewColumns(self::$expectedSchema->getTable('VIEW_COLUMNS'));
 	}
 	
 	/** Data provider indiquant les tables dont il faut tester le contenu. */
 	public function provideTables() {
 		return array(
+				array('robert_matos_detail'),
+				array('robert_matos_unit'),
 				array('robert_users')
 			);
 	}
@@ -81,6 +91,14 @@ class Upgrade_1_0_x_to_1_1_0_Test extends Database_Testcase {
 	 */
 	public function testTableContents($tableName) {
 		$this->assertTableContents(self::$expectedData->getTable($tableName), $tableName);
+	}
+	
+	/**
+	 * @test
+	 * @depends testTableContents
+	 */
+	public function testViewFormula() {
+		$this->assertViewFormulaSameAsInstall(Version::V1_1_0());
 	}
 }
 ?>

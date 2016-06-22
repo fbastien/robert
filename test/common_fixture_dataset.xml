@@ -16,43 +16,43 @@
 		<column>remarque</column>
 		<row>
 			<value>1</value>
-			<value>Interne</value>
-			<value>Upgrade_1_0_x_to_1_1_0_Test::1</value>
-			<value>1</value>
+			<value>Micro Shure SM58</value>
+			<value>MIC-SM58</value>
+			<value>3</value>
 			<value>son</value>
+			<value>9</value>
 			<value>5</value>
-			<value>10</value>
-			<value>2.5</value>
-			<value>12.5</value>
-			<value>2016-05-31</value>
+			<value>5</value>
+			<value>50</value>
 			<null />
-			<value>Remarque 1</value>
+			<value>Prestataire 1</value>
+			<value>Avec pince</value>
 		</row>
 		<row>
 			<value>2</value>
-			<value>Externe</value>
-			<value>Upgrade_1_0_x_to_1_1_0_Test::2</value>
-			<value>0</value>
-			<value>structure</value>
-			<value>10</value>
+			<value>Câble XLR</value>
+			<value>CAB-XLR</value>
 			<value>1</value>
-			<value>3</value>
-			<value>9</value>
+			<value>son</value>
+			<value>7</value>
+			<value>11</value>
+			<value>1</value>
+			<value>10</value>
+			<value>2016-05-31</value>
 			<null />
-			<value>Prestataire 1</value>
-			<value>Remarque 2</value>
+			<value>Avec attache</value>
 		</row>
 		<row>
 			<value>3</value>
-			<value>Sans remarque</value>
-			<value>Upgrade_1_0_x_to_1_1_0_Test::3</value>
+			<value>Projecteur PAR64</value>
+			<value>PRJ-P64</value>
 			<value>0</value>
 			<value>lumiere</value>
-			<value>16</value>
-			<value>5</value>
-			<value>4</value>
-			<value>12</value>
-			<value>2016-05-30</value>
+			<value>6</value>
+			<value>3</value>
+			<value>3</value>
+			<value>30</value>
+			<null />
 			<null />
 			<null />
 		</row>
@@ -66,11 +66,64 @@
 		<column>dateAchat</column>
 		<column>ownerExt</column>
 		<column>remarque</column>
+		<row>
+			<value>1</value>
+			<value>1</value>
+			<value>MIC-SM58-001</value>
+			<value>0</value>
+			<null />
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>2</value>
+			<value>1</value>
+			<value>MIC-SM58-002</value>
+			<value>1</value>
+			<null />
+			<value>Prestataire 2</value>
+			<null />
+		</row>
+		<row>
+			<value>3</value>
+			<value>1</value>
+			<value>MIC-SM58-003</value>
+			<value>0</value>
+			<null />
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>4</value>
+			<value>3</value>
+			<value>PRJ-P64-001</value>
+			<value>0</value>
+			<value>2015-11-02</value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>5</value>
+			<value>3</value>
+			<value>PRJ-P64-002</value>
+			<value>0</value>
+			<value>2015-11-03</value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>6</value>
+			<value>3</value>
+			<value>PRJ-P64-003</value>
+			<value>0</value>
+			<null />
+			<null />
+			<null />
+		</row>
 	</table>
 	
 	<table name="robert_users">
 		<column>id</column>
-		<column>ldap_uid</column>
 		<column>email</column>
 		<column>password</column>
 		<column>nom</column>
@@ -87,7 +140,6 @@
 		<column>idTekos</column>
 		<row>
 			<value>1</value>
-			<null />
 			<value>root@robertmanager.org</value>
 			<value>8351aaf8480d8135bc77af590c93c1e2</value>
 			<value>DEBUGGER</value>

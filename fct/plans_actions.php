@@ -239,7 +239,7 @@ if ( $action == 'getManqueMatos' ){
 }
 
 
-// Ajoute une dimension a la liste de materiel ['MANQUE']
+/** Ajoute une dimension à la liste de matériel ['MANQUE'] */
 function Matos_getManque( $idPlan, $listMatos ){
 
 	$tmpPlan = createTmpPlan () ;
@@ -656,7 +656,7 @@ if (@$action == 'showPlanFiles') {
 /* //////////////////////////////// FONCTIONS DES PLANS ///////////////////////////////////////// */
 /* ////////////////////////////////////////////////////////////////////////////////////////////// */
 
-// CRÉE UN OBJET PLAN VITE FAIT
+/** Crée un objet plan vite fait */
 function createTmpPlan (){
 	try {
 		$tmpPlan = new Plan () ;
@@ -669,7 +669,7 @@ function createTmpPlan (){
 }
 
 
-// SAUVEGARDE D'UN PLAN ET SOUS PLAN
+/** Sauvegarde un plan et sous-plan */
 function saveTmpPlan ( $tmpPlan ){
 	try {
 		if ( $tmpPlan->save() ) {
@@ -686,10 +686,10 @@ function saveTmpPlan ( $tmpPlan ){
 }
 
 
-// RÉCUPÉRATION DES PLANS ET SOUS PLANS puis ENCODAGE JSON
+/** Récupère les plans et sous-plans puis encode en JSON */
 function jsonPlan($p) {
 	$l = new Liste();
-	$list_Matos = $l->getListe(TABLE_MATOS, 'id, ref, tarifLoc, externe, categorie, sousCateg, ownerExt', 'categorie', 'ASC');
+	$list_Matos = $l->getListe(TABLE_MATOS, 'id, ref, tarifLoc, categorie, sousCateg, ownerExt', 'categorie', 'ASC');
 
 	if ( get_class($p) != "Plan" ) return -1 ;
 	$retour['id']			= $p->getPlanID();
@@ -732,7 +732,7 @@ function jsonPlan($p) {
 				$retour['matos'][$sousCat][$idMatos]['ref']	  = $matosInfo['ref'];
 				$retour['matos'][$sousCat][$idMatos]['qte']	  = $qteMatos;
 				$retour['matos'][$sousCat][$idMatos]['prix']  = $matosInfo['tarifLoc'] * $qteMatos;
-				$retour['matos'][$sousCat][$idMatos]['ext']	  = $matosInfo['externe'];
+				$retour['matos'][$sousCat][$idMatos]['ext']	  = ($matosInfo['ownerExt'] === null ? '0' : '1');
 				$retour['matos'][$sousCat][$idMatos]['extOwn']= $matosInfo['ownerExt'];
 			}
 		}

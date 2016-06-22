@@ -6,7 +6,7 @@ require_once ('checkConnect.php' );
 
 $l = new Liste();
 
-$liste_matos = $l->getListe(TABLE_MATOS, 'id, ref, externe, Qtotale, tarifLoc', 'id');
+$liste_matos = $l->getListe(TABLE_MATOS, 'id, ref, Qtotale, tarifLoc, ownerExt', 'id');
 
 if ( isset($_POST['searchingfor']) ) {
 	 $liste_packs = $l->getListe(TABLE_PACKS, '*', 'ref', 'ASC', $_POST['searchingwhat'], 'LIKE', '%'.$_POST['searchingfor'].'%');
@@ -107,7 +107,7 @@ else $liste_packs = $l->getListe(TABLE_PACKS, '*', 'ref');
 								$refM = $matos['ref'];
 								$qteParc = $matos['Qtotale'];
 								$ssTarifLoc = $qteNeed * $matos['tarifLoc'];
-								$ou = ($matos['externe'] == '1') ? 'externe au parc': 'en parc';
+								$ou = ($matos['ownerExt'] === null) ? 'en parc' : 'externe au parc';
 							}
 						}
 						($qteNeed > $qteParc) ? $ok = 'insufisant !' : $ok = 'OK.';

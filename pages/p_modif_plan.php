@@ -42,7 +42,7 @@ foreach ($listeMatos as $m) {
 	$matosById[$m['id']]['cat']  = $m['categorie'];
 	$matosById[$m['id']]['Qtot'] = $m['Qtotale'];
 	$matosById[$m['id']]['PU']   = $m['tarifLoc'];
-	$matosById[$m['id']]['ext']  = $m['externe'];
+	$matosById[$m['id']]['ext']  = ($m['ownerExt'] === null ? '0' : '1');
 }
 
 

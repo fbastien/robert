@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+<dataset>
+	<table name="robert_matos_detail">
+		<column>id</column>
+		<column>label</column>
+		<column>ref</column>
+		<column>panne</column>
+		<column>categorie</column>
+		<column>sousCateg</column>
+		<column>Qtotale</column>
+		<column>tarifLoc</column>
+		<column>valRemp</column>
+		<column>dateAchat</column>
+		<column>ownerExt</column>
+		<column>remarque</column>
+		<row>
+			<value>4</value>
+			<value>Matériel externe Matos_Actions_Test</value>
+			<value>Matos_Actions_Test::2</value>
+			<value>0</value>
+			<value>lumiere</value>
+			<value>17</value>
+			<value>6</value>
+			<value>9.9</value>
+			<value>24</value>
+			<null />
+			<value>Prestataire Matos_Actions_Test</value>
+			<value>Matériel externe pour les tests dans Matos_Actions_Test</value>
+		</row>
+	</table>
+</dataset>

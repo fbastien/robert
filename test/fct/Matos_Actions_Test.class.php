@@ -266,6 +266,7 @@ class Matos_Actions_Test extends PageTestCase
 	public function testActionModifInterne() {
 		// Préparation des données
 		$this->insertData(self::$matosInterneDataset);
+		$oldMatos = self::$matosInterneDataset->getTable('robert_matos_detail')->getRow(0);
 		$newMatos = self::$matosExterneDataset->getTable('robert_matos_detail')->getRow(0);
 		$_POST['action'] = 'modif';
 		$_POST['id'] = $newMatos['id'];
@@ -279,7 +280,7 @@ class Matos_Actions_Test extends PageTestCase
 		$_POST['panne'] = $newMatos['panne'];
 		$_POST['remarque'] = $newMatos['remarque'];
 		$_POST['externe'] = '1';
-		$_POST['dateAchat'] = self::$matosInterneDataset->getTable('robert_matos_detail')->getRow(0)['dateAchat'];
+		$_POST['dateAchat'] = $oldMatos['dateAchat'];
 		$_POST['ownerExt'] = $newMatos['ownerExt'];
 		
 		// Test
@@ -305,6 +306,7 @@ class Matos_Actions_Test extends PageTestCase
 	public function testActionModifExterne() {
 		// Préparation des données
 		$this->insertData(self::$matosExterneDataset);
+		$oldMatos = self::$matosExterneDataset->getTable('robert_matos_detail')->getRow(0);
 		$newMatos = self::$matosInterneDataset->getTable('robert_matos_detail')->getRow(0);
 		$_POST['action'] = 'modif';
 		$_POST['id'] = $newMatos['id'];
@@ -319,7 +321,7 @@ class Matos_Actions_Test extends PageTestCase
 		$_POST['remarque'] = $newMatos['remarque'];
 		$_POST['externe'] = '0';
 		$_POST['dateAchat'] = $newMatos['dateAchat'];
-		$_POST['ownerExt'] = self::$matosExterneDataset->getTable('robert_matos_detail')->getRow(0)['ownerExt'];
+		$_POST['ownerExt'] = $oldMatos['ownerExt'];
 		
 		// Test
 		$this->callTestedPage();
@@ -341,8 +343,9 @@ class Matos_Actions_Test extends PageTestCase
 	public function testActionModifDelete() {
 		// Préparation des données
 		$this->insertData(self::$matosInterneDataset);
+		$matos = self::$matosInterneDataset->getTable('robert_matos_detail')->getRow(0);
 		$_POST['action'] = 'delete';
-		$_POST['id'] = self::$matosInterneDataset->getTable('robert_matos_detail')->getRow(0)['id'];
+		$_POST['id'] = $matos['id'];
 		
 		$this->callTestedPage();
 		

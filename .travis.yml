@@ -14,12 +14,21 @@ branches:
   except:
     - /^dev[-_]/
 
+env:
+  global:
+    - COMPOSER_DISABLE_XDEBUG_WARN=1
+
 before_install:
-  - mysql --execute="CREATE DATABASE robert;" --user=root
   # GITHUB_OAUTH_TOKEN doit être défini comme une variable d'environnement (dans les paramètres sur le site de Travis CI) contenant un jeton d'accès généré par GitHub
   - composer config --global github-oauth.github.com $GITHUB_OAUTH_TOKEN
+  # Contournement du module OpenSSL désactivé dans la version 5.3.3 de PHP fournie par Travis
+  - if [[ "$TRAVIS_PHP_VERSION" = "5.3.3" ]]; then composer config --global disable-tls true; composer config --global secure-http false; fi
 
-before_script:
+install:
   - composer install --no-interaction --no-progress
 
-script: phpunit --configuration test/phpunit-travis-ci.xml --test-suffix Test.class.php .
+before_script:
+  - mysql --execute="CREATE DATABASE robert;" --user=root
+
+script:
+  - phpunit --configuration test/phpunit-travis-ci.xml --test-suffix Test.class.php .

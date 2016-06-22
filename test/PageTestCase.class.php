@@ -203,7 +203,8 @@ abstract class PageTestCase extends DatabaseTestCase
 	
 	/** Ferme et détruit la session courante */
 	protected function sessionDestroy() {
-		if(! empty(session_id())) {
+		$sessionId = session_id();
+		if(! empty($sessionId)) {
 			// Réouverture de la session si elle a été fermée
 			// TODO PHP5.4+ : Inclure dans une condition session_status() === PHP_SESSION_NONE
 			@session_start();

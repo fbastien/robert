@@ -20,7 +20,7 @@ rendez-vous à http://www.gnu.org/licenses/agpl.txt (en Anglais)
 require_once dirname(__DIR__).'/PageTestCase.class.php';
 
 /**
- * Test du script d'installation de la base de données (install_DB.sql).
+ * Test des actions liées au matériel (fct/matos_actions.php).
  * 
  * @runTestsInSeparateProcesses
  * @preserveGlobalState disabled
@@ -34,7 +34,7 @@ class Matos_Actions_Test extends PageTestCase {
 	/** @var PHPUnit_Extensions_Database_DataSet_IDataSet Dataset d'un matériel supplémentaire appartenant à un prestataire externe. */
 	private static $matosExterneDataset;
 	/** @var array Liste des tables dont le contenu est à tester. */
-	private static $tables = array('robert_matos_detail', 'robert_matos_generique', 'robert_matos_ident');
+	private static $tables = array('robert_matos_detail', 'robert_matos_unit');
 	
 	/**
 	 * @beforeClass
@@ -56,259 +56,302 @@ class Matos_Actions_Test extends PageTestCase {
 		return self::$dataset;
 	}
 	
-	/** @test */
+	/**
+	 * Teste la récupération des informations d'un matériel en JSON (pour l'écran de modification d'un matériel).
+	 * 
+	 * @test
+	 */
 	public function testActionSelect() {
-		$id = '1';
-		$matosDetail = $this->getDataSet()->getTable('robert_matos_detail')->getRow(0);
-		$matosGenerique = $this->getDataSet()->getTable('robert_matos_generique')->getRow(0);
-		$matosIdentTable = $this->getDataSet()->getTable('robert_matos_ident');
-		$matosIdent = array($matosIdentTable->getRow(0), $matosIdentTable->getRow(1), $matosIdentTable->getRow(2));
-		if ($matosDetail['id'] != $id
-				|| $matosGenerique['id_matosdetail'] != $id
-				|| call_user_func(function ($array, $id) {
-						foreach ($array as $row) {
-							if($row['id_matosdetail'] != $id)
-								return true;
-						}
-						return false;
-					}, $matosIdent, $id)) {
-			throw new UnexpectedValueException("Configuration des valeurs attendues incorrecte");
-		}
-		
+		// Préparation des données
+		$matos = $this->getDataSet()->getTable('robert_matos_detail')->getRow(0);
 		$_POST['action'] = 'select';
-		$_POST['id'] = $id;
+		$_POST['id'] = $matos['id'];
 		
+		// Test
 		$this->callTestedPage();
 		
+		// Vérification des données retournées
 		$expectedJson = array (
-				'id' => $id,
-				'label' => $matosDetail['label'],
-				'ref' => $matosDetail['ref'],
-				'panne' => $matosGenerique['panne'] + $matosIdent[0]['panne'] + $matosIdent[1]['panne'] + $matosIdent[2]['panne'],
+				'id' => $matos['id'],
+				'label' => $matos['label'],
+				'ref' => $matos['ref'],
+				'panne' => $matos['panne'],
 				'externe' => '1',
-				'categorie' => $matosDetail['categorie'],
-				'sousCateg' => $matosDetail['sousCateg'],
-				'Qtotale' => $matosGenerique['quantite'] + 3,
-				'tarifLoc' => $matosDetail['tarifLoc'],
-				'valRemp' => $matosDetail['valRemp'],
+				'categorie' => $matos['categorie'],
+				'sousCateg' => $matos['sousCateg'],
+				'Qtotale' => $matos['Qtotale'],
+				'tarifLoc' => $matos['tarifLoc'],
+				'valRemp' => $matos['valRemp'],
 				'dateAchat' => null,
-				'ownerExt' => $matosGenerique['ownerExt'].', '.$matosIdent[1]['ownerExt'],
-				'remarque' => $matosDetail['remarque'] );
+				'ownerExt' => $matos['ownerExt'],
+				'remarque' => $matos['remarque'] );
 		$this->assertJsonStringEqualsJsonString(json_encode($expectedJson), $this->getOutput());
 	}
 	
-	/** @test */
+	/**
+	 * Teste l'ajout d'un matériel (pour l'écran accessible depuis de la liste du matériel).
+	 * 
+	 * Cas de test :
+	 * * Matériel interne
+	 * 
+	 * @test
+	 */
 	public function testActionAddMatosInterne() {
-		$matosDetail = self::$matosInterneDataset->getTable('robert_matos_detail')->getRow(0);
-		$matosGenerique = self::$matosInterneDataset->getTable('robert_matos_generique')->getRow(0);
-		
+		// Préparation des données
+		$matos = self::$matosInterneDataset->getTable('robert_matos_detail')->getRow(0);
 		$_POST['action'] = 'addMatos';
-		$_POST['ref'] = $matosDetail['ref'];
-		$_POST['label'] = $matosDetail['label'];
-		$_POST['categorie'] = $matosDetail['categorie'];;
-		$_POST['sousCateg'] = $matosDetail['sousCateg'];
-		$_POST['tarifLoc'] = $matosDetail['tarifLoc'];
-		$_POST['valRemp'] = $matosDetail['valRemp'];
-		$_POST['Qtotale'] = $matosGenerique['quantite'];
-		$_POST['remarque'] = $matosDetail['remarque'];
+		$_POST['ref'] = $matos['ref'];
+		$_POST['label'] = $matos['label'];
+		$_POST['categorie'] = $matos['categorie'];;
+		$_POST['sousCateg'] = $matos['sousCateg'];
+		$_POST['tarifLoc'] = $matos['tarifLoc'];
+		$_POST['valRemp'] = $matos['valRemp'];
+		$_POST['Qtotale'] = $matos['Qtotale'];
+		$_POST['remarque'] = $matos['remarque'];
 		$_POST['externe'] = '0';
-		$_POST['dateAchat'] = $matosGenerique['dateAchat'];
+		$_POST['dateAchat'] = $matos['dateAchat'];
 		$_POST['ownerExt'] = 'N/A';
 		
+		// Test
 		$this->callTestedPage();
 		
-		$this->assertSame("Matériel ${matosDetail['ref']} Ajouté !", $this->getOutput());
+		// Vérification du message retourné
+		$this->assertSame("Matériel ${matos['ref']} Ajouté !", $this->getOutput());
+		// Vérification du contenu de la base de données
 		$expectedData = new PHPUnit_Extensions_Database_DataSet_CompositeDataSet(array($this->getDataSet(), self::$matosInterneDataset));
 		foreach (self::$tables as $tableName) {
 			$this->assertTableContents($expectedData->getTable($tableName), $tableName);
 		}
 	}
 	
-	/** @test */
+	/**
+	 * Teste l'ajout d'un matériel (pour l'écran accessible depuis de la liste du matériel).
+	 * 
+	 * Cas de test :
+	 * * Matériel externe
+	 * 
+	 * @test
+	 */
 	public function testActionAddMatosExterne() {
-		$matosDetail = self::$matosExterneDataset->getTable('robert_matos_detail')->getRow(0);
-		$matosGenerique = self::$matosExterneDataset->getTable('robert_matos_generique')->getRow(0);
-		
+		// Préparation des données
+		$matos = self::$matosExterneDataset->getTable('robert_matos_detail')->getRow(0);
 		$_POST['action'] = 'addMatos';
-		$_POST['ref'] = $matosDetail['ref'];
-		$_POST['label'] = $matosDetail['label'];
-		$_POST['categorie'] = $matosDetail['categorie'];;
-		$_POST['sousCateg'] = $matosDetail['sousCateg'];
-		$_POST['tarifLoc'] = $matosDetail['tarifLoc'];
-		$_POST['valRemp'] = $matosDetail['valRemp'];
-		$_POST['Qtotale'] = $matosGenerique['quantite'];
-		$_POST['remarque'] = $matosDetail['remarque'];
+		$_POST['ref'] = $matos['ref'];
+		$_POST['label'] = $matos['label'];
+		$_POST['categorie'] = $matos['categorie'];;
+		$_POST['sousCateg'] = $matos['sousCateg'];
+		$_POST['tarifLoc'] = $matos['tarifLoc'];
+		$_POST['valRemp'] = $matos['valRemp'];
+		$_POST['Qtotale'] = $matos['Qtotale'];
+		$_POST['remarque'] = $matos['remarque'];
 		$_POST['externe'] = '1';
 		$_POST['dateAchat'] = '2016-04-14';
-		$_POST['ownerExt'] = $matosGenerique['ownerExt'];
+		$_POST['ownerExt'] = $matos['ownerExt'];
 		
+		// Test
 		$this->callTestedPage();
 		
-		$this->assertSame("Matériel ${matosDetail['ref']} Ajouté !", $this->getOutput());
+		// Vérification du message retourné
+		$this->assertSame("Matériel ${matos['ref']} Ajouté !", $this->getOutput());
+		// Vérification du contenu de la base de données
 		$expectedData = new PHPUnit_Extensions_Database_DataSet_CompositeDataSet(array($this->getDataSet(), self::$matosExterneDataset));
 		foreach (self::$tables as $tableName) {
 			$this->assertTableContents($expectedData->getTable($tableName), $tableName);
 		}
 	}
 	
-	/** @test */
+	/**
+	 * Teste l'ajout d'un matériel (pour l'écran accessible lors la création d'un événement).
+	 * 
+	 * Cas de test :
+	 * * Matériel interne
+	 * 
+	 * @test
+	 */
 	public function testActionAddMatosJsonInterne() {
-		$matosDetail = self::$matosInterneDataset->getTable('robert_matos_detail')->getRow(0);
-		$matosGenerique = self::$matosInterneDataset->getTable('robert_matos_generique')->getRow(0);
+		// Préparation des données
+		$matos = self::$matosInterneDataset->getTable('robert_matos_detail')->getRow(0);
 		$externe = '0';
-		
 		$_POST['action'] = 'addMatosJson';
-		$_POST['ref'] = $matosDetail['ref'];
-		$_POST['label'] = $matosDetail['label'];
-		$_POST['categorie'] = $matosDetail['categorie'];;
-		$_POST['sousCateg'] = $matosDetail['sousCateg'];
-		$_POST['tarifLoc'] = $matosDetail['tarifLoc'];
-		$_POST['valRemp'] = $matosDetail['valRemp'];
-		$_POST['Qtotale'] = $matosGenerique['quantite'];
-		$_POST['remarque'] = $matosDetail['remarque'];
+		$_POST['ref'] = $matos['ref'];
+		$_POST['label'] = $matos['label'];
+		$_POST['categorie'] = $matos['categorie'];;
+		$_POST['sousCateg'] = $matos['sousCateg'];
+		$_POST['tarifLoc'] = $matos['tarifLoc'];
+		$_POST['valRemp'] = $matos['valRemp'];
+		$_POST['Qtotale'] = $matos['Qtotale'];
+		$_POST['remarque'] = $matos['remarque'];
 		$_POST['externe'] = $externe;
-		$_POST['dateAchat'] = $matosGenerique['dateAchat'];
+		$_POST['dateAchat'] = $matos['dateAchat'];
 		$_POST['ownerExt'] = 'N/A';
 		
+		// Test
 		$this->callTestedPage();
 		
+		// Vérification des données retournées
 		$expectedJson = array(
 				'success' => 'SUCCESS',
 				'matos' => array (
-					'id' => $matosDetail['id'],
-					'label' => $matosDetail['label'],
-					'ref' => $matosDetail['ref'],
+					'id' => $matos['id'],
+					'label' => $matos['label'],
+					'ref' => $matos['ref'],
 					'panne' => '0',
 					'externe' => $externe,
-					'categorie' => $matosDetail['categorie'],
-					'sousCateg' => $matosDetail['sousCateg'],
-					'Qtotale' => $matosGenerique['quantite'],
-					'tarifLoc' => $matosDetail['tarifLoc'],
-					'valRemp' => $matosDetail['valRemp'],
-					'dateAchat' => $matosGenerique['dateAchat'],
+					'categorie' => $matos['categorie'],
+					'sousCateg' => $matos['sousCateg'],
+					'Qtotale' => $matos['Qtotale'],
+					'tarifLoc' => $matos['tarifLoc'],
+					'valRemp' => $matos['valRemp'],
+					'dateAchat' => $matos['dateAchat'],
 					'ownerExt' => null,
-					'remarque' => $matosDetail['remarque'] ));
+					'remarque' => $matos['remarque'] ));
 		$this->assertJsonStringEqualsJsonString(json_encode($expectedJson), $this->getOutput());
+		// Vérification du contenu de la base de données
 		$expectedData = new PHPUnit_Extensions_Database_DataSet_CompositeDataSet(array($this->getDataSet(), self::$matosInterneDataset));
 		foreach (self::$tables as $tableName) {
 			$this->assertTableContents($expectedData->getTable($tableName), $tableName);
 		}
 	}
 	
-	/** @test */
+	/**
+	 * Teste l'ajout d'un matériel (pour l'écran accessible lors la création d'un événement).
+	 * 
+	 * Cas de test :
+	 * * Matériel externe
+	 * 
+	 * @test
+	 */
 	public function testActionAddMatosJsonExterne() {
-		$matosDetail = self::$matosExterneDataset->getTable('robert_matos_detail')->getRow(0);
-		$matosGenerique = self::$matosExterneDataset->getTable('robert_matos_generique')->getRow(0);
+		// Préparation des données
+		$matos = self::$matosExterneDataset->getTable('robert_matos_detail')->getRow(0);
 		$externe = '1';
-		
 		$_POST['action'] = 'addMatosJson';
-		$_POST['ref'] = $matosDetail['ref'];
-		$_POST['label'] = $matosDetail['label'];
-		$_POST['categorie'] = $matosDetail['categorie'];;
-		$_POST['sousCateg'] = $matosDetail['sousCateg'];
-		$_POST['tarifLoc'] = $matosDetail['tarifLoc'];
-		$_POST['valRemp'] = $matosDetail['valRemp'];
-		$_POST['Qtotale'] = $matosGenerique['quantite'];
-		$_POST['remarque'] = $matosDetail['remarque'];
+		$_POST['ref'] = $matos['ref'];
+		$_POST['label'] = $matos['label'];
+		$_POST['categorie'] = $matos['categorie'];;
+		$_POST['sousCateg'] = $matos['sousCateg'];
+		$_POST['tarifLoc'] = $matos['tarifLoc'];
+		$_POST['valRemp'] = $matos['valRemp'];
+		$_POST['Qtotale'] = $matos['Qtotale'];
+		$_POST['remarque'] = $matos['remarque'];
 		$_POST['externe'] = $externe;
 		$_POST['dateAchat'] = '2016-04-14';
-		$_POST['ownerExt'] = $matosGenerique['ownerExt'];
+		$_POST['ownerExt'] = $matos['ownerExt'];
 		
+		// Test
 		$this->callTestedPage();
 		
+		// Vérification des données retournées
 		$expectedJson = array(
 				'success' => 'SUCCESS',
 				'matos' => array (
-					'id' => $matosDetail['id'],
-					'label' => $matosDetail['label'],
-					'ref' => $matosDetail['ref'],
+					'id' => $matos['id'],
+					'label' => $matos['label'],
+					'ref' => $matos['ref'],
 					'panne' => '0',
 					'externe' => $externe,
-					'categorie' => $matosDetail['categorie'],
-					'sousCateg' => $matosDetail['sousCateg'],
-					'Qtotale' => $matosGenerique['quantite'],
-					'tarifLoc' => $matosDetail['tarifLoc'],
-					'valRemp' => $matosDetail['valRemp'],
-					'dateAchat' => '0000-00-00',
-					'ownerExt' => $matosGenerique['ownerExt'],
-					'remarque' => $matosDetail['remarque'] ));
+					'categorie' => $matos['categorie'],
+					'sousCateg' => $matos['sousCateg'],
+					'Qtotale' => $matos['Qtotale'],
+					'tarifLoc' => $matos['tarifLoc'],
+					'valRemp' => $matos['valRemp'],
+					'dateAchat' => null,
+					'ownerExt' => $matos['ownerExt'],
+					'remarque' => $matos['remarque'] ));
 		$this->assertJsonStringEqualsJsonString(json_encode($expectedJson), $this->getOutput());
+		// Vérification du contenu de la base de données
 		$expectedData = new PHPUnit_Extensions_Database_DataSet_CompositeDataSet(array($this->getDataSet(), self::$matosExterneDataset));
 		foreach (self::$tables as $tableName) {
 			$this->assertTableContents($expectedData->getTable($tableName), $tableName);
 		}
 	}
 	
-	/** @test */
+	/**
+	 * Teste la modification d'un matériel.
+	 * 
+	 * Cas de test :
+	 * * Modification d'un matériel interne en un matériel externe
+	 * 
+	 * @test
+	 */
 	public function testActionModifInterne() {
+		// Préparation des données
 		$this->insertData(self::$matosInterneDataset);
-		$matosDetail = self::$matosExterneDataset->getTable('robert_matos_detail')->getRow(0);
-		$matosGenerique = self::$matosExterneDataset->getTable('robert_matos_generique')->getRow(0);
-		if ($matosDetail['id'] != self::$matosInterneDataset->getTable('robert_matos_detail')->getRow(0)['id']) {
-			throw new UnexpectedValueException("Configuration des valeurs attendues incorrecte");
-		}
-		
+		$newMatos = self::$matosExterneDataset->getTable('robert_matos_detail')->getRow(0);
 		$_POST['action'] = 'modif';
-		$_POST['id'] = $matosDetail['id'];
-		$_POST['ref'] = $matosDetail['ref'];
-		$_POST['label'] = $matosDetail['label'];
-		$_POST['categorie'] = $matosDetail['categorie'];
-		$_POST['sousCateg'] = $matosDetail['sousCateg'];
-		$_POST['tarifLoc'] = $matosDetail['tarifLoc'];
-		$_POST['valRemp'] = $matosDetail['valRemp'];
-		$_POST['Qtotale'] = $matosGenerique['quantite'];
-		$_POST['panne'] = $matosGenerique['panne'];
-		$_POST['remarque'] = $matosDetail['remarque'];
+		$_POST['id'] = $newMatos['id'];
+		$_POST['ref'] = $newMatos['ref'];
+		$_POST['label'] = $newMatos['label'];
+		$_POST['categorie'] = $newMatos['categorie'];
+		$_POST['sousCateg'] = $newMatos['sousCateg'];
+		$_POST['tarifLoc'] = $newMatos['tarifLoc'];
+		$_POST['valRemp'] = $newMatos['valRemp'];
+		$_POST['Qtotale'] = $newMatos['Qtotale'];
+		$_POST['panne'] = $newMatos['panne'];
+		$_POST['remarque'] = $newMatos['remarque'];
 		$_POST['externe'] = '1';
-		$_POST['dateAchat'] = self::$matosInterneDataset->getTable('robert_matos_generique')->getRow(0)['dateAchat'];
-		$_POST['ownerExt'] = $matosGenerique['ownerExt'];
+		$_POST['dateAchat'] = self::$matosInterneDataset->getTable('robert_matos_detail')->getRow(0)['dateAchat'];
+		$_POST['ownerExt'] = $newMatos['ownerExt'];
 		
+		// Test
 		$this->callTestedPage();
 		
+		// Vérification du message retourné
 		$this->assertSame("Matériel sauvegardé !", $this->getOutput());
+		// Vérification du contenu de la base de données
 		$expectedData = new PHPUnit_Extensions_Database_DataSet_CompositeDataSet(array($this->getDataSet(), self::$matosExterneDataset));
 		foreach (self::$tables as $tableName) {
 			$this->assertTableContents($expectedData->getTable($tableName), $tableName);
 		}
 	}
 	
-	/** @test */
+	/**
+	 * Teste la modification d'un matériel.
+	 * 
+	 * Cas de test :
+	 * * Modification d'un matériel externe en un matériel interne
+	 * 
+	 * @test
+	 */
 	public function testActionModifExterne() {
+		// Préparation des données
 		$this->insertData(self::$matosExterneDataset);
-		$matosDetail = self::$matosInterneDataset->getTable('robert_matos_detail')->getRow(0);
-		$matosGenerique = self::$matosInterneDataset->getTable('robert_matos_generique')->getRow(0);
-		if ($matosDetail['id'] != self::$matosExterneDataset->getTable('robert_matos_detail')->getRow(0)['id']) {
-			throw new UnexpectedValueException("Configuration des valeurs attendues incorrecte");
-		}
-		
+		$newMatos = self::$matosInterneDataset->getTable('robert_matos_detail')->getRow(0);
 		$_POST['action'] = 'modif';
-		$_POST['id'] = $matosDetail['id'];
-		$_POST['ref'] = $matosDetail['ref'];
-		$_POST['label'] = $matosDetail['label'];
-		$_POST['categorie'] = $matosDetail['categorie'];
-		$_POST['sousCateg'] = $matosDetail['sousCateg'];
-		$_POST['tarifLoc'] = $matosDetail['tarifLoc'];
-		$_POST['valRemp'] = $matosDetail['valRemp'];
-		$_POST['Qtotale'] = $matosGenerique['quantite'];
-		$_POST['panne'] = $matosGenerique['panne'];
-		$_POST['remarque'] = $matosDetail['remarque'];
+		$_POST['id'] = $newMatos['id'];
+		$_POST['ref'] = $newMatos['ref'];
+		$_POST['label'] = $newMatos['label'];
+		$_POST['categorie'] = $newMatos['categorie'];
+		$_POST['sousCateg'] = $newMatos['sousCateg'];
+		$_POST['tarifLoc'] = $newMatos['tarifLoc'];
+		$_POST['valRemp'] = $newMatos['valRemp'];
+		$_POST['Qtotale'] = $newMatos['Qtotale'];
+		$_POST['panne'] = $newMatos['panne'];
+		$_POST['remarque'] = $newMatos['remarque'];
 		$_POST['externe'] = '0';
-		$_POST['dateAchat'] = $matosGenerique['dateAchat'];
-		$_POST['ownerExt'] = self::$matosExterneDataset->getTable('robert_matos_generique')->getRow(0)['ownerExt'];
+		$_POST['dateAchat'] = $newMatos['dateAchat'];
+		$_POST['ownerExt'] = self::$matosExterneDataset->getTable('robert_matos_detail')->getRow(0)['ownerExt'];
 		
+		// Test
 		$this->callTestedPage();
 		
+		// Vérification du message retourné
 		$this->assertSame("Matériel sauvegardé !", $this->getOutput());
+		// Vérification du contenu de la base de données
 		$expectedData = new PHPUnit_Extensions_Database_DataSet_CompositeDataSet(array($this->getDataSet(), self::$matosInterneDataset));
 		foreach (self::$tables as $tableName) {
 			$this->assertTableContents($expectedData->getTable($tableName), $tableName);
 		}
 	}
 	
-	/** @test */
+	/**
+	 * Teste la suppression d'un matériel.
+	 * 
+	 * @test
+	 */
 	public function testActionModifDelete() {
+		// Préparation des données
 		$this->insertData(self::$matosInterneDataset);
-		
 		$_POST['action'] = 'delete';
 		$_POST['id'] = self::$matosInterneDataset->getTable('robert_matos_detail')->getRow(0)['id'];
 		

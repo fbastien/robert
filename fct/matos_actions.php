@@ -49,6 +49,7 @@ if ( $action == 'addMatosJson') {
 		foreach ($tmpMatos as $k => $v ){
 			$result['matos'][$k] = $v ;
 		}
+		$result['matos']['externe'] = $tmpMatos->getExterne();
 	}
 	echo json_encode($result);
 }

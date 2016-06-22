@@ -30,8 +30,6 @@ define ("TABLE_CAL"  ,			"robert_calendar");								// table du calendrier
 define ("TABLE_MATOS",			"robert_matos_detail");							// table du matos au détail
 define ("TABLE_MATOS_CATEG",	"robert_matos_sous_cat");						// table des sous-catégories de matos
 define ("TABLE_MATOS_ID",		"robert_matos_ident");							// table du matos identifié individuellement
-define ("TABLE_MATOS_GEN",		"robert_matos_generique");						// table du matos non identifié individuellement
-define ("VIEW_MATOS",			"robert_view_matos_detail");					// vue d'agrégation des tables de matos au détail (identifié ou non)
 define ("TABLE_PACKS",			"robert_matos_packs");							// table des packs de matos
 define ("TABLE_TEKOS",			"robert_tekos");								// table des techniciens
 define ("TABLE_PLANS",			"robert_plans");								// table des plans

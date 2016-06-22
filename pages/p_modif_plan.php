@@ -18,7 +18,7 @@ if (!isset($_GET['plan'])) {
 $lp = new Liste();
 $listeBenef = $lp->getListe ( TABLE_STRUCT, 'id, label' );
 $listeTekos = $lp->getListe ( TABLE_TEKOS, 'id, surnom, categorie', 'surnom', 'ASC' );
-$listeMatos = $lp->getListe ( VIEW_MATOS, '*', 'categorie', "ASC" ) ;
+$listeMatos = $lp->getListe ( TABLE_MATOS, '*', 'categorie', "ASC" ) ;
 $listePacks = $lp->getListe ( TABLE_PACKS, '*', 'categorie', "ASC" ) ;
 $lp = null ;
 
@@ -42,7 +42,7 @@ foreach ($listeMatos as $m) {
 	$matosById[$m['id']]['cat']  = $m['categorie'];
 	$matosById[$m['id']]['Qtot'] = $m['Qtotale'];
 	$matosById[$m['id']]['PU']   = $m['tarifLoc'];
-	$matosById[$m['id']]['ext']  = $m['externe'];
+	$matosById[$m['id']]['ext']  = ($m['ownerExt'] === null ? '0' : '1');
 }
 
 

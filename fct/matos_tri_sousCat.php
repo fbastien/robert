@@ -15,8 +15,7 @@ function creerSousCatArray ($liste_Matos = null) {
 }
 
 
-// cree une sous categorie supplementaire nommée //
-	// contenant le materiel a louer //
+/** Crée une sous-catégorie supplémentaire nommée contenant le materiel a louer */
 function creerSousCatArray_showExterieur ($liste_Matos = null ) {
 	if ($liste_Matos == null) return false ;
 
@@ -26,7 +25,7 @@ function creerSousCatArray_showExterieur ($liste_Matos = null ) {
 
 		if ( ! isset ( $matos['sousCateg']) ) continue ;
 
-		if ( $matos['externe'] == '1') {
+		if ( $matos['ownerExt'] !== null) {
 			$ext[] = $matos;
 		}
 		else
@@ -59,7 +58,7 @@ function simplifySousCatArray($liste_sousCat = null) {
 }
 
 
-// trie le tableau de materiel exterieur par le champ 'ownerExt' !
+/** Trie le tableau de matériel extérieur par le champ 'ownerExt' ! */
 function MatosExt_by_Location ( $listeMatosExterieur ){
 
 	//echo "<pre>"; print_r ($listeMatosExterieur) ;echo "</pre>";

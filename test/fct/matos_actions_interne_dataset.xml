@@ -5,35 +5,28 @@
 		<column>id</column>
 		<column>label</column>
 		<column>ref</column>
+		<column>panne</column>
 		<column>categorie</column>
 		<column>sousCateg</column>
+		<column>Qtotale</column>
 		<column>tarifLoc</column>
 		<column>valRemp</column>
+		<column>dateAchat</column>
+		<column>ownerExt</column>
 		<column>remarque</column>
 		<row>
 			<value>4</value>
 			<value>Matériel interne Matos_Actions_Test</value>
-			<value>Matos_Actions_Test_1</value>
+			<value>Matos_Actions_Test::1</value>
+			<value>0</value>
 			<value>son</value>
 			<value>2</value>
+			<value>9</value>
 			<value>3.5</value>
 			<value>15.5</value>
-			<value>Matériel interne pour les tests dans Matos_Actions_Test</value>
-		</row>
-	</table>
-	
-	<table name="robert_matos_generique">
-		<column>id_matosdetail</column>
-		<column>quantite</column>
-		<column>panne</column>
-		<column>dateAchat</column>
-		<column>ownerExt</column>
-		<row>
-			<value>4</value>
-			<value>9</value>
-			<value>2</value>
-			<value>2016-04-14</value>
+			<value>2016-05-31</value>
 			<null />
+			<value>Matériel interne pour les tests dans Matos_Actions_Test</value>
 		</row>
 	</table>
 </dataset>

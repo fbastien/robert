@@ -17,7 +17,7 @@ unset($infosPlan['picker_end']);
 
 // Crée des listes utiles à la vérif et à l'affichage
 $l = new Liste();
-$matosList = $l->getListe(VIEW_MATOS, '*', 'categorie', "ASC");
+$matosList = $l->getListe(TABLE_MATOS, '*', 'categorie', "ASC");
 $listeTekos = $l->getListe(TABLE_TEKOS, '*', 'surnom', 'ASC');
 $l = null;
 
@@ -32,7 +32,7 @@ foreach ($matosList as $m) {
 	$matosById[$m['id']]['cat']  = $m['categorie'];
 	$matosById[$m['id']]['Qtot'] = $m['Qtotale'];
 	$matosById[$m['id']]['PU']   = $m['tarifLoc'];
-	$matosById[$m['id']]['ext']  = $m['externe'];
+	$matosById[$m['id']]['ext']  = ($m['ownerExt'] === null ? '0' : '1');
 }
 
 unset($_SESSION['plan_add']);

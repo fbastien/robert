@@ -9,7 +9,7 @@ $lCateg = new Liste();
 $lMatos = new Liste();
 
 $categ = $lCateg->getListe(TABLE_MATOS_CATEG, '*' );
-$matos = $lMatos->getListe(VIEW_MATOS, '*') ;
+$matos = $lMatos->getListe(TABLE_MATOS, '*') ;
 
 $matos = simplifieTableauListe ($matos);
 $categ = simplifieTableauListe ($categ);
@@ -43,8 +43,7 @@ foreach ( $sousCategList as $loop => $table ){
 }
 
 
-// supprimme une dimension du tableau retourné par l'objet liste
-// pour faire correspondre l'ID tableau avec l'ID Matos'
+/** Supprime une dimension du tableau retourné par l'objet liste pour faire correspondre l'ID tableau avec l'ID Matos */
 function simplifieTableauListe ( $listArray ){
 
 	$newTableau = array();
@@ -58,8 +57,4 @@ function simplifieTableauListe ( $listArray ){
 
 }
 
-
 ?>
-
-
-

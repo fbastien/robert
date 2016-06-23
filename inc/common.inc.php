@@ -82,9 +82,9 @@ date_default_timezone_set('Europe/Paris');										// La timezone par défaut, 
 $config = parse_ini_file($install_path . FOLDER_CONFIG . 'config.ini');
 $config['boite.TVA.val'] = (float) $config['boite.TVA.val'];
 
-defined('DSN') or define ("DSN",  'mysql:dbname=' . $config['db.base'] . ';host=' . $config['db.host']);		// données de connexion à la BDD via PDO
-defined('USER') or define ("USER", $config['db.user']);
-defined('PASS') or define ("PASS", $config['db.pass']);
+defined('DSN') or define('DSN', 'mysql:dbname='.$config['db.base'].';host='.$config['db.host']);		// données de connexion à la BDD via PDO
+defined('USER') or define('USER', $config['db.user']);
+defined('PASS') or define('PASS', $config['db.pass']);
 
 
 // fonction de suppression de dossier, vite fait, dispo pour tout le monde !

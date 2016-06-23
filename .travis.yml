@@ -31,4 +31,4 @@ before_script:
   - mysql --execute="CREATE DATABASE robert;" --user=root
 
 script:
-  - phpunit --configuration test/phpunit-travis-ci.xml --test-suffix Test.class.php .
+  - phpunit --configuration tests/phpunit-travis-ci.xml --test-suffix Test.class.php .

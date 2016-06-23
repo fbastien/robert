@@ -19,7 +19,7 @@
 
 require_once __DIR__.DIRECTORY_SEPARATOR.'Version.class.php';
 
-abstract class DatabaseTestCase extends PHPUnit_Extensions_Database_TestCase implements Serializable
+abstract class DatabaseTestCase extends PHPUnit_Extensions_Database_TestCase
 {
 	/** @var PDO only instantiate once for test clean-up/fixture load */
 	private static $pdo;
@@ -40,6 +40,12 @@ abstract class DatabaseTestCase extends PHPUnit_Extensions_Database_TestCase imp
 	public function __construct($name = null, array $data = array(), $dataName = '') {
 		parent::__construct($name, $data, $dataName);
 		$this->conn = $this->createDefaultDBConnection(self::$pdo, DBNAME);
+	}
+	
+	/** {@inheritDoc} */
+	public function __sleep() {
+		// Ne pas sérialiser le PDO
+		return array();
 	}
 	
 	/**
@@ -81,24 +87,6 @@ abstract class DatabaseTestCase extends PHPUnit_Extensions_Database_TestCase imp
 	protected final function getDefaultDataSet() {
 		return self::$defaultDataset;
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 * @see Serializable::serialize()
-	 */
-	public function serialize() {
-		$pdoSave = self::$pdo;
-		self::$pdo = null;
-		$string = serialize($this);
-		self::$pdo = $pdoSave;
-		return $string;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * @see Serializable::unserialize()
-	 */
-	public function unserialize($serialized) {}
 	
 	private static function doTruncateDatabase(PDO $pdo) {
 		$tableList = $pdo->query("SELECT `TABLE_NAME`, `TABLE_TYPE` FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = '".DBNAME."'");

@@ -20,9 +20,9 @@
 			<value>MIC-SM58</value>
 			<value>3</value>
 			<value>son</value>
-			<value>9</value>
 			<value>5</value>
 			<value>5</value>
+			<value>7.5</value>
 			<value>50</value>
 			<null />
 			<value>Prestataire 1</value>
@@ -48,10 +48,10 @@
 			<value>PRJ-P64</value>
 			<value>0</value>
 			<value>lumiere</value>
-			<value>6</value>
+			<value>16</value>
 			<value>3</value>
 			<value>3</value>
-			<value>30</value>
+			<value>29.99</value>
 			<null />
 			<null />
 			<null />
@@ -124,6 +124,7 @@
 	
 	<table name="robert_users">
 		<column>id</column>
+		<column>ldap_uid</column>
 		<column>email</column>
 		<column>password</column>
 		<column>nom</column>
@@ -140,6 +141,7 @@
 		<column>idTekos</column>
 		<row>
 			<value>1</value>
+			<null />
 			<value>root@robertmanager.org</value>
 			<value>8351aaf8480d8135bc77af590c93c1e2</value>
 			<value>DEBUGGER</value>

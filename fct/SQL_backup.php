@@ -161,13 +161,14 @@ function importInventaire($file) {
 			$selectSousCategStmt = $bdd->prepare("SELECT `id` FROM `robert_matos_sous_cat` WHERE `label` = :label");
 			$insertSousCategStmt = $bdd->prepare("INSERT INTO `robert_matos_sous_cat` (`label`, `ordre`) VALUES (:label, (SELECT MAX(`ordre`) + 1 FROM `robert_matos_sous_cat` OLD))");
 			$insertMatosStmt = $bdd->prepare("INSERT INTO `robert_matos_detail` (`label`, `ref`, `categorie`, `sousCateg`, `tarifLoc`, `valRemp`, `remarque`) VALUES (:label, :ref, :categorie, :sousCateg, :tarifLoc, :valRemp, :remarque)");
-			$insertMatosGenStmt = $bdd->prepare("INSERT INTO `robert_matos_generique` (`id_matosdetail`, `quantite`, `panne`, `dateAchat`, `ownerExt`) VALUES (:id, :quantite, :panne, :dateAchat, :ownerExt)");
-			$insertMatosUnitStmt = $bdd->prepare("INSERT INTO `robert_matos_ident` (`id_matosdetail`, `ref`, `panne`, `dateAchat`, `ownerExt`, `remarque`) VALUES (:id, :ref, :panne, :dateAchat, :ownerExt, :remarque)");
+			// TODO FIXME $insertMatosGenStmt = $bdd->prepare("INSERT INTO `robert_matos_generique` (`id_matosdetail`, `quantite`, `panne`, `dateAchat`, `ownerExt`) VALUES (:id, :quantite, :panne, :dateAchat, :ownerExt)");
+				$insertMatosGenStmt = $bdd->prepare("UPDATE `robert_matos_detail` SET `Qtotale` = :quantite, `panne` = :panne, `dateAchat` = :dateAchat, `ownerExt` = :ownerExt WHERE `id` = :id");
+			$insertMatosUnitStmt = $bdd->prepare("INSERT INTO `robert_matos_unit` (`id_matosdetail`, `ref`, `panne`, `dateAchat`, `ownerExt`, `remarque`) VALUES (:id, :ref, :panne, :dateAchat, :ownerExt, :remarque)"); // TODO FIXME
 			$selectDetailCountStmt = $bdd->prepare("SELECT COUNT(*) FROM `robert_matos_detail` WHERE `id` = :id");
-			$selectIdRefStmt = $bdd->prepare("SELECT `id` FROM `robert_matos_detail` WHERE `ref` = :reference AND `id` <> :id UNION SELECT `id_matosident` AS `id` FROM `robert_matos_ident` WHERE `ref` = :reference AND `id_matosident` <> :id");
+			$selectIdRefStmt = $bdd->prepare("SELECT `id` FROM `robert_matos_detail` WHERE `ref` = :reference AND `id` <> :id UNION SELECT `id_matosunit` AS `id` FROM `robert_matos_unit` WHERE `ref` = :reference AND `id_matosunit` <> :id"); // TODO FIXME
 			// TODO check code-barres
 			$selectGenCountStmt = $bdd->prepare("SELECT COUNT(*) FROM `robert_matos_generique` WHERE `id_matosdetail` = :id");
-			$selectUnitCountStmt = $bdd->prepare("SELECT COUNT(*) AS `quantite`, SUM(`panne`) AS `panne` FROM `robert_matos_ident` WHERE `id_matosdetail` = :id");
+			$selectUnitCountStmt = $bdd->prepare("SELECT COUNT(*) AS `quantite`, SUM(`panne`) AS `panne` FROM `robert_matos_unit` WHERE `id_matosdetail` = :id"); // TODO FIXME
 			$updateMatosStmt = $bdd->prepare("UPDATE `robert_matos_detail` SET `label` = :label, `ref` = :ref, `categorie` = :categorie, `sousCateg` = :sousCateg, `tarifLoc` = :tarifLoc, `valRemp` = :valRemp, `remarque` = :remarque WHERE `id` = :id");
 			$updateMatosGenStmt = $bdd->prepare("UPDATE `robert_matos_generique` SET `quantite` = :quantite, `panne` = :panne, `dateAchat` = :dateAchat, `ownerExt` = :ownerExt WHERE `id_matosdetail` = :id");
 			$deleteMatosGenStmt = $bdd->prepare("DELETE FROM `robert_matos_generique` WHERE `id_matosdetail` = :id");
@@ -205,7 +206,8 @@ function importInventaire($file) {
 						$selectIdRefStmt->bindValue(':reference', $data[CSV_REF]);
 						$selectIdRefStmt->bindValue(':id', ($data[CSV_ID] === CSV_LINE_NEW || $data[CSV_ID] === CSV_LINE_UNIT ? -1 : $data[CSV_ID]), PDO::PARAM_INT);
 						if(! $selectIdRefStmt->execute()) {
-							echo "ERREUR ligne $rowNumber : ".$selectIdRefStmt->errorInfo()[2];
+							$errorInfo = $selectIdRefStmt->errorInfo(); // TODO PHP5.4+ : Supprimer la variable intermédiaire pour l'accès au tableau
+							echo "ERREUR ligne $rowNumber : ".$errorInfo[2];
 							$reset = true;
 							continue;
 						}
@@ -279,7 +281,7 @@ function importInventaire($file) {
 							continue;
 						}
 						
-						// Insertion dans la table robert_matos_ident
+						// Insertion dans la table robert_matos_unit // TODO FIXME
 						$insertMatosUnitStmt->bindValue(':id', $idMatos, PDO::PARAM_INT);
 						$insertMatosUnitStmt->bindValue(':ref', $data[CSV_REF]);
 						$insertMatosUnitStmt->bindValue(':panne', $data[CSV_PANNE], PDO::PARAM_INT);
@@ -287,7 +289,8 @@ function importInventaire($file) {
 						$insertMatosUnitStmt->bindValue(':ownerExt', $data[CSV_EXT]);
 						$insertMatosUnitStmt->bindValue(':remarque', $data[CSV_REMARQUE]);
 						if(! $insertMatosUnitStmt->execute()) {
-							echo "ERREUR ligne $rowNumber : ".$insertMatosStmt->errorInfo()[2];
+							$errorInfo = $insertMatosStmt->errorInfo(); // TODO PHP5.4+ : Supprimer la variable intermédiaire pour l'accès au tableau
+							echo "ERREUR ligne $rowNumber : ".$errorInfo[2];
 							continue;
 						}
 						
@@ -296,21 +299,27 @@ function importInventaire($file) {
 						$matosPanneCount -= $data[CSV_PANNE];
 						// Si tout le matériel est identifié individuellement, il ne doit plus y avoir d'enregistrement dans le matériel générique
 						if($matosNonUnitCount == 0) {
+							/* TODO FIXME
 							$deleteMatosGenStmt->bindValue(':id', $idMatos, PDO::PARAM_INT);
 							if(! $deleteMatosGenStmt->execute()) {
-								echo "ERREUR ligne $rowNumber : ".$deleteMatosGenStmt->errorInfo()[2];
+								$errorInfo = $deleteMatosGenStmt->errorInfo(); // TODO PHP5.4+ : Supprimer la variable intermédiaire pour l'accès au tableau
+								echo "ERREUR ligne $rowNumber : ".$errorInfo[2];
 								$reset = true;
 								continue;
 							}
+							*/
 							// Sinon mise à jour de la quantité dans robert_matos_generique qui n'inclut pas le matériel identifié
 						} else {
+							/* TODO FIXME
 							$updateQuantiteGenStmt->bindValue(':id', $idMatos, PDO::PARAM_INT);
 							$updateQuantiteGenStmt->bindValue(':panne', $data[CSV_PANNE], PDO::PARAM_INT);
 							if(! $updateQuantiteGenStmt->execute()) {
-								echo "ERREUR ligne $rowNumber : ".$updateQuantiteGenStmt->errorInfo()[2];
+								$errorInfo = $updateQuantiteGenStmt->errorInfo(); // TODO PHP5.4+ : Supprimer la variable intermédiaire pour l'accès au tableau
+								echo "ERREUR ligne $rowNumber : ".$errorInfo[2];
 								$reset = true;
 								continue;
 							}
+							*/
 						}
 					}
 					// Cas normal d'une ligne pour un matériel groupé
@@ -361,7 +370,8 @@ function importInventaire($file) {
 						} else {
 							$selectSousCategStmt->bindValue(':label', $data[CSV_SOUS_CATEG]);
 							if(! $selectSousCategStmt->execute()) {
-								echo "ERREUR ligne $rowNumber : ".$selectSousCategStmt->errorInfo()[2];
+								$errorInfo = $selectSousCategStmt->errorInfo(); // TODO PHP5.4+ : Supprimer la variable intermédiaire pour l'accès au tableau
+								echo "ERREUR ligne $rowNumber : ".$errorInfo[2];
 								$reset = true;
 								continue;
 							}
@@ -372,7 +382,8 @@ function importInventaire($file) {
 							else {
 								$insertSousCategStmt->bindValue(':label', $data[CSV_SOUS_CATEG]);
 								if(! $insertSousCategStmt->execute()) {
-									echo "ERREUR ligne $rowNumber : ".$insertSousCategStmt->errorInfo()[2];
+									$errorInfo = $insertSousCategStmt->errorInfo(); // TODO PHP5.4+ : Supprimer la variable intermédiaire pour l'accès au tableau
+									echo "ERREUR ligne $rowNumber : ".$errorInfo[2];
 									$reset = true;
 									continue;
 								}
@@ -391,7 +402,8 @@ function importInventaire($file) {
 							$insertMatosStmt->bindValue(':valRemp', $data[CSV_VAL_REMP]);
 							$insertMatosStmt->bindValue(':remarque', $data[CSV_REMARQUE]);
 							if(! $insertMatosStmt->execute()) {
-								echo "ERREUR ligne $rowNumber : ".$insertMatosStmt->errorInfo()[2];
+								$errorInfo = $insertMatosStmt->errorInfo(); // TODO PHP5.4+ : Supprimer la variable intermédiaire pour l'accès au tableau
+								echo "ERREUR ligne $rowNumber : ".$errorInfo[2];
 								$reset = true;
 								continue;
 							}
@@ -404,7 +416,8 @@ function importInventaire($file) {
 							$insertMatosGenStmt->bindValue(':dateAchat', $data[CSV_DATE]);
 							$insertMatosGenStmt->bindValue(':ownerExt', $data[CSV_EXT]);
 							if(! $insertMatosGenStmt->execute()) {
-								echo "ERREUR ligne $rowNumber : ".$insertMatosGenStmt->errorInfo()[2];
+								$errorInfo = $insertMatosGenStmt->errorInfo(); // TODO PHP5.4+ : Supprimer la variable intermédiaire pour l'accès au tableau
+								echo "ERREUR ligne $rowNumber : ".$errorInfo[2];
 								$reset = true;
 								continue;
 							}
@@ -418,7 +431,8 @@ function importInventaire($file) {
 							// Vérification que l'id correspond à un matériel existant
 							$selectDetailCountStmt->bindValue(':id', $idMatos, PDO::PARAM_INT);
 							if(! $selectDetailCountStmt->execute()) {
-								echo "ERREUR ligne $rowNumber : ".$selectDetailCountStmt->errorInfo()[2];
+								$errorInfo = $selectDetailCountStmt->errorInfo(); // TODO PHP5.4+ : Supprimer la variable intermédiaire pour l'accès au tableau
+								echo "ERREUR ligne $rowNumber : ".$errorInfo[2];
 								$reset = true;
 								continue;
 							}
@@ -429,10 +443,11 @@ function importInventaire($file) {
 							}
 								
 							// Récupération de la répartition actuelle de matériel entre le générique et celui identifié individuellement
-							// Table robert_matos_ident
+							// Table robert_matos_unit // TODO FIXME
 							$selectUnitCountStmt->bindValue(':id', $idMatos, PDO::PARAM_INT);
 							if(! $selectUnitCountStmt->execute()) {
-								echo "ERREUR ligne $rowNumber : ".$selectUnitCountStmt->errorInfo()[2];
+								$errorInfo = $selectUnitCountStmt->errorInfo(); // TODO PHP5.4+ : Supprimer la variable intermédiaire pour l'accès au tableau
+								echo "ERREUR ligne $rowNumber : ".$errorInfo[2];
 								$reset = true;
 								continue;
 							}
@@ -442,7 +457,8 @@ function importInventaire($file) {
 							// Table robert_matos_generique
 							$selectGenCountStmt->bindValue(':id', $idMatos, PDO::PARAM_INT);
 							if(! $selectGenCountStmt->execute()) {
-								echo "ERREUR ligne $rowNumber : ".$selectGenCountStmt->errorInfo()[2];
+								$errorInfo = $selectGenCountStmt->errorInfo(); // TODO PHP5.4+ : Supprimer la variable intermédiaire pour l'accès au tableau
+								echo "ERREUR ligne $rowNumber : ".$errorInfo[2];
 								$reset = true;
 								continue;
 							}
@@ -478,7 +494,8 @@ function importInventaire($file) {
 							$updateMatosStmt->bindValue(':valRemp', $data[CSV_VAL_REMP]);
 							$updateMatosStmt->bindValue(':remarque', $data[CSV_REMARQUE]);
 							if(! $updateMatosStmt->execute()) {
-								echo "ERREUR ligne $rowNumber : ".$updateMatosStmt->errorInfo()[2];
+								$errorInfo = $updateMatosStmt->errorInfo(); // TODO PHP5.4+ : Supprimer la variable intermédiaire pour l'accès au tableau
+								echo "ERREUR ligne $rowNumber : ".$errorInfo[2];
 								$reset = true;
 								continue;
 							}
@@ -489,7 +506,8 @@ function importInventaire($file) {
 								if($matosGenExists) {
 									$deleteMatosGenStmt->bindValue(':id', $idMatos, PDO::PARAM_INT);
 									if(! $deleteMatosGenStmt->execute()) {
-										echo "ERREUR ligne $rowNumber : ".$deleteMatosGenStmt->errorInfo()[2];
+										$errorInfo = $deleteMatosGenStmt->errorInfo(); // TODO PHP5.4+ : Supprimer la variable intermédiaire pour l'accès au tableau
+										echo "ERREUR ligne $rowNumber : ".$errorInfo[2];
 										$reset = true;
 										continue;
 									}
@@ -503,7 +521,8 @@ function importInventaire($file) {
 								$statement->bindValue(':dateAchat', $data[CSV_DATE]);
 								$statement->bindValue(':ownerExt', $data[CSV_EXT]);
 								if(! $statement->execute()) {
-									echo "ERREUR ligne $rowNumber : ".$statement->errorInfo()[2];
+									$errorInfo = $statement->errorInfo(); // TODO PHP5.4+ : Supprimer la variable intermédiaire pour l'accès au tableau
+									echo "ERREUR ligne $rowNumber : ".$errorInfo[2];
 									$reset = true;
 									continue;
 								}

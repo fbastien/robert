@@ -1,0 +1,2 @@
+*;000001;SQL_Backup_Test::testImportInvalidLabel::1;;son;Microphones;1;0;1;2;Remarque;2016-05-31;
+1;000002;SQL_Backup_Test::testImportInvalidLabel::2;;son;Microphones;1;0;1;2;Remarque;;EXT

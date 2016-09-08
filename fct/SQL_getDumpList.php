@@ -18,4 +18,15 @@ function getTableList () {
 	return $tablesNames ;
 }
 
+function getImportList () {
+	$list = array();
+	$dir = opendir($install_path.FOLDER_IMPORT_MATOS);
+	while (($file = readdir($dir)) !== false) {
+		if ($file != '.' && $file != '..' && $file != '.gitignore')
+		$list[] = $file;
+	}
+	rsort($list, SORT_STRING);
+	return $list;
+}
+
 ?>

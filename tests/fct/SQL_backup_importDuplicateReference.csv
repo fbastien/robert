@@ -1,0 +1,47 @@
+	5;CODE_GEN;SQL_Backup_Test::testImportDuplicateReference::1;Designation;son;Microphones;1;0;1;2;Doublon d'un code-barres generique;2016-05-31;
+
+	6;CODE_UNIT;SQL_Backup_Test::testImportDuplicateReference::2;Designation;son;Microphones;1;0;1;2;Doublon d'un code-barres unitaire;;EXT
+
+7;000003;REF_GEN;Designation;son;Microphones;1;0;1;2;Doublon d'une reference generique;;EXT
+
+8;000004;REF_UNIT;Designation;son;Microphones;1;0;1;2;Doublon d'une reference unitaire;2016-05-31;
+
+	9;000005;SQL_Backup_Test::testImportDuplicateReference::5;Designation;son;Microphones;2;0;1;2;Ligne valide avant prochain test;2016-05-31;
+	+;CODE_GEN;SQL_Backup_Test::testImportDuplicateReference::12;;;;;0;;;Doublon d'un code-barres generique;;EXT
+
+	10;000006;SQL_Backup_Test::testImportDuplicateReference::6;Designation;son;Microphones;2;0;1;2;Ligne valide avant prochain test;;EXT
+	+;CODE_UNIT;SQL_Backup_Test::testImportDuplicateReference::13;;;;;0;;;Doublon d'un code-barres unitaire;2016-05-31;
+
+11;000007;SQL_Backup_Test::testImportDuplicateReference::7;Designation;son;Microphones;2;0;1;2;Ligne valide avant prochain test;2016-05-31;
++;000014;REF_GEN;;;;;0;;;Doublon d'une reference generique;2016-05-31;
+
+12;000008;SQL_Backup_Test::testImportDuplicateReference::8;Designation;son;Microphones;2;0;1;2;Ligne valide avant prochain test;;EXT
++;000015;REF_UNIT;;;;;0;;;Doublon d'une reference unitaire;;EXT
+
+13;000009;SQL_Backup_Test::testImportDuplicateReference::9;Designation;son;Microphones;1;0;1;2;Modification sans changer le code-barres ni la reference;2016-05-31;
+
+14;000010_NEW;SQL_Backup_Test::testImportDuplicateReference::10;Designation;son;Microphones;1;0;1;2;Modification de code-barres avant prochain test;;EXT
+*;000010;SQL_Backup_Test::testImportDuplicateReference::16;Designation;son;Microphones;1;0;1;2;Reutilisation d'ancien code-barres;2016-05-31;
+
+15;000011;SQL_Backup_Test::testImportDuplicateReference::11_NEW;Designation;son;Microphones;1;0;1;2;Modification de reference avant prochain test;2016-05-31;
+*;000017;SQL_Backup_Test::testImportDuplicateReference::11;Designation;son;Microphones;1;0;1;2;Reutilisation d'ancienne reference;;EXT
+
+	*;CODE_GEN;SQL_Backup_Test::testImportDuplicateReference::18;Designation;son;Microphones;1;0;1;2;Doublon d'un code-barres generique;2016-05-31;
+
+	*;CODE_UNIT;SQL_Backup_Test::testImportDuplicateReference::19;Designation;son;Microphones;1;0;1;2;Doublon d'un code-barres unitaire;;EXT
+
+*;000020;REF_GEN;Designation;son;Microphones;1;0;1;2;Doublon d'une reference generique;;EXT
+
+*;000021;REF_UNIT;Designation;son;Microphones;1;0;1;2;Doublon d'une reference unitaire;2016-05-31;
+
+	*;000022;SQL_Backup_Test::testImportDuplicateReference::22;Designation;son;Microphones;2;0;1;2;Ligne valide avant prochain test;2016-05-31;
+	+;CODE_GEN;SQL_Backup_Test::testImportDuplicateReference::23;;;;;0;;;Doublon d'un code-barres generique;;EXT
+
+	*;000024;SQL_Backup_Test::testImportDuplicateReference::24;Designation;son;Microphones;2;0;1;2;Ligne valide avant prochain test;;EXT
+	+;CODE_UNIT;SQL_Backup_Test::testImportDuplicateReference::25;;;;;0;;;Doublon d'un code-barres unitaire;2016-05-31;
+
+*;000026;SQL_Backup_Test::testImportDuplicateReference::26;Designation;son;Microphones;2;0;1;2;Ligne valide avant prochain test;2016-05-31;
++;000027;REF_GEN;;;;;0;;;Doublon d'une reference generique;2016-05-31;
+
+*;000028;SQL_Backup_Test::testImportDuplicateReference::28;Designation;son;Microphones;2;0;1;2;Ligne valide avant prochain test;;EXT
++;000029;REF_UNIT;;;;;0;;;Doublon d'une reference unitaire;;EXT

@@ -1,0 +1,6 @@
+COMMENT;000001;SQL_Backup_Test::testImportComments::1;Designation;son;Microphones;1;0;1;2;String;;EXT
+1l;000002;SQL_Backup_Test::testImportComments::2;Designation;son;Microphones;1;0;1;2;     String commencant par un chiffre;2016-05-31;
+-1;000003;SQL_Backup_Test::testImportComments::3;Designation;son;Microphones;1;0;1;2;     Nombre negatif;;EXT
+1E+3;000004;SQL_Backup_Test::testImportComments::4;Designation;son;Microphones;1;0;1;2;   Nombre avec exposant;2016-05-31;
+ +;000005;SQL_Backup_Test::testImportComments::5;Designation;son;Microphones;1;0;1;2;     Espace devant;;EXT
+* ;000006;SQL_Backup_Test::testImportComments::6;Designation;son;Microphones;1;0;1;2;     Espace derriere;2016-05-31;

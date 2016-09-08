@@ -10,43 +10,56 @@ require_once ('checkConnect.php' );
 	extract ($_GET) ;
 
 	$file = urldecode($file);
-
 	
-	if ( $dir == 'sql' ){
-		$dir = FOLDER_DUMP_SQL;
-		$mime = 'text/plain';
-	}
-	elseif ( $dir == 'PlanDevis' ) {
-		if ($planID == null || $planID == '') die("J'ai besoin de l'ID du plan pour vous envoyer le devis !") ;
-		$dir = FOLDER_PLANS_DATA . $planID . '/devis' ;
-		$mime = 'application/pdf';
-	}
-	elseif ( $dir == 'PlanFacture' ) {
-		if ($planID == null || $planID == '') die("J'ai besoin de l'ID du plan pour vous envoyer la facture !") ;
-		$dir = FOLDER_PLANS_DATA . $planID . '/facture' ;
-		$mime = 'application/pdf';
-	}
-	elseif ( $dir == 'PlanFichier' ) {
-		if ($planID == null || $planID == '') die("J'ai besoin de l'ID du plan pour vous envoyer le fichier !") ;
-		$dir = FOLDER_PLANS_DATA . $planID ;
-		$ext = strtolower (substr( $file, strrpos( $file, '.')) );
-		if ( $ext == 'jpg' || $ext == 'jpeg' || $ext == 'bmp')
-			$mime = 'image/jpeg';
-		elseif ( $ext == 'pdf')
+	switch( $dir ) {
+		case 'sql':
+			$dir = FOLDER_DUMP_SQL;
+			$mime = 'text/plain';
+			break;
+		case 'PlanDevis':
+			if ($planID == null || $planID == '')
+				die("J'ai besoin de l'ID du plan pour vous envoyer le devis !") ;
+			$dir = FOLDER_PLANS_DATA . $planID . '/devis' ;
 			$mime = 'application/pdf';
-	}
-	elseif ( $dir == 'Tekos'){
-		if ($idTekos == null || $idTekos == '') die("J'ai besoin de l'ID du technicien pour vous envoyer le fichier !") ;
-		$dir = FOLDER_TEKOS_DATA . strtolower($idTekos) ;
-		$ext = strtolower (substr( $file, strrpos( $file, '.')) );
-		if ( $ext == 'jpg' || $ext == 'jpeg' || $ext == 'bmp')
-			$mime = 'image/jpeg';
-		elseif ( $ext == 'pdf')
+			break;
+		case 'PlanFacture':
+			if ($planID == null || $planID == '')
+				die("J'ai besoin de l'ID du plan pour vous envoyer la facture !") ;
+			$dir = FOLDER_PLANS_DATA . $planID . '/facture' ;
 			$mime = 'application/pdf';
-	}
-	else {
-		$dir = 'NO FILES HERE';
-		die('Dossier non accessible !');
+			break;
+		case 'PlanFichier':
+			if ($planID == null || $planID == '')
+				die("J'ai besoin de l'ID du plan pour vous envoyer le fichier !") ;
+			$dir = FOLDER_PLANS_DATA . $planID ;
+			$ext = strtolower (substr( $file, strrpos( $file, '.')) );
+			if ( $ext == 'jpg' || $ext == 'jpeg' || $ext == 'bmp')
+				$mime = 'image/jpeg';
+			elseif ( $ext == 'pdf')
+				$mime = 'application/pdf';
+			break;
+		case 'Tekos':
+			if ($idTekos == null || $idTekos == '')
+				die("J'ai besoin de l'ID du technicien pour vous envoyer le fichier !") ;
+			$dir = FOLDER_TEKOS_DATA . strtolower($idTekos) ;
+			$ext = strtolower (substr( $file, strrpos( $file, '.')) );
+			if ( $ext == 'jpg' || $ext == 'jpeg' || $ext == 'bmp')
+				$mime = 'image/jpeg';
+			elseif ( $ext == 'pdf')
+				$mime = 'application/pdf';
+			break;
+		case 'doc':
+			if( $file == '' )
+				die("J'ai besoin du nom du fichier à ouvrir !") ;
+			$dir = rtrim(FOLDER_CONFIG, '/');
+			if( $file != 'exemple_inventaire.xls' )
+				die("Fichier inexistant !");
+			$ext = strtolower(substr($file, strrpos($file, '.')));
+			if( $ext == 'xls' )
+				$mime = 'application/vnd.ms-excel';
+			break;
+		default:
+			die('Dossier non accessible !');
 	}
 
 	$filename = "../$dir/$file" ;

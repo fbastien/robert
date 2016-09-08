@@ -52,6 +52,7 @@ define ("FOLDER_PAGES",		"pages/");
 define ("FOLDER_TEKOS_DATA", "data/TEKOS_DATA/");
 define ("FOLDER_PLANS_DATA", "data/PLANS_DATA/");
 define ("FOLDER_DUMP_SQL", "data/dumpSQL/");
+defined('FOLDER_IMPORT_MATOS') or define('FOLDER_IMPORT_MATOS', 'data/inventaire/');
 
 define ("SALT_PASS",		'G:niUk5!1|WQ');									// Grain de sel (seed) pour la création / récup de password in BDD
 define ("COOKIE_NAME_AUTH",	'auth_type');										// nom du cookie gestion type d'authentification

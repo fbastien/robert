@@ -1,0 +1,2 @@
+*;000001;SQL_Backup_Test::testImportInvalidUnitPanne::1;Designation;son;Microphones;2;1;1;2;Ligne valide avant prochain test;;EXT
++;000002;SQL_Backup_Test::testImportInvalidUnitPanne::2;;;;;2;;;Quantite en panne superieure a 1 dans une ligne unitaire;2016-05-31;

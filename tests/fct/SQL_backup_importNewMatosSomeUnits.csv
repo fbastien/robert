@@ -1,0 +1,16 @@
+*;000001;SQL_Backup_Test::testImportNewMatosSomeUnits::1;Designation 1;son;Microphones;3;0;1;2;Ligne valide avant test 1;2016-05-31;
++;000002;SQL_Backup_Test::testImportNewMatosSomeUnits::2;____________;___;__________;_;0;_;_;Champs ignores non vides;2016-05-30;
+
+*;000003;SQL_Backup_Test::testImportNewMatosSomeUnits::3;Designation 2;lumiere;Projecteurs;4;0;3;4;Ligne valide avant test 2;2016-05-28;
++;000004;SQL_Backup_Test::testImportNewMatosSomeUnits::4;;;;;0;;;Materiel interne;2016-05-27;
++;000005;SQL_Backup_Test::testImportNewMatosSomeUnits::5;;;;;0;;;Materiel externe mais type interne;;EXT1
+
+*;000006;SQL_Backup_Test::testImportNewMatosSomeUnits::6;Designation 3;transport;Vehicules;3;0;5;6;Ligne valide avant test 3;;EXT2
++;000007;SQL_Backup_Test::testImportNewMatosSomeUnits::7;;;;;0;;;Materiel externe;;EXT3
++;000008;SQL_Backup_Test::testImportNewMatosSomeUnits::8;;;;;0;;;Materiel interne mais type externe;2016-05-26;
+
+*;000009;SQL_Backup_Test::testImportNewMatosSomeUnits::9;Designation 4;structure;Structure;2;1;7;8;Ligne valide avant test 4;2016-05-25;
++;000010;SQL_Backup_Test::testImportNewMatosSomeUnits::10;;;;;1;;;Panne;2016-05-24;
+
+*;000011;SQL_Backup_Test::testImportNewMatosSomeUnits::11;Designation 5;son;Enceintes;3;2;9;10;Ligne valide avant test 5;2016-05-23;
++;000012;SQL_Backup_Test::testImportNewMatosSomeUnits::12;;;;;1;;;Panne;2016-05-22;

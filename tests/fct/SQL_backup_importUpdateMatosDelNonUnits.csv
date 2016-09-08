@@ -1,0 +1,8 @@
+4;000001;SQL_Backup_Test::testImportUpdateMatosDelNonUnits::1;Designation;son;Microphones;1;0;1;2;Un materiel non identifie;2016-05-31;
+
+5;000002;SQL_Backup_Test::testImportUpdateMatosDelNonUnits::2;Designation;son;Microphones;1;0;1;2;Plusieurs materiels non identifies;;EXT
+
+6;000003;SQL_Backup_Test::testImportUpdateMatosDelNonUnits::3;Designation;son;Microphones;2;0;1;2;Ajout de materiel identifie;2016-05-31;
++;000009;SQL_Backup_Test::testImportUpdateMatosDelNonUnits::9;;;;;0;;;Remarque;2016-05-31;
+
+7;000004;SQL_Backup_Test::testImportUpdateMatosDelNonUnits::4;Designation;son;Microphones;1;2;1;2;Diminution sous la quantite en panne;;EXT

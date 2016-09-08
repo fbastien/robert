@@ -1,0 +1,3 @@
+*;000001;SQL_Backup_Test::testImportInvalidDateAndExt::1;Designation;son;Microphones;1;0;1;2;Remarque;2016-05-31;EXT
++;000002;SQL_Backup_Test::testImportInvalidDateAndExt::2;;;;;0;;;Remarque                            ;2016-05-31;EXT
+1;000003;SQL_Backup_Test::testImportInvalidDateAndExt::3;Designation;son;Microphones;1;0;1;2;Remarque;2016-05-31;EXT

@@ -1,0 +1,11 @@
+4;000001;SQL_Backup_Test::testImportMorePannesThanQuantity::1;Designation;son;Microphones;1;2;1;2;Quantite en panne superieure a la quantite totale;2016-05-31;
+
+5;000002;SQL_Backup_Test::testImportMorePannesThanQuantity::2;Designation;son;Microphones;3;2;1;2;Quantite en panne superieure a la quantite non identifiee;;EXT
+
+6;000003;SQL_Backup_Test::testImportMorePannesThanQuantity::3;Designation;son;Microphones;1;1;1;2;Augmentation de la quantite en panne identifiee;2016-05-31;
+
+*;000007;SQL_Backup_Test::testImportMorePannesThanQuantity::7;Designation;son;Microphones;1;2;1;2;Quantite en panne superieure a la quantite totale;;EXT
+
+*;000008;SQL_Backup_Test::testImportMorePannesThanQuantity::8;Designation;son;Microphones;3;2;1;2;Quantite en panne superieure a la quantite non identifiee;2016-05-31;
++;000009;SQL_Backup_Test::testImportMorePannesThanQuantity::9;;;;;0;;;Non en panne et valide;;EXT
++;000010;SQL_Backup_Test::testImportMorePannesThanQuantity::10;;;;;0;;;Quantite en panne non identifiee invalide;2016-05-31;

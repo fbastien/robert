@@ -1,0 +1,8 @@
+*;"INVALIDE;SQL_Backup_Test::testImportSpecialCharacters::1";Designation;son;Microphones;1;0;1;2;"Le nombre de ; est bon mais certains sont échappés";EXT
+4;àéèïôù;SQL_Backup_Test::testImportSpecialCharactersà2;Désignation;son;Câbles son;1;0;1;2;Champs accentués ASCII;2016-05-31;
+*;αβγδεζ;SQL_Backup_Test::testImportSpecialCharactersϾ3;обозначение;son;Câbles son;1;0;1;2;Champs α Unicode non ASCII;2016-05-31;
+5;"0000;4";"SQL_Backup_Test::testImportSpecialCharacters;4";"Design;ation";son;Microphones;1;0;1;2;"Champs avec ;";;EXT
+*;"""000005""";"SQL_Backup_Test::testImportSpecialCharacters""5";"Desig""nation";son;Microphones;1;0;1;2;"Champs avec """;;EXT
+6;"""0000;6""";"SQL_Backup_Test::testImportSpecialCharacters"";""6";"De;sig""na;tion";son;Microphones;1;0;1;2;"Champs avec "";"" et """"""";2016-05-31;
+*;000007;SQL_Backup_Test::testImportSpecialCharacters::7;Designation;son;"""Shure β"" et micros à gogo !";2;0;1;2;Nouvelle sous-catégorie avec caractères spéciaux;;EXT
++;"0000;8""àα";"SQL_Backup_Test::testImportSpecialCharacters"";àα""8";;;;;0;;;"Ajout avec "";"", """""", caractères accentués et Unicode α";2016-05-31;

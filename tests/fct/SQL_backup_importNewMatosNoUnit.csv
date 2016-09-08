@@ -1,0 +1,5 @@
+*;000001;SQL_Backup_Test::testImportNewMatosNoUnit::1;Designation 1;son;Microphones;1;0;2;3;Cas nominal;2016-05-31;
+*;000002;SQL_Backup_Test::testImportNewMatosNoUnit::2;Designation 2;lumiere;Projecteurs;10;0;2.50;19.99;Valeur et tarif non entiers;2016-05-30;
+*;000003;SQL_Backup_Test::testImportNewMatosNoUnit::3;Designation 3;structure;Structure;4;0;0;0;Valeur et tarif nuls;2016-05-29;
+*;000004;SQL_Backup_Test::testImportNewMatosNoUnit::4;Designation 4;transport;Vehicules;5;0;6.0;7.0;Materiel externe;;EXT
+*;000005;SQL_Backup_Test::testImportNewMatosNoUnit::5;Designation 5;son;Enceintes;20;8;15;30;Pannes;2016-05-28;

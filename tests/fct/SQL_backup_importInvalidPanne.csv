@@ -1,0 +1,5 @@
+*;000001;SQL_Backup_Test::testImportInvalidPanne::1;Designation;son;Microphones;1;-1;1;2;   Nombre negatif;;EXT
++;000002;SQL_Backup_Test::testImportInvalidPanne::2                          ;;;;;1l;;;     String commencant par un chiffre;2016-05-31;
+1;000003;SQL_Backup_Test::testImportInvalidPanne::3;Designation;son;Microphones;1;1.0;1;2;  Nombre decimal;;EXT
+*;000004;SQL_Backup_Test::testImportInvalidPanne::4;Designation;son;Microphones;1;1,000;1;2;Separateur de milliers;2016-05-31;
++;000005;SQL_Backup_Test::testImportInvalidPanne::5                          ;;;;;١;;;      Nombre non ASCII;;EXT

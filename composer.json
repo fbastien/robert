@@ -28,6 +28,6 @@
 		"vendor-dir" : "lib"
 	},
 	"archive" : {
-		"exclude" : ["/data/dumpSQL/*", "/data/PLANS_DATA/*", "/data/TEKOS_DATA/*", "/scripts/build/out", "/tmp/BFlogs/*"]
+		"exclude" : ["/data/dumpSQL/*", "/data/inventaire/*", "/data/PLANS_DATA/*", "/data/TEKOS_DATA/*", "/scripts/build/out", "/tmp/BFlogs/*"]
 	}
 }

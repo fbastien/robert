@@ -1,0 +1,81 @@
++;000001;SQL_Backup_Test::testImportUnitAfterInvalid::1;;;;;0;;;Aucune ligne precedente;;EXT
+
+*;000002;SQL_Backup_Test::testImportUnitAfterInvalid::2;Designation;son;Microphones;2;0;1;2;Ligne valide avant prochain test;2016-05-31;
+;Ligne invalide;
++;000003;SQL_Backup_Test::testImportUnitAfterInvalid::3;;;;;0;;;Ligne precedente invalide (nombre de champs);2016-05-31;
+
+*;000004;SQL_Backup_Test::testImportUnitAfterInvalid::4;Designation;son;Microphones;2;0;1;2;Ligne valide avant prochain test;;EXT
+COMMENT;000005;SQL_Backup_Test::testImportUnitAfterInvalid::5;Designation;son;Microphones;1;0;1;2;Ligne de commentaire avant prochain test;2016-05-31;
++;000006;SQL_Backup_Test::testImportUnitAfterInvalid::6;;;;;0;;;Ligne precedente de commentaire;;EXT
+
+1;000007;SQL_Backup_Test::testImportUnitAfterInvalid::7;Designation;son;Microphones;1;0;1;2;Ligne invalide avant prochain test;2016-05-31;EXT
++;000008;SQL_Backup_Test::testImportUnitAfterInvalid::8;;;;;0;;;Ligne de modification precedente invalide;2016-05-31;
+
+*;000009;SQL_Backup_Test::testImportUnitAfterInvalid::9;Designation;son;Microphones;1;0;1;2;Ligne invalide avant prochain test;2016-05-31;EXT
++;000010;SQL_Backup_Test::testImportUnitAfterInvalid::10;;;;;0;;;Ligne d'ajout generique precedente invalide;;EXT
+
+*;000011;SQL_Backup_Test::testImportUnitAfterInvalid::11;Designation;son;Microphones;4;0;1;2;Ligne valide avant prochain test;2016-05-31;
++;000012;SQL_Backup_Test::testImportUnitAfterInvalid::12;;;;;0;;;Ligne valide avant prochain test;2016-05-31;
++;000013;SQL_Backup_Test::testImportUnitAfterInvalid::13;;;;;0;;;Ligne invalide avant prochain test;2016-05-31;EXT
++;000014;SQL_Backup_Test::testImportUnitAfterInvalid::14;;;;;0;;;Ligne d'ajout unitaire precedente invalide;2016-05-31;
+
+*;;;Designation;son;Microphones;1;0;1;2;Ligne invalide avant prochain test;;EXT
++;000015;SQL_Backup_Test::testImportUnitAfterInvalid::15;;;;;0;;;Ligne precedente invalide (code-barres et reference);2016-05-31;
+
+	*;TODO;SQL_Backup_Test::testImportUnitAfterInvalid::16;Designation;son;Microphones;1;0;1;2;Ligne invalide avant prochain test;2016-05-31;
+	+;000017;SQL_Backup_Test::testImportUnitAfterInvalid::17;;;;;0;;;Ligne precedente invalide (code-barre deja utilise);;EXT
+
+*;000018;MIC-SM58;Designation;son;Microphones;1;0;1;2;Ligne invalide avant prochain test;2016-05-31;
++;000019;SQL_Backup_Test::testImportUnitAfterInvalid::19;;;;;0;;;Ligne precedente invalide (reference deja utilisee);;EXT
+
+*;000020;SQL_Backup_Test::testImportUnitAfterInvalid::20;Designation;son;Microphones;1;INVALIDE;1;2;Ligne invalide avant prochain test;2016-05-31;
++;000021;SQL_Backup_Test::testImportUnitAfterInvalid::21;;;;;0;;;Ligne precedente invalide (quantite en panne);;EXT
+
+*;000022;SQL_Backup_Test::testImportUnitAfterInvalid::22;Designation;son;Microphones;1;0;1;2;Ligne invalide avant prochain test;2016-05-31;EXT
++;000023;SQL_Backup_Test::testImportUnitAfterInvalid::23;;;;;0;;;Ligne precedente invalide (date d'achat et prestataire externe);;EXT
+
+*;000024;SQL_Backup_Test::testImportUnitAfterInvalid::24;Designation;son;Microphones;1;0;1;2;Ligne invalide avant prochain test;9999-99-99;
++;000025;SQL_Backup_Test::testImportUnitAfterInvalid::25;;;;;0;;;Ligne precedente invalide (date d'achat);;EXT
+
+*;000026;SQL_Backup_Test::testImportUnitAfterInvalid::26;Designation;son;Microphones;3;1;1;2;Ligne valide avant prochain test;2016-05-31;
++;000027;SQL_Backup_Test::testImportUnitAfterInvalid::27;;;;;2;;;Ligne invalide avant prochain test;2016-05-31;
++;000028;SQL_Backup_Test::testImportUnitAfterInvalid::28;;;;;0;;;Ligne precedente invalide (quantite unitaire en panne superieure a 1);;EXT
+
+*;000029;SQL_Backup_Test::testImportUnitAfterInvalid::29;Designation;son;Microphones;3;0;1;2;Ligne valide avant prochain test;;EXT
++;000030;SQL_Backup_Test::testImportUnitAfterInvalid::30;;;;;1;;;Ligne invalide avant prochain test;;EXT
++;000031;SQL_Backup_Test::testImportUnitAfterInvalid::31;;;;;0;;;Ligne precedente invalide (quantite unitaire en panne superieure a la quantite totale en panne);2016-05-31;
+
+*;000032;SQL_Backup_Test::testImportUnitAfterInvalid::32;Designation;son;Microphones;1;2;1;2;Ligne invalide avant prochain test;2016-05-31;
++;000033;SQL_Backup_Test::testImportUnitAfterInvalid::33;;;;;0;;;Ligne precedente invalide (quantite en panne superieure a la quantite totale);;EXT
+
+*;000034;SQL_Backup_Test::testImportUnitAfterInvalid::34;Designation;son;Microphones;3;2;1;2;Ligne valide avant prochain test;;EXT
++;000035;SQL_Backup_Test::testImportUnitAfterInvalid::35;;;;;0;;;Ligne valide avant prochain test;2016-05-31;
++;000036;SQL_Backup_Test::testImportUnitAfterInvalid::36;;;;;0;;;Ligne invalide avant prochain test;;EXT
++;000037;SQL_Backup_Test::testImportUnitAfterInvalid::37;;;;;1;;;Ligne precedente invalide (quantite en panne non identifiee superieure a la quantite non identifiee);2016-05-31;
+
+1;;MIC-SM58;Micro Shure SM58;son;Microphones;8;7;7.5;50;Avec pince;;Prestataire 1
++;000038;SQL_Backup_Test::testImportUnitAfterInvalid::38;;;;;0;;;Ligne precedente invalide (quantite en panne non identifiee superieure a la quantite non identifiee);;EXT
+
+*;000039;SQL_Backup_Test::testImportUnitAfterInvalid::39;;son;Microphones;1;0;1;2;Ligne invalide avant prochain test;2016-05-31;
++;000040;SQL_Backup_Test::testImportUnitAfterInvalid::40;;;;;0;;;Ligne precedente invalide (designation);;EXT
+
+*;000041;SQL_Backup_Test::testImportUnitAfterInvalid::41;Designation;;Microphones;1;0;1;2;Ligne invalide avant prochain test;;EXT
++;000042;SQL_Backup_Test::testImportUnitAfterInvalid::42;;;;;0;;;Ligne precedente invalide (categorie);2016-05-31;
+
+*;000043;SQL_Backup_Test::testImportUnitAfterInvalid::43;Designation;son;Microphones;INVALIDE;0;1;2;Ligne invalide avant prochain test;2016-05-31;
++;000044;SQL_Backup_Test::testImportUnitAfterInvalid::44;;;;;0;;;Ligne precedente invalide (quantite);;EXT
+
+*;000045;SQL_Backup_Test::testImportUnitAfterInvalid::45;Designation;son;Microphones;1;0;INVALIDE;2;Ligne invalide avant prochain test;;EXT
++;000046;SQL_Backup_Test::testImportUnitAfterInvalid::46;;;;;0;;;Ligne precedente invalide (tarif de location);2016-05-31;
+
+*;000047;SQL_Backup_Test::testImportUnitAfterInvalid::47;Designation;son;Microphones;1;0;1;INVALIDE;Ligne invalide avant prochain test;2016-05-31;
++;000048;SQL_Backup_Test::testImportUnitAfterInvalid::48;;;;;0;;;Ligne precedente invalide (valeur de remplacement);;EXT
+
+0;000049;SQL_Backup_Test::testImportUnitAfterInvalid::49;Designation;son;Microphones;1;0;1;2;Ligne invalide avant prochain test;;EXT
++;000050;SQL_Backup_Test::testImportUnitAfterInvalid::50;;;;;0;;;Ligne precedente invalide (id inexistant);2016-05-31;
+
+3;;PRJ-P64;Projecteur PAR64;lumiere;Projecteurs;2;0;3;29.99;;2015-11-02;
++;000037;SQL_Backup_Test::testImportUnitAfterInvalid::37;;;;;0;;;Ligne precedente invalide (quantite inferieure a la quantite identifiee unitairement);;EXT
+
+1;;MIC-SM58;Micro Shure SM58;son;Microphones;8;0;7.5;50;Avec pince;;Prestataire 1
++;000038;SQL_Backup_Test::testImportUnitAfterInvalid::38;;;;;0;;;Ligne precedente invalide (quantite en panne inferieure a la quantite en panne identifiee unitairement);2016-05-31;

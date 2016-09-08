@@ -1,0 +1,15 @@
+*;000001;SQL_Backup_Test::testImportInvalidDate::1;Designation;son;Microphones;1;0;1;2;                     Entier;2016;
++;000002;SQL_Backup_Test::testImportInvalidDate::2;;;;;0;;;                                                 String;DATE;
+1;000003;SQL_Backup_Test::testImportInvalidDate::3;Designation;son;Microphones;1;0;1;2;  Slashes au lieu de tirets;2016/05/05;
+*;000004;SQL_Backup_Test::testImportInvalidDate::4;Designation;son;Microphones;1;0;1;2;  Espaces au lieu de tirets;2016 05 05;
++;000005;SQL_Backup_Test::testImportInvalidDate::5;;;;;0;;;                               Points au lieu de tirets;2016.05.05;
+1;000006;SQL_Backup_Test::testImportInvalidDate::6;Designation;son;Microphones;1;0;1;2;              Mauvais ordre;05-05-2016;
+*;000007;SQL_Backup_Test::testImportInvalidDate::7;Designation;son;Microphones;1;0;1;2;              Mauvais ordre;2016-31-12;
++;000008;SQL_Backup_Test::testImportInvalidDate::8;;;;;0;;;                                        Format invalide;May 5 2016;
+1;000009;SQL_Backup_Test::testImportInvalidDate::9;Designation;son;Microphones;1;0;1;2;            Format invalide;5 May 2016;
+*;000010;SQL_Backup_Test::testImportInvalidDate::10;Designation;son;Microphones;1;0;1;2;    Mois et jour invalides;2016-99-99;
++;000011;SQL_Backup_Test::testImportInvalidDate::11;;;;;0;;;                               Mois et jour en lettres;2016-00-00;
+1;000012;SQL_Backup_Test::testImportInvalidDate::12;Designation;son;Microphones;1;0;1;2;   Mois et jour en lettres;2016-May-5th;
+*;000013;SQL_Backup_Test::testImportInvalidDate::13;Designation;son;Microphones;1;0;1;2;Mois et jour sur 1 chiffre;2016-5-5;
++;000014;SQL_Backup_Test::testImportInvalidDate::14;;;;;0;;;                                  Annee sur 2 chiffres;16-05-05;
+1;000015;SQL_Backup_Test::testImportInvalidDate::15;Designation;son;Microphones;1;0;1;2;          Date inexistante;2016-02-30;

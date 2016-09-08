@@ -1,0 +1,22 @@
+3;;PRJ-P64;Projecteur PAR64;lumiere;Projecteurs;3;0;3;29.99;;;
++;000004;SQL_Backup_Test::testImportMoreUnitsThanQuantity::4;;;;;0;;;Remarque;2016-05-31;
++;000005;SQL_Backup_Test::testImportMoreUnitsThanQuantity::5;;;;;0;;;Remarque;;EXT
+
+4;000001;SQL_Backup_Test::testImportMoreUnitsThanQuantity::1;Designation;son;Microphones;1;0;1;2;Non identifie unitairement;2016-05-31;
++;000006;SQL_Backup_Test::testImportMoreUnitsThanQuantity::6;;;;;0;;;Remarque;2016-05-31;
++;000007;SQL_Backup_Test::testImportMoreUnitsThanQuantity::7;;;;;0;;;Remarque;;EXT
+
+5;000002;SQL_Backup_Test::testImportMoreUnitsThanQuantity::2;Designation;son;Microphones;3;0;1;2;Partiellement identifie unitairement;;EXT
++;000008;SQL_Backup_Test::testImportMoreUnitsThanQuantity::8;;;;;0;;;Remarque;2016-05-31;
++;000009;SQL_Backup_Test::testImportMoreUnitsThanQuantity::9;;;;;0;;;Remarque;;EXT
++;000010;SQL_Backup_Test::testImportMoreUnitsThanQuantity::10;;;;;0;;;Remarque;2016-05-31;
+
+*;000011;SQL_Backup_Test::testImportMoreUnitsThanQuantity::11;Designation;son;Microphones;1;0;1;2;Remarque;;EXT
++;000012;SQL_Backup_Test::testImportMoreUnitsThanQuantity::12;;;;;0;;;Remarque;;EXT
++;000013;SQL_Backup_Test::testImportMoreUnitsThanQuantity::13;;;;;0;;;Remarque;2016-05-31;
+
+*;000014;SQL_Backup_Test::testImportMoreUnitsThanQuantity::14;Designation;son;Microphones;2;0;1;2;Remarque;2016-05-31;
++;000015;SQL_Backup_Test::testImportMoreUnitsThanQuantity::15;;;;;0;;;Remarque;2016-05-31;
++;000016;SQL_Backup_Test::testImportMoreUnitsThanQuantity::16;;;;;0;;;Remarque;;EXT
++;000017;SQL_Backup_Test::testImportMoreUnitsThanQuantity::17;;;;;0;;;Remarque;2016-05-31;
++;000018;SQL_Backup_Test::testImportMoreUnitsThanQuantity::18;;;;;0;;;Remarque;;EXT

@@ -5,6 +5,7 @@ $(function() {
 	$('#filtresDiv').off('click', '.filtre');
 	$('#filtresDiv').on('click', '.filtre', function() {
 		$('.matosLine').hide();
+		$('.mDetail').hide();
 
 		if ( $(this).hasClass('ui-state-error') )
 			 $(this).removeClass('ui-state-error');
@@ -44,6 +45,14 @@ $(function() {
 		else {
 			$('.matosExterne').hide();
 		}
+	});
+
+
+	// Affichage du détail d'un matos
+	$('.showMDtr').click(function() {
+		$('.mDetail').hide();
+		var idMatos = $(this).attr('id');
+		$('#matosDetailTR-'+idMatos).toggle();
 	});
 
 

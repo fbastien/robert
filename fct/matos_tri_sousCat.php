@@ -64,14 +64,25 @@ function MatosExt_by_Location ( $listeMatosExterieur ){
 	//echo "<pre>"; print_r ($listeMatosExterieur) ;echo "</pre>";
 
 	$newTableau = array();
-
 	foreach ( $listeMatosExterieur as $matos ){
 		$newTableau[$matos['ownerExt']][] = $matos ;
 	}
 	//echo "<pre>"; print_r ($newTableau) ;echo "</pre>";
 	return $newTableau ; 
-
 }
 
-
-?>
+/** 
+ * Regroupe le matériel identifié unitairement en fonction du matériel générique auquel il correspond.
+ * 
+ * @param mixed[][] $listeMatosUnit Liste du matériel unitaire.
+ *     Chaque élément de la première dimension du tableau correspond à un matériel.
+ *     La seconde dimension est un tableau associatif contenant les informations du matériel contenues en base de données.
+ * @return mixed[][][] Tableau qui associe à chaque identifiant de matériel générique (clé de la première dimension) la liste des matériels unitaires associés (format des 2 autres dimensions identique au tableau en entrée).
+ */
+function groupUnitsByMatos($listeMatosUnit) {
+	$newTableau = array();
+	foreach ($listeMatosUnit as $matosUnit){
+		$newTableau[$matosUnit['id_matosdetail']][] = $matosUnit;
+	}
+	return $newTableau;
+}

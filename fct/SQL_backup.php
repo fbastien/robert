@@ -160,19 +160,13 @@ function importInventaire($file) {
 			// Préparation des différentes requêtes SQL
 			$selectSousCategStmt = $bdd->prepare("SELECT `id` FROM `robert_matos_sous_cat` WHERE `label` = :label");
 			$insertSousCategStmt = $bdd->prepare("INSERT INTO `robert_matos_sous_cat` (`label`, `ordre`) VALUES (:label, (SELECT MAX(`ordre`) + 1 FROM `robert_matos_sous_cat` OLD))");
-			$insertMatosStmt = $bdd->prepare("INSERT INTO `robert_matos_detail` (`label`, `ref`, `categorie`, `sousCateg`, `tarifLoc`, `valRemp`, `remarque`) VALUES (:label, :ref, :categorie, :sousCateg, :tarifLoc, :valRemp, :remarque)");
-			// TODO FIXME $insertMatosGenStmt = $bdd->prepare("INSERT INTO `robert_matos_generique` (`id_matosdetail`, `quantite`, `panne`, `dateAchat`, `ownerExt`) VALUES (:id, :quantite, :panne, :dateAchat, :ownerExt)");
-				$insertMatosGenStmt = $bdd->prepare("UPDATE `robert_matos_detail` SET `Qtotale` = :quantite, `panne` = :panne, `dateAchat` = :dateAchat, `ownerExt` = :ownerExt WHERE `id` = :id");
-			$insertMatosUnitStmt = $bdd->prepare("INSERT INTO `robert_matos_unit` (`id_matosdetail`, `ref`, `panne`, `dateAchat`, `ownerExt`, `remarque`) VALUES (:id, :ref, :panne, :dateAchat, :ownerExt, :remarque)"); // TODO FIXME
+			$insertMatosStmt = $bdd->prepare("INSERT INTO `robert_matos_detail` (`label`, `ref`, `panne`, `categorie`, `sousCateg`, `Qtotale`, `tarifLoc`, `valRemp`, `dateAchat`, `ownerExt`, `remarque`) VALUES (:label, :ref, :panne, :categorie, :sousCateg, :quantite, :tarifLoc, :valRemp, :dateAchat, :ownerExt, :remarque)");
+			$insertMatosUnitStmt = $bdd->prepare("INSERT INTO `robert_matos_unit` (`id_matosdetail`, `ref`, `panne`, `dateAchat`, `ownerExt`, `remarque`) VALUES (:id, :ref, :panne, :dateAchat, :ownerExt, :remarque)");
 			$selectDetailCountStmt = $bdd->prepare("SELECT COUNT(*) FROM `robert_matos_detail` WHERE `id` = :id");
-			$selectIdRefStmt = $bdd->prepare("SELECT `id` FROM `robert_matos_detail` WHERE `ref` = :reference AND `id` <> :id UNION SELECT `id_matosunit` AS `id` FROM `robert_matos_unit` WHERE `ref` = :reference AND `id_matosunit` <> :id"); // TODO FIXME
+			$selectIdRefStmt = $bdd->prepare("SELECT `id` FROM `robert_matos_detail` WHERE `ref` = :reference AND `id` <> :id UNION SELECT `id_matosunit` AS `id` FROM `robert_matos_unit` WHERE `ref` = :reference AND `id_matosunit` <> :id");
 			// TODO check code-barres
-			$selectGenCountStmt = $bdd->prepare("SELECT COUNT(*) FROM `robert_matos_generique` WHERE `id_matosdetail` = :id");
-			$selectUnitCountStmt = $bdd->prepare("SELECT COUNT(*) AS `quantite`, SUM(`panne`) AS `panne` FROM `robert_matos_unit` WHERE `id_matosdetail` = :id"); // TODO FIXME
-			$updateMatosStmt = $bdd->prepare("UPDATE `robert_matos_detail` SET `label` = :label, `ref` = :ref, `categorie` = :categorie, `sousCateg` = :sousCateg, `tarifLoc` = :tarifLoc, `valRemp` = :valRemp, `remarque` = :remarque WHERE `id` = :id");
-			$updateMatosGenStmt = $bdd->prepare("UPDATE `robert_matos_generique` SET `quantite` = :quantite, `panne` = :panne, `dateAchat` = :dateAchat, `ownerExt` = :ownerExt WHERE `id_matosdetail` = :id");
-			$deleteMatosGenStmt = $bdd->prepare("DELETE FROM `robert_matos_generique` WHERE `id_matosdetail` = :id");
-			$updateQuantiteGenStmt = $bdd->prepare("UPDATE `robert_matos_generique` SET `quantite` = `quantite` - 1, `panne` = `panne` - :panne WHERE `id_matosdetail` = :id");
+			$selectUnitCountStmt = $bdd->prepare("SELECT COUNT(*) AS `quantite`, SUM(`panne`) AS `panne` FROM `robert_matos_unit` WHERE `id_matosdetail` = :id");
+			$updateMatosStmt = $bdd->prepare("UPDATE `robert_matos_detail` SET `label` = :label, `ref` = :ref, `panne` = :panne, `categorie` = :categorie, `sousCateg` = :sousCateg, `Qtotale` = :quantite, `tarifLoc` = :tarifLoc, `valRemp` = :valRemp, `dateAchat` = :dateAchat, `ownerExt` = :ownerExt, `remarque` = :remarque WHERE `id` = :id");
 			
 			try {
 				$rowNumber = 0;
@@ -281,7 +275,7 @@ function importInventaire($file) {
 							continue;
 						}
 						
-						// Insertion dans la table robert_matos_unit // TODO FIXME
+						// Insertion dans la table robert_matos_unit
 						$insertMatosUnitStmt->bindValue(':id', $idMatos, PDO::PARAM_INT);
 						$insertMatosUnitStmt->bindValue(':ref', $data[CSV_REF]);
 						$insertMatosUnitStmt->bindValue(':panne', $data[CSV_PANNE], PDO::PARAM_INT);
@@ -289,17 +283,18 @@ function importInventaire($file) {
 						$insertMatosUnitStmt->bindValue(':ownerExt', $data[CSV_EXT]);
 						$insertMatosUnitStmt->bindValue(':remarque', $data[CSV_REMARQUE]);
 						if(! $insertMatosUnitStmt->execute()) {
-							$errorInfo = $insertMatosStmt->errorInfo(); // TODO PHP5.4+ : Supprimer la variable intermédiaire pour l'accès au tableau
+							$errorInfo = $insertMatosUnitStmt->errorInfo(); // TODO PHP5.4+ : Supprimer la variable intermédiaire pour l'accès au tableau
 							echo "ERREUR ligne $rowNumber : ".$errorInfo[2];
 							continue;
 						}
 						
+						// TODO FIXME DEL block
 						// Mise à jour de la table robert_matos_generique
 						$matosNonUnitCount--;
-						$matosPanneCount -= $data[CSV_PANNE];
+						$matosPanneCount -= $data[CSV_PANNE]; // TODO FIXME Compter plutôt le matos en panne non unitaire
 						// Si tout le matériel est identifié individuellement, il ne doit plus y avoir d'enregistrement dans le matériel générique
 						if($matosNonUnitCount == 0) {
-							/* TODO FIXME
+							/* TODO FIXME DEL
 							$deleteMatosGenStmt->bindValue(':id', $idMatos, PDO::PARAM_INT);
 							if(! $deleteMatosGenStmt->execute()) {
 								$errorInfo = $deleteMatosGenStmt->errorInfo(); // TODO PHP5.4+ : Supprimer la variable intermédiaire pour l'accès au tableau
@@ -310,7 +305,7 @@ function importInventaire($file) {
 							*/
 							// Sinon mise à jour de la quantité dans robert_matos_generique qui n'inclut pas le matériel identifié
 						} else {
-							/* TODO FIXME
+							/* TODO FIXME DEL
 							$updateQuantiteGenStmt->bindValue(':id', $idMatos, PDO::PARAM_INT);
 							$updateQuantiteGenStmt->bindValue(':panne', $data[CSV_PANNE], PDO::PARAM_INT);
 							if(! $updateQuantiteGenStmt->execute()) {
@@ -396,10 +391,14 @@ function importInventaire($file) {
 							// Insertion dans la table robert_matos_detail
 							$insertMatosStmt->bindValue(':label', $data[CSV_LABEL]);
 							$insertMatosStmt->bindValue(':ref', $data[CSV_REF]);
+							$insertMatosStmt->bindValue(':panne', $data[CSV_PANNE], PDO::PARAM_INT);
 							$insertMatosStmt->bindValue(':categorie', $data[CSV_CATEG]);
 							$insertMatosStmt->bindValue(':sousCateg', $idSousCateg, PDO::PARAM_INT);
+							$insertMatosStmt->bindValue(':quantite', $data[CSV_QUANTITE], PDO::PARAM_INT);
 							$insertMatosStmt->bindValue(':tarifLoc', $data[CSV_TARIF]);
 							$insertMatosStmt->bindValue(':valRemp', $data[CSV_VAL_REMP]);
+							$insertMatosStmt->bindValue(':dateAchat', $data[CSV_DATE]);
+							$insertMatosStmt->bindValue(':ownerExt', $data[CSV_EXT]);
 							$insertMatosStmt->bindValue(':remarque', $data[CSV_REMARQUE]);
 							if(! $insertMatosStmt->execute()) {
 								$errorInfo = $insertMatosStmt->errorInfo(); // TODO PHP5.4+ : Supprimer la variable intermédiaire pour l'accès au tableau
@@ -408,19 +407,8 @@ function importInventaire($file) {
 								continue;
 							}
 							$idMatos = $bdd->lastInsertId();
-								
-							// Insertion dans la table robert_matos_generique
-							$insertMatosGenStmt->bindValue(':id', $idMatos, PDO::PARAM_INT);
-							$insertMatosGenStmt->bindValue(':quantite', $data[CSV_QUANTITE], PDO::PARAM_INT);
-							$insertMatosGenStmt->bindValue(':panne', $data[CSV_PANNE], PDO::PARAM_INT);
-							$insertMatosGenStmt->bindValue(':dateAchat', $data[CSV_DATE]);
-							$insertMatosGenStmt->bindValue(':ownerExt', $data[CSV_EXT]);
-							if(! $insertMatosGenStmt->execute()) {
-								$errorInfo = $insertMatosGenStmt->errorInfo(); // TODO PHP5.4+ : Supprimer la variable intermédiaire pour l'accès au tableau
-								echo "ERREUR ligne $rowNumber : ".$errorInfo[2];
-								$reset = true;
-								continue;
-							}
+							
+							// Initialisation des compteurs décroissants qui ne doivent pas passer en dessous de 0 dans les lignes suivantes du fichier
 							$matosNonUnitCount = $data[CSV_QUANTITE];
 							$matosPanneCount = $data[CSV_PANNE];
 						}
@@ -442,8 +430,7 @@ function importInventaire($file) {
 								continue;
 							}
 								
-							// Récupération de la répartition actuelle de matériel entre le générique et celui identifié individuellement
-							// Table robert_matos_unit // TODO FIXME
+							// Récupération de la quantité de matériel identifié individuellement (total et en panne)
 							$selectUnitCountStmt->bindValue(':id', $idMatos, PDO::PARAM_INT);
 							if(! $selectUnitCountStmt->execute()) {
 								$errorInfo = $selectUnitCountStmt->errorInfo(); // TODO PHP5.4+ : Supprimer la variable intermédiaire pour l'accès au tableau
@@ -454,15 +441,6 @@ function importInventaire($file) {
 							$selectUnitCountStmt->bindColumn('quantite', $matosUnitCount);
 							$selectUnitCountStmt->bindColumn('panne', $matosUnitPanneCount);
 							$selectUnitCountStmt->fetch(PDO::FETCH_BOUND);
-							// Table robert_matos_generique
-							$selectGenCountStmt->bindValue(':id', $idMatos, PDO::PARAM_INT);
-							if(! $selectGenCountStmt->execute()) {
-								$errorInfo = $selectGenCountStmt->errorInfo(); // TODO PHP5.4+ : Supprimer la variable intermédiaire pour l'accès au tableau
-								echo "ERREUR ligne $rowNumber : ".$errorInfo[2];
-								$reset = true;
-								continue;
-							}
-							$matosGenExists = ($selectGenCountStmt->fetchColumn() > 0);
 								
 							// Vérification que la quantité et le nombre en panne ne sont pas inférieurs au matériel unitaire existant
 							if($data[CSV_QUANTITE] < $matosUnitCount) {
@@ -475,57 +453,36 @@ function importInventaire($file) {
 								$reset = true;
 								continue;
 							}
+							
+							// Initialisation des compteurs décroissants qui ne doivent pas passer en dessous de 0 dans les lignes suivantes du fichier
 							$matosNonUnitCount = $data[CSV_QUANTITE] - $matosUnitCount;
 							$matosPanneCount = $data[CSV_PANNE] - $matosUnitPanneCount;
-							// Vérification que, sans compter le matériel unitaire, la quantité en panne n'est pas supérieure à la quantité restante
+							
+							// Vérification que, sans compter le matériel unitaire existant, la quantité en panne n'est pas supérieure à la quantité restante
 							if($matosPanneCount > $matosNonUnitCount) {
 								echo "WARNING ligne $rowNumber ignorée : quantité en panne invalide.<br />";
 								$reset = true;
 								continue;
 							}
-								
+							
 							// Mise à jour de la table robert_matos_detail
 							$updateMatosStmt->bindValue(':id', $idMatos, PDO::PARAM_INT);
 							$updateMatosStmt->bindValue(':label', $data[CSV_LABEL]);
 							$updateMatosStmt->bindValue(':ref', $data[CSV_REF]);
+							$updateMatosStmt->bindValue(':panne', $data[CSV_PANNE], PDO::PARAM_INT);
 							$updateMatosStmt->bindValue(':categorie', $data[CSV_CATEG]);
 							$updateMatosStmt->bindValue(':sousCateg', $idSousCateg, PDO::PARAM_INT);
+							$updateMatosStmt->bindValue(':quantite', $data[CSV_QUANTITE], PDO::PARAM_INT);
 							$updateMatosStmt->bindValue(':tarifLoc', $data[CSV_TARIF]);
 							$updateMatosStmt->bindValue(':valRemp', $data[CSV_VAL_REMP]);
+							$updateMatosStmt->bindValue(':dateAchat', $data[CSV_DATE]);
+							$updateMatosStmt->bindValue(':ownerExt', $data[CSV_EXT]);
 							$updateMatosStmt->bindValue(':remarque', $data[CSV_REMARQUE]);
 							if(! $updateMatosStmt->execute()) {
 								$errorInfo = $updateMatosStmt->errorInfo(); // TODO PHP5.4+ : Supprimer la variable intermédiaire pour l'accès au tableau
 								echo "ERREUR ligne $rowNumber : ".$errorInfo[2];
 								$reset = true;
 								continue;
-							}
-								
-							// Mise à jour de la table robert_matos_generique
-							if($matosNonUnitCount == 0) {
-								// Si tout le matériel est identifié individuellement, il ne doit pas y avoir d'enregistrement dans le matériel générique
-								if($matosGenExists) {
-									$deleteMatosGenStmt->bindValue(':id', $idMatos, PDO::PARAM_INT);
-									if(! $deleteMatosGenStmt->execute()) {
-										$errorInfo = $deleteMatosGenStmt->errorInfo(); // TODO PHP5.4+ : Supprimer la variable intermédiaire pour l'accès au tableau
-										echo "ERREUR ligne $rowNumber : ".$errorInfo[2];
-										$reset = true;
-										continue;
-									}
-								}
-							} else {
-								// Si tout le matériel n'est pas identifié individuellement alors que c'était le cas avant, insertion, sinon mise à jour
-								$statement = ($matosGenExists ? $updateMatosGenStmt : $insertMatosGenStmt);
-								$statement->bindValue(':id', $idMatos, PDO::PARAM_INT);
-								$statement->bindValue(':quantite', $matosNonUnitCount, PDO::PARAM_INT);
-								$statement->bindValue(':panne', $matosPanneCount, PDO::PARAM_INT);
-								$statement->bindValue(':dateAchat', $data[CSV_DATE]);
-								$statement->bindValue(':ownerExt', $data[CSV_EXT]);
-								if(! $statement->execute()) {
-									$errorInfo = $statement->errorInfo(); // TODO PHP5.4+ : Supprimer la variable intermédiaire pour l'accès au tableau
-									echo "ERREUR ligne $rowNumber : ".$errorInfo[2];
-									$reset = true;
-									continue;
-								}
 							}
 						}
 					}

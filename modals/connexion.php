@@ -19,14 +19,14 @@
 <div id="connexionRobert" class="big">
 	<form action="index.php?go=calendrier" method="post">
 		<input type="hidden" name="conx" value="MPM" />
-		<input type="text" name="email" value="votre email" size="20" /><br />
+		<input type="text" name="login" value="votre login" size="20" /><br />
 		<input type="password" name="password" value="pass" size="20" /><br />
 		<input type="submit" class="bouton boutonMenu" value="Connexion" /><br />
 	</form>
 </div>
 <br /><br />
 <?php
-if ($errAuth === true) echo '<div class="ui-state-error ui-corner-all pad10 enorme center">ERREUR ! mauvais mail / mot de passe !</div>';
+if ($errAuth === true) echo '<div class="ui-state-error ui-corner-all pad10 enorme center">ERREUR ! mauvais login / mot de passe !</div>';
 if (isset($_GET['action']) && $_GET['action'] == 'deconx') echo '<div class="ui-state-default ui-corner-all pad10 enorme center" id="byebye">A bientôt !</div>';
 else echo '<div class="ui-state-default ui-corner-all pad10 enorme center" id="byebye">BIENVENUE !</div>';
 ?>

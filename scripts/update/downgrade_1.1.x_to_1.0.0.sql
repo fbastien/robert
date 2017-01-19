@@ -43,6 +43,10 @@ UPDATE `robert_matos_detail`
 				FROM `robert_matos_unit`
 				WHERE `id_matosdetail` = `id`));
 
+UPDATE `robert_users`
+	SET `password` = '061d36f3666ce4790c5cfb855fed4658' -- Le mot de passe devient "ldap"
+	WHERE `password` IS NULL;
+
 -- ----------------------- --
 -- Restauration des tables --
 -- ----------------------- --
@@ -62,6 +66,12 @@ ALTER TABLE `robert_plans`
 
 ALTER TABLE `robert_plans_details`
 	DROP COLUMN `units`;
+
+ALTER TABLE `robert_users`
+	DROP KEY `ldap_uid`,
+	DROP COLUMN `ldap_uid`,
+	MODIFY COLUMN `password`
+		VARCHAR(32) NOT NULL;
 
 -- -------------------------------- --
 -- Suppression des nouvelles tables --

@@ -1,0 +1,21 @@
+4;000001;SQL_Backup_Test::testImportMoreUnitPannesThanTotal::1;Designation;son;Microphones;2;0;1;2;Non identifie unitairement et sans panne;2016-05-31;
++;000007;SQL_Backup_Test::testImportMoreUnitPannesThanTotal::7;;;;;1;;;Panne invalide;;EXT
+
+5;000002;SQL_Backup_Test::testImportMoreUnitPannesThanTotal::2;Designation;son;Microphones;3;1;1;2;Non identifie unitairement et avec pannes;;EXT
++;000008;SQL_Backup_Test::testImportMoreUnitPannesThanTotal::8;;;;;1;;;Panne valide;;EXT
++;000009;SQL_Backup_Test::testImportMoreUnitPannesThanTotal::9;;;;;1;;;Panne invalide;2016-05-31;
+
+6;000003;SQL_Backup_Test::testImportMoreUnitPannesThanTotal::3;Designation;son;Microphones;3;1;1;2;Partiellement identifie unitairement et toutes pannes sur materiel identifiees;2016-05-31;
++;000010;SQL_Backup_Test::testImportMoreUnitPannesThanTotal::10;;;;;1;;;Panne invalide;;EXT
+
+7;000002;SQL_Backup_Test::testImportMoreUnitPannesThanTotal::4;Designation;son;Microphones;5;3;1;2;Partiellement identifie unitairement et pannes partiellement sur materiel identifie;;EXT
++;000011;SQL_Backup_Test::testImportMoreUnitPannesThanTotal::11;;;;;1;;;Panne valide;2016-05-31;
++;000012;SQL_Backup_Test::testImportMoreUnitPannesThanTotal::12;;;;;1;;;Panne valide;;EXT
++;000013;SQL_Backup_Test::testImportMoreUnitPannesThanTotal::13;;;;;1;;;Panne invalide;2016-05-31;
+
+*;000014;SQL_Backup_Test::testImportMoreUnitPannesThanTotal::14;Designation;son;Microphones;2;0;1;2;Remarque;2016-05-31;
++;000015;SQL_Backup_Test::testImportMoreUnitPannesThanTotal::15;;;;;1;;;Panne invalide;2016-05-31;
+
+*;000016;SQL_Backup_Test::testImportMoreUnitPannesThanTotal::16;Designation;son;Microphones;3;1;1;2;Remarque;;EXT
++;000017;SQL_Backup_Test::testImportMoreUnitPannesThanTotal::17;;;;;1;;;Panne valide;2016-05-31;
++;000018;SQL_Backup_Test::testImportMoreUnitPannesThanTotal::18;;;;;1;;;Panne invalide;;EXT

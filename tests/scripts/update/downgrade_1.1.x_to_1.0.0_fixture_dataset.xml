@@ -342,4 +342,42 @@
 			<value>Remarque unité 15</value>
 		</row>
 	</table>
+	
+	<table name="robert_users">
+		<column>id</column>
+		<column>ldap_uid</column>
+		<column>email</column>
+		<column>password</column>
+		<column>nom</column>
+		<column>prenom</column>
+		<column>level</column>
+		<column>date_inscription</column>
+		<column>date_last_action</column>
+		<column>date_last_connexion</column>
+		<column>theme</column>
+		<column>yeux</column>
+		<column>cheveux</column>
+		<column>age</column>
+		<column>taille</column>
+		<column>idTekos</column>
+		<!-- Il existe déjà un autre enregistrement, créé par le script d'installation de la BDD -->
+		<row>
+			<value>2</value>
+			<value>ldap_user</value>
+			<value>user@robertmanager.org</value>
+			<null />
+			<value>USER</value>
+			<value>Ldap</value>
+			<value>5</value>
+			<value>1325615980</value>
+			<value>1356632988</value>
+			<value>1356620371</value>
+			<value>human</value>
+			<value>blancs</value>
+			<value>rouges</value>
+			<value>31</value>
+			<value>1.73</value>
+			<value>1</value>
+		</row>
+	</table>
 </dataset>

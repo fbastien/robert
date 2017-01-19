@@ -1,0 +1,25 @@
+4;;SQL_Backup_Test::testImportDefaultValues::1;Designation;son;Microphones;1;0;1;2;Code-barres vide;2016-05-31;
+5;000002;;Designation;son;Microphones;1;0;1;2;Reference vide;;EXT
+6;000003;SQL_Backup_Test::testImportDefaultValues::3;Designation;son;;1;0;1;2;Sous-categorie vide;2016-05-31;
+7;000004;SQL_Backup_Test::testImportDefaultValues::4;Designation;son;Microphones;1;;1;2;Quantite en panne vide;;EXT
+8;000005;SQL_Backup_Test::testImportDefaultValues::5;Designation;son;Microphones;1;0;;2;Tarif de location vide;2016-05-31;
+9;000006;SQL_Backup_Test::testImportDefaultValues::6;Designation;son;Microphones;1;0;1;;Valeur de remplacement vide;;EXT
+10;000007;SQL_Backup_Test::testImportDefaultValues::7;Remarque vide;son;Microphones;1;0;1;2;;2016-05-31;
+11;000008;SQL_Backup_Test::testImportDefaultValues::8;Designation;son;Microphones;1;0;1;2;Date et prestataire vides;;
+12;;SQL_Backup_Test::testImportDefaultValues::9;Tous champs optionnels vides;son;;1;;;;;;
+*;;SQL_Backup_Test::testImportDefaultValues::10;Designation;son;Microphones;1;0;1;2;Code-barres vide;;EXT
+*;000011;;Designation;son;Microphones;1;0;1;2;Reference vide;2016-05-31;
+*;000012;SQL_Backup_Test::testImportDefaultValues::12;Designation;son;;1;0;1;2;Sous-categorie vide;;EXT
+*;000013;SQL_Backup_Test::testImportDefaultValues::13;Designation;son;Microphones;1;;1;2;Quantite en panne vide;2016-05-31;
+*;000014;SQL_Backup_Test::testImportDefaultValues::14;Designation;son;Microphones;1;0;;2;Tarif de location vide;;EXT
+*;000015;SQL_Backup_Test::testImportDefaultValues::15;Designation;son;Microphones;1;0;1;;Valeur de remplacement vide;2016-05-31;
+*;000016;SQL_Backup_Test::testImportDefaultValues::16;Remarque vide;son;Microphones;1;0;1;2;;;EXT
+*;000017;SQL_Backup_Test::testImportDefaultValues::17;Designation;son;Microphones;1;0;1;2;Date et prestataire vides;;
+*;;SQL_Backup_Test::testImportDefaultValues::18;Tous champs optionnels vides;son;;1;;;;;;
+*;000019;SQL_Backup_Test::testImportDefaultValues::19;Designation;son;Microphones;7;0;1;2;Ligne valide avant tests d'ajouts unitaires;2016-05-31;
++;;SQL_Backup_Test::testImportDefaultValues::20;;;;;0;;;Code-barres vide;;EXT
++;000021;;;;;;0;;;Reference vide;2016-05-31;
++;000022;SQL_Backup_Test::testImportDefaultValues::22;;;;;;;;Quantite en panne vide;;EXT
++;000023;SQL_Backup_Test::testImportDefaultValues::23;;;;;0;;Remarque vide;;2016-05-31;
++;000024;SQL_Backup_Test::testImportDefaultValues::24;;;;;0;;;Date et prestataire vides;;
++;;SQL_Backup_Test::testImportDefaultValues::25;;;;;;;;;;

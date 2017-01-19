@@ -116,9 +116,9 @@ En plus des éléments nécessaires listés pour l'installation du Robert, vous 
 Ouvrir le fichier "/scripts/build/**build.xml**" et renseigner la propriété `<property name="composer.bin" location="..." />` en renseignant dans l'attribut "location" le chemin absolu du script de lancement de composer (nommé "composer.bat" pour Windows et "composer" pour Unix).
 Inspirez-vous des exemples en commentaires.
 
-Les tests unitaires se trouvent dans le dossier "/test" et peuvent être exécutés avec PHPUnit.
+Les tests unitaires se trouvent dans le dossier "/tests" et peuvent être exécutés avec PHPUnit.
 Celui-ci est importé par Composer et l'exécutable est installé dans le dossier "/lib/bin".
-Le fichier de configuration "/test/**phpunit-local.xml**" doit être passé en paramètre (`--configuration`) de PHPUnit.
+Le fichier de configuration "/tests/**phpunit-local.xml**" doit être passé en paramètre (`--configuration`) de PHPUnit.
 Les tests doivent être effectués sur une base de données différente de celle sur laquelle est déployée le Robert (mais ayant la même structure).
 Par défaut, ils sont effectués sur une base "robert_test" en localhost ; modifier les informations de connexion dans ce fichier de configuration si besoin.
 

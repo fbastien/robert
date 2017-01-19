@@ -218,7 +218,6 @@ class Plan implements Iterator {
 			$this->infos->save() ;									// sauve le plan
 			foreach ( $this->sousPlans as $sp ) {					// sauve tous les sous plans
 				$idSP = $sp->getInfo( Plan::PLAN_cDETAILS_ID );
-//				echo "save $idSP" ;
 				$sp->save(Plan::PLAN_cDETAILS_ID, $idSP) ;
 			}
 			return true ;

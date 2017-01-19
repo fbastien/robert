@@ -1,0 +1,15 @@
+4;000001_NEW;SQL_Backup_Test::testImportUpdateMatosAllUnits::1;Designation;son;Microphones;1;0;1;2;Modification du code-barres;2016-05-31;
+5;000002;SQL_Backup_Test::testImportUpdateMatosAllUnits::2_NEW;Designation;son;Microphones;1;0;1;2;Modification de la reference;;EXT
+6;000003;SQL_Backup_Test::testImportUpdateMatosAllUnits::3;Designation_NEW;son;Microphones;1;0;1;2;Modification de la designation;2016-05-31;
+7;000004;SQL_Backup_Test::testImportUpdateMatosAllUnits::4;Designation;lumiere;Microphones;1;0;1;2;Modification de la categorie;;EXT
+8;000005;SQL_Backup_Test::testImportUpdateMatosAllUnits::5;Designation;son;Enceintes;1;0;1;2;Modification de la sous-categorie;2016-05-31;
+9;000006;SQL_Backup_Test::testImportUpdateMatosAllUnits::6;Designation;son;Microphones;1;0;1.50;2;Modification du tarif de location;;EXT
+10;000007;SQL_Backup_Test::testImportUpdateMatosAllUnits::7;Designation;son;Microphones;1;0;0;2;Modification du tarif de location;2016-05-31;
+11;000008;SQL_Backup_Test::testImportUpdateMatosAllUnits::8;Designation;son;Microphones;1;0;1;2.50;Modification de la valeur de remplacement;;EXT
+12;000009;SQL_Backup_Test::testImportUpdateMatosAllUnits::9;Designation;son;Microphones;1;0;1;0;Modification de la valeur de remplacement;2016-05-31;
+13;000010;SQL_Backup_Test::testImportUpdateMatosAllUnits::10;Designation;son;Microphones;1;0;1;2;Modification de la remarque_NEW;;EXT
+14;000011;SQL_Backup_Test::testImportUpdateMatosAllUnits::11;Designation;son;Microphones;1;0;1;2;Modification de la date d'achat;2015-01-01;
+15;000012;SQL_Backup_Test::testImportUpdateMatosAllUnits::12;Designation;son;Microphones;1;0;1;2;Modification du prestataire externe;;EXT_NEW
+16;000013_NEW;SQL_Backup_Test::testImportUpdateMatosAllUnits::13_NEW;Designation_NEW;lumiere;Enceintes;1;0;2;3;Modification de tous les champs_NEW;2015-01-01;
+17;000014;SQL_Backup_Test::testImportUpdateMatosAllUnits::14;Designation;son;Microphones;1;0;1;2;Changement d'interne en externe;;EXT
+18;000015;SQL_Backup_Test::testImportUpdateMatosAllUnits::15;Designation;son;Microphones;1;0;1;2;Changement d'externe en interne;2016-05-31;

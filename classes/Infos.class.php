@@ -110,15 +110,18 @@ class Infos implements Iterator
 		// Vérifie si tous les champs existent, sinon crée le champ
 		$this->updateBDD();
 		// Construction de la chaine des clés et valeurs SQL pour la requête
-		$keys   = ''; 	$vals   = '';  $up = '' ;
+		$keys = $vals = $up = '';
 		foreach ( $this->datas as $k => $v ) {
-			if ( is_array($v) ) continue ;
-			if ( is_string($v) ) $v = addslashes($v);
-			if ( is_null($v) ) $v = 'NULL';
-			else $v = "'$v'";
 			$keys .= "`$k`, " ;
-			$vals .= "$v, " ;
-			$up   .= "$k=$v, ";
+			if($v === null) {
+				$vals .= "NULL, ";
+				$up .= "$k = NULL, ";
+			} else {
+				if ( is_array($v) ) continue ;
+				if ( is_string($v) ) $v = addslashes($v);
+				$vals .= "'$v', " ;
+				$up   .= "$k='$v', ";
+			}
 		}
 		// suppression de la dernière virgule
 		$keys = substr($keys, 0 , strlen($keys) -2 );
@@ -215,7 +218,6 @@ class Infos implements Iterator
 		$this->initPDO();
 		if ((strpos('!', $val) !== false) && (strpos('\'', $val) !== false) && (strpos('?', $val) !== false) && (strpos('#', $val) !== false))
 			return false;
-//		echo "<p>ADD CHAMP $row -> $val </p>";
 		$char = '' ;
 		if (is_numeric($val)) {										// check du type de valeur du champ à ajouter
 			$tailleNbre = strlen((string)$val);

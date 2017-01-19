@@ -139,7 +139,6 @@ $(document).ready (function() {
 		aLouer();
 
 		var divQte = $(this).parents(".packPik").find(".qteDispo_QTE")
-		//var qte = $(divQte).html()
 		if ( plusmoins == "moins" ) qte_a = 1;  else qte_a = -1 ;
 		qte = parseInt ( currentpack, 10 ) + qte_a ;
 		if ( qte < 0 ) $(divQte).addClass('ui-state-error'); else $(divQte).removeClass('ui-state-error');

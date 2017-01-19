@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+<dataset>
+	<table name="robert_matos_detail">
+		<column>id</column>
+		<column>label</column>
+		<column>ref</column>
+		<column>panne</column>
+		<column>categorie</column>
+		<column>sousCateg</column>
+		<column>Qtotale</column>
+		<column>tarifLoc</column>
+		<column>valRemp</column>
+		<column>dateAchat</column>
+		<column>ownerExt</column>
+		<column>remarque</column>
+		<row>
+			<value>1</value>
+			<value>Micro Shure SM58</value>
+			<value>MIC-SM58</value>
+			<value>3</value>
+			<value>son</value>
+			<value>5</value>
+			<value>5</value>
+			<value>7.5</value>
+			<value>50</value>
+			<null />
+			<value>Prestataire 1</value>
+			<value>Avec pince</value>
+		</row>
+		<row>
+			<value>2</value>
+			<value>Câble XLR</value>
+			<value>CAB-XLR</value>
+			<value>1</value>
+			<value>son</value>
+			<value>7</value>
+			<value>11</value>
+			<value>1</value>
+			<value>10</value>
+			<value>2016-05-31</value>
+			<null />
+			<value>Avec attache</value>
+		</row>
+		<row>
+			<value>3</value>
+			<value>Projecteur PAR64</value>
+			<value>PRJ-P64</value>
+			<value>0</value>
+			<value>lumiere</value>
+			<value>16</value>
+			<value>3</value>
+			<value>3</value>
+			<value>29.99</value>
+			<null />
+			<null />
+			<null />
+		</row>
+	</table>
+	
+	<table name="robert_matos_unit">
+		<column>id_matosunit</column>
+		<column>id_matosdetail</column>
+		<column>ref</column>
+		<column>panne</column>
+		<column>dateAchat</column>
+		<column>ownerExt</column>
+		<column>remarque</column>
+		<row>
+			<value>1</value>
+			<value>1</value>
+			<value>MIC-SM58-001</value>
+			<value>0</value>
+			<null />
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>2</value>
+			<value>1</value>
+			<value>MIC-SM58-002</value>
+			<value>1</value>
+			<null />
+			<value>Prestataire 2</value>
+			<null />
+		</row>
+		<row>
+			<value>3</value>
+			<value>1</value>
+			<value>MIC-SM58-003</value>
+			<value>0</value>
+			<null />
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>4</value>
+			<value>3</value>
+			<value>PRJ-P64-001</value>
+			<value>0</value>
+			<value>2015-11-02</value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>5</value>
+			<value>3</value>
+			<value>PRJ-P64-002</value>
+			<value>0</value>
+			<value>2015-11-03</value>
+			<null />
+			<null />
+		</row>
+		<row>
+			<value>6</value>
+			<value>3</value>
+			<value>PRJ-P64-003</value>
+			<value>0</value>
+			<null />
+			<null />
+			<null />
+		</row>
+	</table>
+	
+	<table name="robert_matos_sous_cat">
+		<column>id</column>
+		<column>label</column>
+		<column>ordre</column>
+		<row>
+			<value>1</value>
+			<value>Amplificateurs</value>
+			<value>1</value>
+		</row>
+		<row>
+			<value>2</value>
+			<value>Enceintes</value>
+			<value>2</value>
+		</row>
+		<row>
+			<value>3</value>
+			<value>Consoles son</value>
+			<value>3</value>
+		</row>
+		<row>
+			<value>4</value>
+			<value>Périphériques son</value>
+			<value>4</value>
+		</row>
+		<row>
+			<value>5</value>
+			<value>Microphones</value>
+			<value>5</value>
+		</row>
+		<row>
+			<value>6</value>
+			<value>Pieds micro</value>
+			<value>6</value>
+		</row>
+		<row>
+			<value>7</value>
+			<value>Câbles son</value>
+			<value>7</value>
+		</row>
+		<row>
+			<value>8</value>
+			<value>Divers son</value>
+			<value>8</value>
+		</row>
+		<row>
+			<value>9</value>
+			<value>Pieds enceinte et lumière</value>
+			<value>9</value>
+		</row>
+		<row>
+			<value>10</value>
+			<value>Structure</value>
+			<value>10</value>
+		</row>
+		<row>
+			<value>11</value>
+			<value>Pendrillons</value>
+			<value>11</value>
+		</row>
+		<row>
+			<value>12</value>
+			<value>Divers structure</value>
+			<value>12</value>
+		</row>
+		<row>
+			<value>13</value>
+			<value>Distribution électrique</value>
+			<value>13</value>
+		</row>
+		<row>
+			<value>14</value>
+			<value>Divers élec</value>
+			<value>14</value>
+		</row>
+		<row>
+			<value>15</value>
+			<value>Console lumière</value>
+			<value>15</value>
+		</row>
+		<row>
+			<value>16</value>
+			<value>Projecteurs</value>
+			<value>16</value>
+		</row>
+		<row>
+			<value>17</value>
+			<value>Gradateurs</value>
+			<value>17</value>
+		</row>
+		<row>
+			<value>18</value>
+			<value>Câbles lumière</value>
+			<value>18</value>
+		</row>
+		<row>
+			<value>19</value>
+			<value>Divers lumière</value>
+			<value>19</value>
+		</row>
+		<row>
+			<value>20</value>
+			<value>Divers</value>
+			<value>20</value>
+		</row>
+		<row>
+			<value>21</value>
+			<value>Véhicules</value>
+			<value>21</value>
+		</row>
+		<row>
+			<value>22</value>
+			<value>Divers transport</value>
+			<value>22</value>
+		</row>
+	</table>
+	
+	<table name="robert_users">
+		<column>id</column>
+		<column>ldap_uid</column>
+		<column>email</column>
+		<column>password</column>
+		<column>nom</column>
+		<column>prenom</column>
+		<column>level</column>
+		<column>date_inscription</column>
+		<column>date_last_action</column>
+		<column>date_last_connexion</column>
+		<column>theme</column>
+		<column>yeux</column>
+		<column>cheveux</column>
+		<column>age</column>
+		<column>taille</column>
+		<column>idTekos</column>
+		<row>
+			<value>1</value>
+			<null />
+			<value>root@robertmanager.org</value>
+			<value>8351aaf8480d8135bc77af590c93c1e2</value>
+			<value>DEBUGGER</value>
+			<value>Root</value>
+			<value>9</value>
+			<value>1325615980</value>
+			<value>1356632988</value>
+			<value>1356620371</value>
+			<value>human</value>
+			<value>blancs</value>
+			<value>rouges</value>
+			<value>31</value>
+			<value>1.73</value>
+			<value>0</value>
+		</row>
+	</table>
+</dataset>

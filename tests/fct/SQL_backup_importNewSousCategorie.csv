@@ -1,0 +1,11 @@
+4;000001;SQL_Backup_Test::testImportNewSousCategorie::1;Designation;son;Instruments;1;0;1;2;Nouvelle sous-categorie;2016-05-31;
+
+1;;MIC-SM58;Micro Shure SM58;son;Microphones;8;3;7.5;50;Avec pince;;Prestataire 1
+5;000002;SQL_Backup_Test::testImportNewSousCategorie::2;Designation;son;Instruments;1;0;1;2;Reutilisation d'une nouvelle sous-categorie (apres une ligne utilisant une sous-categorie existante);;EXT
+
+*;000003;SQL_Backup_Test::testImportNewSousCategorie::3;Designation;transport;Flight cases;1;0;1;2;Nouvelle sous-categorie;2016-05-31;
+
+*;000004;SQL_Backup_Test::testImportNewSousCategorie::4;Designation;structure;Supports vidéoprojecteur !;1;0;1;2;Nouvelle sous-categorie avec caracteres speciaux;;EXT
+
+1;;MIC-SM58;Micro Shure SM58;son;Microphones;8;3;7.5;50;Avec pince;;Prestataire 1
+*;000005;SQL_Backup_Test::testImportNewSousCategorie::5;Designation;son;Instruments;1;0;1;2;Reutilisation d'une nouvelle sous-categorie (apres une ligne utilisant une sous-categorie existante);2016-05-31;

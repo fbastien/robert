@@ -125,8 +125,6 @@ class SortiePDF {
 			$this->matosBySousCat = creerSousCatArray ( $this->retour['matos'] );
 
 			$this->dateFinDevis = date('d/m/Y', $planInfo->getPlanEndDate());
-//			$dateFinDevis = '01/' . date('m/Y', strtotime("+6 month"));
-
 		}
 		catch (Exception $e) { throw new Exception ('Création PDF : Impossible de récupérer une info... '.$e->getMessage()); }
 	}

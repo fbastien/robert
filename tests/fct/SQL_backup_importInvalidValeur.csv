@@ -1,0 +1,5 @@
+*;000001;SQL_Backup_Test::testImportInvalidValeur::1;Designation;son;Microphones;1;0;1;-0.01;  Nombre negatif;2016-05-31;
+1;000002;SQL_Backup_Test::testImportInvalidValeur::2;Designation;son;Microphones;1;0;1;1l;     String commencant par un chiffre;;EXT
+*;000003;SQL_Backup_Test::testImportInvalidValeur::3;Designation;son;Microphones;1;0;1;1,000.0;Separateur de milliers;;EXT
+1;000004;SQL_Backup_Test::testImportInvalidValeur::4;Designation;son;Microphones;1;0;1;1.000.0;Plusieurs separateurs decimaux;2016-05-31;
+*;000005;SQL_Backup_Test::testImportInvalidValeur::5;Designation;son;Microphones;1;0;1;١;      Nombre non ASCII;2016-05-31;

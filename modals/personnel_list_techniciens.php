@@ -67,7 +67,7 @@ else $liste_tekos = $l->getListe(TABLE_TEKOS, '*', 'surnom');
 					$intermittent = '<img src="gfx/icones/intermittent.png" popup="No GUSO : <b>'.$info['GUSO'].'</b><br />No Congés Sp. : <b>'.$info['CS'].'</b>" alt="OUI" />';
 				else $intermittent = '<span popup="No SIRET : <b>'.$info['SIRET'].'</b>">NON</span>';
 				
-				if ( $_SESSION['user']->isAdmin() && $info['idUser'] < 1 ) {
+				if ( $_SESSION['user']->isAdmin() && $info['idUser'] < 1 && $config[CONF_AUTH_DB] ) {
 					$boutonAddUser = '<button class="bouton createUser"  id="'.$info['id'].'" surnom="'.$info['surnom'].'" title="créer un utilisateur associé">
 										<span class="ui-icon ui-icon-shuffle"></span>
 									</button>';

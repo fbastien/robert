@@ -23,12 +23,12 @@
 		else {
 			echo '<form action="index.php?go=p_test.php" method="post">
 					<input type="hidden" name="conx" value="MPM" />
-					<input type="text" name="email" value="votre email" size="20" /><br />
+					<input type="text" name="login" value="votre login" size="20" /><br />
 					<input type="password" name="password" value="pass" size="20" />
 					<input type="submit" class="boutonMenu" value="Connexion" /><br />
 				</form>';
 		}
-		if ($errAuth === true) echo '<span class="ui-state-error pad5">ERREUR ! mauvais mail / mot de passe</span>';
+		if ($errAuth === true) echo '<span class="ui-state-error pad5">ERREUR ! mauvais login / mot de passe</span>';
 ?>
 	</div>
 </div>

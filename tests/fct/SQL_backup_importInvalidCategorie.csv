@@ -1,0 +1,6 @@
+*;000001;SQL_Backup_Test::testImportInvalidCategorie::1;Champ vide                                          ;;Microphones;1;0;1;2;Remarque;2016-05-31;
+1;000002;SQL_Backup_Test::testImportInvalidCategorie::2;Categorie inexistante                               ;inconnu;Microphones;1;0;1;2;Remarque;;EXT
+*;000003;SQL_Backup_Test::testImportInvalidCategorie::3;Categorie commencant par categorie existante        ;sono;Microphones;1;0;1;2;Remarque;;EXT
+1;000004;SQL_Backup_Test::testImportInvalidCategorie::4;Categorie se terminant par categorie existante      ;json;Microphones;1;0;1;2;Remarque;2016-05-31;
+*;000005;SQL_Backup_Test::testImportInvalidCategorie::5;Categorie contenant categorie existante             ;gros son !;Microphones;1;0;1;2;Remarque;2016-05-31;
+1;000006;SQL_Backup_Test::testImportInvalidCategorie::6;Categorie identique a une existante aux accents pres;lumière;Microphones;1;0;1;2;Remarque;;EXT

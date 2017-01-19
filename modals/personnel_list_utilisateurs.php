@@ -35,7 +35,17 @@ if ( $_SESSION["user"]->isAdmin() !== true ) die('Vous n\'avez pas accès à cet
 		);
 		$('#chercheInput').val('');							// vide l'input de recherche
 		$('#chercheDiv').show(300);							// affiche le module de recherche
-
+		
+		// Affichage des champs en fonction du type d'authentification
+		$("#modifieurPage input:radio[name='auth']").change(function(eventObject) {
+			if($('#modUserAuthDB').is(':checked')) {
+				$('#modUserDivAuthDB').show();
+				$('#modUserDivAuthLDAP').hide();
+			} else if($('#modUserAuthLDAP').is(':checked')) {
+				$('#modUserDivAuthDB').hide();
+				$('#modUserDivAuthLDAP').show();
+			}
+		});
 	});
 </script>
 
@@ -52,73 +62,93 @@ if ( $_SESSION["user"]->isAdmin() !== true ) die('Vous n\'avez pas accès à cet
 			<th></th>
 		</tr>
 		
-		<?php
-		if (is_array($liste_Users)) {
-			foreach ($liste_Users as $info) {
-				$tekos = ' --- '; $tekosInfo = array();
-				if (is_array($liste_tekos)) {
-					foreach ($liste_tekos as $tekosInfo)
-						if ($tekosInfo['idUser'] == $info['id'])
-							$tekos = $tekosInfo['surnom'].' <img src="gfx/icones/categ-'.$tekosInfo['categorie'].'" style="width:20px; float:right;" />' ;
-				}
-				$popupUserInfos = '';
-				foreach ($info as $k => $v) {
-					if ($k != 'id' && $k != 'email' && $k != 'prenom' && $k != 'nom' && $k != 'level' && $k != 'idTekos' && $k != 'date_inscription' && $k != 'date_last_action' && $k != 'date_last_connexion')
-						$popupUserInfos .= "<li>$k : <b>$v</b></li>";
-					if ($k == 'date_last_action') {
-						($v == 0) ? $dateLastAction = 'Jamais' :	$dateLastAction = date('d/m/Y à H\hi', $v);
-						$popupUserInfos .= "<li>Vu la dernière fois le :<br /><b>$dateLastAction</b></li>";
-					}
-				}
-				switch ($info['level']) {
-					case '1':
-						$levelTxt = 'Consultant';
-						break;
-					case '5':
-						$levelTxt = 'Utilisateur';
-						break;
-					case '7':
-						$levelTxt = 'Administrateur';
-						break;
-					case '9':
-						$levelTxt = 'Développeur';
-						break;
-				}
-				echo '<tr class="ui-state-default">
-						<td>'.$info['email'].'</td>
-						<td popup="'.$popupUserInfos.'">'.$info['prenom'].' '.$info['nom'].'</td>
-						<td><img src="gfx/icones/users/level-'.$info['level'].'.png" alt="'.$levelTxt.'" popup="'.$levelTxt.'" /></td>
-						<td width="130">'.$tekos.'</td>
-						<td class="rightText">
-							<button class="bouton selectUser" id="'.$info['id'].'" nom="'.$info['prenom'].'" title="modifier"><span class="ui-icon ui-icon-pencil"></span></button>
-							<button class="bouton deleteUser" id="'.$info['id'].'" nom="'.$info['prenom'].'" title="supprimer"><span class="ui-icon ui-icon-trash"></span></button>
-						</td>
-					</tr>';
+<?php
+if (is_array($liste_Users)) {
+	foreach ($liste_Users as $info) {
+		$tekos = ' --- ';
+		$tekosInfo = array();
+		if (is_array($liste_tekos)) {
+			foreach ($liste_tekos as $tekosInfo)
+				if ($tekosInfo['idUser'] == $info['id'])
+					$tekos = $tekosInfo['surnom'].' <img src="gfx/icones/categ-'.$tekosInfo['categorie'].'" style="width:20px; float:right;" />' ;
+		}
+		$popupUserInfos = '';
+		foreach ($info as $k => $v) {
+			if ($k != 'id' && $k != 'email' && $k != 'prenom' && $k != 'nom' && $k != 'level' && $k != 'idTekos' && $k != 'date_inscription' && $k != 'date_last_action' && $k != 'date_last_connexion')
+				$popupUserInfos .= "<li>$k : <b>$v</b></li>";
+			if ($k == 'date_last_action') {
+				($v == 0) ? $dateLastAction = 'Jamais' :	$dateLastAction = date('d/m/Y à H\hi', $v);
+				$popupUserInfos .= "<li>Vu la dernière fois le :<br /><b>$dateLastAction</b></li>";
 			}
 		}
-		else {
-			echo '<tr class="ui-state-error big pad20">
-				<td colspan="6">Aucun utilisateur enregistré ';
-			if (isset($_POST['searchingfor']))
-				echo 'pour la recherche <b>"'.$_POST['searchingfor'].'"</b> ';
-			else echo '!! Comment c\'est possible ??? ';
-			echo '!!</td></tr>';
+		switch ($info['level']) {
+			case '1':
+				$levelTxt = 'Consultant';
+				break;
+			case '5':
+				$levelTxt = 'Utilisateur';
+				break;
+			case '7':
+				$levelTxt = 'Administrateur';
+				break;
+			case '9':
+				$levelTxt = 'Développeur';
+				break;
 		}
-	?></table>
+		echo '<tr class="ui-state-default">
+				<td>'.$info['email'].'</td>
+				<td popup="'.$popupUserInfos.'">'.$info['prenom'].' '.$info['nom'].'</td>
+				<td><img src="gfx/icones/users/level-'.$info['level'].'.png" alt="'.$levelTxt.'" popup="'.$levelTxt.'" /></td>
+				<td width="130">'.$tekos.'</td>
+				<td class="rightText">
+					<button class="bouton selectUser" id="'.$info['id'].'" nom="'.($info['prenom'] != '' ? $info['prenom'] : $info['nom']).'" title="modifier"><span class="ui-icon ui-icon-pencil"></span></button>
+					<button class="bouton deleteUser" id="'.$info['id'].'" nom="'.($info['prenom'] != '' ? $info['prenom'] : $info['nom']).'" title="supprimer"><span class="ui-icon ui-icon-trash"></span></button>
+				</td>
+			</tr>';
+	}
+}
+else {
+	echo '<tr class="ui-state-error big pad20">
+		<td colspan="6">Aucun utilisateur enregistré ';
+	if (isset($_POST['searchingfor']))
+		echo 'pour la recherche <b>"'.$_POST['searchingfor'].'"</b> ';
+	else
+		echo '!! Comment c\'est possible ??? ';
+	echo '!!</td></tr>';
+}
+?>
+	</table>
 	<br />
 </div>
 
 <div class="ui-widget-content ui-corner-all center gros hide" id="modifieurPage">
 	<div class="closeModifieur ui-state-active ui-corner-all" id="btnClose"><span class="ui-icon ui-icon-circle-close"></span></div>
 	<div class="ui-widget-header ui-corner-all pad3">Modifier l'utilisateur "<span id="nomUserModif"></span>"</div>
-	<br />
 	<input type="hidden" id="modUserId" />
+	<input type="hidden" id="modUserCurAuth" />
+	<div class="inline top" id="modUserDivAuth" style="width: 500px; margin-bottom: 2ex;">
+		<br />
+		<div class="ui-widget-header ui-corner-all">Authentification :</div>
+		<input type="radio" id="modUserAuthDB" name="auth" value="<?php echo AUTH_DB; ?>" <?php echo (! $config[CONF_AUTH_DB]) ? 'disabled="disabled"' : ''; ?> /> <label for="modUserAuthDB">Par email et mot de passe</label>
+		<input type="radio" id="modUserAuthLDAP" name="auth" value="<?php echo AUTH_LDAP; ?>" <?php echo (! $config[CONF_AUTH_LDAP]) ? 'disabled="disabled"' : ''; ?> /> <label for="modUserAuthLDAP">Avec un compte LDAP</label>
+	</div>
+	<br />
 	<div class="inline top" style="width: 200px;">
 		<div class="ui-widget-header ui-corner-all">Adresse Email :</div>
 		<input type="text" id="modUserEmail" size="20" />
 		<br />
-		<div class="ui-widget-header ui-corner-all">Mot de passe :</div>
-		<input type="text" id="modUserPass" size="20" title="Laissez vide si pas de modif." />
+		<div id="modUserDivAuthDB">
+			<div class="ui-widget-header ui-corner-all">Mot de passe :</div>
+			<input type="text" id="modUserPass" size="20" />
+		</div>
+		<div id="modUserDivAuthLDAP">
+			<div class="ui-widget-header ui-corner-all">Login LDAP :</div>
+			<input type="text" id="modUserLDAP" size="20" />
+			<div id="modUserDivAuthLDAPPass" style="display: none;">
+				<div class="ui-widget-header ui-corner-all">Mot de passe LDAP :</div>
+				<input type="password" id="modUserLDAPPass" size="20" />
+			</div>
+		</div>
 	</div>
 	<div class="inline top" style="width: 200px;">
 		<div class="ui-widget-header ui-corner-all">Prénom :</div>

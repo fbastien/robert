@@ -14,16 +14,22 @@ $liste_users = $u->getListe(TABLE_USERS);
 	<div class="ui-widget-header ui-corner-all">Créer un utilisateur</div>
 	<br />
 	<div class="inline top">
-		<div class="ui-widget-header ui-corner-all">Email :</div>
-		<input type="text" id='cMail' value="" size="30" />
+		<div class="ui-widget-header ui-corner-all">Authentification :</div>
+		<input type="radio" id="cAuthDB" name="auth" value="<?php echo AUTH_DB; ?>" /> <label for="cAuthDB">Par email et mot de passe</label>
+		<input type="radio" id="cAuthLDAP" name="auth" value="<?php echo AUTH_LDAP; ?>" /> <label for="cAuthLDAP">Avec un compte LDAP</label>
+	</div>
+	<br />
+	<div class="inline top">
+		<div class="ui-widget-header ui-corner-all">Email / Login :</div>
+		<input type="text" id="cLogin" value="" size="30" />
 		<div class="ui-widget-header ui-corner-all">Nom :</div>
-		<input type="text" id='cName' value="" size="30" />
+		<input type="text" id="cName" value="" size="30" />
 	</div>
 	<div class="inline top">
 		<div class="ui-widget-header ui-corner-all">Prénom :</div>
-		<input type="text" id='cPren' value="" size="30" />
+		<input type="text" id="cPren" value="" size="30" />
 		<div class="ui-widget-header ui-corner-all">Mot de passe :</div>
-		<input type="text" id='cPass' value="" size="30" /><br /><br />
+		<input type="text" id="cPass" value="" size="30" /><br /><br />
 	</div>
 	<div class="inline top">
 		<button class="bouton petit" id="btncreateUser">Créer l'utilisateur</button>

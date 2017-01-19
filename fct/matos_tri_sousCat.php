@@ -61,13 +61,10 @@ function simplifySousCatArray($liste_sousCat = null) {
 /** Trie le tableau de matériel extérieur par le champ 'ownerExt' ! */
 function MatosExt_by_Location ( $listeMatosExterieur ){
 
-	//echo "<pre>"; print_r ($listeMatosExterieur) ;echo "</pre>";
-
 	$newTableau = array();
 	foreach ( $listeMatosExterieur as $matos ){
 		$newTableau[$matos['ownerExt']][] = $matos ;
 	}
-	//echo "<pre>"; print_r ($newTableau) ;echo "</pre>";
 	return $newTableau ; 
 }
 

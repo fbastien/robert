@@ -1,0 +1,16 @@
+4;000001;SQL_Backup_Test::testImportUpdateMatosAddSomeUnits::1;Designation;son;Microphones;3;0;1;2;Ajout de plusieurs materiels identifies;2016-05-31;
++;000010;SQL_Backup_Test::testImportUpdateMatosAddSomeUnits::10;;;;;0;;;Remarque;;EXT
++;000011;SQL_Backup_Test::testImportUpdateMatosAddSomeUnits::11;;;;;0;;;Remarque;2016-05-31;
+
+5;000002;SQL_Backup_Test::testImportUpdateMatosAddSomeUnits::2;Designation;son;Microphones;3;0;1;2;Diminution de la quantite;;EXT
++;000012;SQL_Backup_Test::testImportUpdateMatosAddSomeUnits::12;;;;;0;;;Remarque;2016-05-31;
+
+6;000003;SQL_Backup_Test::testImportUpdateMatosAddSomeUnits::3;Designation;son;Microphones;4;0;1;2;Augmentation de la quantite;2016-05-31;
++;000013;SQL_Backup_Test::testImportUpdateMatosAddSomeUnits::13;;;;;0;;;Remarque;;EXT
+
+7;000004;SQL_Backup_Test::testImportUpdateMatosAddSomeUnits::4;Designation;son;Microphones;4;0;1;2;Nouvelle quantite identifiee superieure a l'ancienne quantite totale;;EXT
++;000014;SQL_Backup_Test::testImportUpdateMatosAddSomeUnits::14;;;;;0;;;Remarque;2016-05-31;
++;000015;SQL_Backup_Test::testImportUpdateMatosAddSomeUnits::15;;;;;0;;;Remarque;;EXT
+
+8;000005;SQL_Backup_Test::testImportUpdateMatosAddSomeUnits::5;Designation;son;Microphones;3;0;1;2;Materiel entierement identifie;2016-05-31;
++;000016;SQL_Backup_Test::testImportUpdateMatosAddSomeUnits::16;;;;;0;;;Remarque;;EXT

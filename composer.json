@@ -11,12 +11,12 @@
 		"source" : "https://github.com/fbastien/robert"
 	},
 	"require" : {
-		"itbz/fpdf" : "~1.7.1-stable",
-		"eloquent/enumeration" : "^5-stable"
+		"eloquent/enumeration" : "^5-stable",
+		"itbz/fpdf" : "~1.7.1-stable"
 	},
 	"require-dev" : {
-		"phpunit/phpunit" : ">=4.8-stable",
-		"phpunit/dbunit" : ">=1.2-stable"
+		"phpunit/dbunit" : ">=1.2-stable",
+		"phpunit/phpunit" : ">=4.8-stable"
 	},
 	"autoload" : {
 		"classmap" : ["classes/"]
@@ -28,6 +28,6 @@
 		"vendor-dir" : "lib"
 	},
 	"archive" : {
-		"exclude" : ["/data/dumpSQL/*", "/data/PLANS_DATA/*", "/data/TEKOS_DATA/*", "/scripts/build/out", "/tmp/BFlogs/*"]
+		"exclude" : ["/data/dumpSQL/*", "/data/inventaire/*", "/data/PLANS_DATA/*", "/data/TEKOS_DATA/*", "/scripts/build/out", "/tmp/BFlogs/*"]
 	}
 }

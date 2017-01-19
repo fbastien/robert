@@ -274,8 +274,9 @@ DROP TABLE IF EXISTS `robert_users`;
 
 CREATE TABLE `robert_users` (
 		`id`                  INT(10)      NOT NULL AUTO_INCREMENT,
+		`ldap_uid`            VARCHAR(255) NULL,
 		`email`               VARCHAR(255) NOT NULL,
-		`password`            VARCHAR(32)  NOT NULL,
+		`password`            VARCHAR(32)  NULL,
 		`nom`                 CHAR(30)     NOT NULL,
 		`prenom`              CHAR(30)     NOT NULL,
 		`level`               INT(1)       NOT NULL DEFAULT '1',
@@ -289,10 +290,11 @@ CREATE TABLE `robert_users` (
 		`taille`              FLOAT        NOT NULL,
 		`idTekos`             SMALLINT(3)  NOT NULL,
 		PRIMARY KEY (`id`),
+		UNIQUE KEY `ldap_uid` (`ldap_uid`),
 		UNIQUE KEY `email` (`email`) )
 	ENGINE = MyISAM,
 	AUTO_INCREMENT = 2,
 	DEFAULT CHARSET = utf8;
 
-INSERT INTO `robert_users` (`id`, `email`, `password`, `nom`, `prenom`, `level`, `date_inscription`, `date_last_action`, `date_last_connexion`, `theme`, `yeux`, `cheveux`, `age`, `taille`, `idTekos`)
-VALUES (1, 'root@robertmanager.org', '8351aaf8480d8135bc77af590c93c1e2', 'DEBUGGER', 'Root', '9', 1325615980, 1356632988, 1356620371, 'human', 'blancs', 'rouges', 31, 1.73, 0);
+INSERT INTO `robert_users` (`id`, `ldap_uid`, `email`, `password`, `nom`, `prenom`, `level`, `date_inscription`, `date_last_action`, `date_last_connexion`, `theme`, `yeux`, `cheveux`, `age`, `taille`, `idTekos`)
+VALUES (1, NULL, 'root@robertmanager.org', '8351aaf8480d8135bc77af590c93c1e2', 'DEBUGGER', 'Root', '9', 1325615980, 1356632988, 1356620371, 'human', 'blancs', 'rouges', 31, 1.73, 0);

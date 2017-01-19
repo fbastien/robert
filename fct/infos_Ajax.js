@@ -8,7 +8,6 @@ $(function () {
 			if (dataType == 'boite.TVA.val') dataVal /= 100;
 			ajaxReq += '&'+dataType+'='+dataVal ;
 		});
-//		alert(ajaxReq);
 		AjaxFct(ajaxReq, 'infos_actions', false, 'retourAjax');
 	});
 });

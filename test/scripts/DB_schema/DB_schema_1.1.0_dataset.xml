@@ -1065,8 +1065,20 @@
 		</row>
 		<row>
 			<value>robert_plans</value>
-			<value>confirm</value>
+			<value>units</value>
 			<value>11</value>
+			<value>text</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_plans</value>
+			<value>confirm</value>
+			<value>12</value>
 			<value>varchar(15)</value>
 			<value></value>
 			<value>0</value>
@@ -1137,8 +1149,20 @@
 		</row>
 		<row>
 			<value>robert_plans_details</value>
-			<value>details_remarque</value>
+			<value>units</value>
 			<value>6</value>
+			<value>text</value>
+			<value></value>
+			<null />
+			<value>NO</value>
+			<value></value>
+			<value>utf8</value>
+			<value>utf8_general_ci</value>
+		</row>
+		<row>
+			<value>robert_plans_details</value>
+			<value>details_remarque</value>
+			<value>7</value>
 			<value>mediumtext</value>
 			<value></value>
 			<null />

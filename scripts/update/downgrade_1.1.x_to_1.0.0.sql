@@ -57,6 +57,12 @@ ALTER TABLE `robert_matos_detail`
 	MODIFY COLUMN `remarque`
 		TEXT NOT NULL;
 
+ALTER TABLE `robert_plans`
+	DROP COLUMN `units`;
+
+ALTER TABLE `robert_plans_details`
+	DROP COLUMN `units`;
+
 -- -------------------------------- --
 -- Suppression des nouvelles tables --
 -- -------------------------------- --

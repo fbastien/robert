@@ -31,6 +31,16 @@ ALTER TABLE `robert_matos_detail`
 		VARCHAR(256) DEFAULT NULL,
 	MODIFY COLUMN `remarque`
 		TEXT DEFAULT NULL;
+ 
+ALTER TABLE `robert_plans`
+	ADD COLUMN `units`
+		TEXT NOT NULL
+		AFTER `materiel`;
+
+ALTER TABLE `robert_plans_details`
+	ADD COLUMN `units`
+		TEXT NOT NULL
+		AFTER `materiel`;
 
 -- ---------------------- --
 -- Conversion des données --

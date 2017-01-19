@@ -208,6 +208,7 @@ CREATE TABLE `robert_plans` (
 		`beneficiaire` VARCHAR(64)  NOT NULL,
 		`techniciens`  VARCHAR(64)  NOT NULL,
 		`materiel`     TEXT         NOT NULL,
+		`units`        TEXT         NOT NULL,
 		`confirm`      VARCHAR(15)  NOT NULL DEFAULT '0',
 		UNIQUE KEY `id` (`id`),
 		KEY `titre` (`titre`) )
@@ -225,6 +226,7 @@ CREATE TABLE `robert_plans_details` (
 		`jour`             VARCHAR(64)  NOT NULL,
 		`techniciens`      VARCHAR(100) NOT NULL,
 		`materiel`         TEXT         NOT NULL,
+		`units`            TEXT         NOT NULL,
 		`details_remarque` MEDIUMTEXT   NOT NULL,
 		PRIMARY KEY (`id_plandetails`) )
 	ENGINE = MyISAM,

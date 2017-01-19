@@ -113,8 +113,8 @@ abstract class PageTestCase extends DatabaseTestCase
 		if(! file_exists(LOCK_FILE)) {
 			if(file_put_contents(LOCK_FILE, getmypid()) === false)
 				throw new RuntimeException("Impossible de créer le fichier de verrou pour les tests isolés");
-				// Installation de la base de données
-				parent::setUpBeforeClass();
+			// Installation de la base de données
+			parent::setUpBeforeClass();
 		}
 	}
 	
@@ -164,6 +164,17 @@ abstract class PageTestCase extends DatabaseTestCase
 		$this->sessionDestroy();
 		
 		parent::tearDown();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * @see PHPUnit_Framework_TestCase::onNotSuccessfulTest()
+	 */
+	protected function onNotSuccessfulTest(Exception $exception) {
+		// Réinstalle la base de données pour les tests suivants au cas où elle aurait été altérée pendant le test en échec
+		$this->installDatabase();
+		
+		parent::onNotSuccessfulTest($exception);
 	}
 	
 	/**

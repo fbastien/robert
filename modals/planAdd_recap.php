@@ -7,6 +7,7 @@ require_once ('checkConnect.php' );
 $infosPlan  = json_decode( $_POST['infos'], true );
 $tekosAsked = json_decode( $_POST['tekos'], true );
 $matosAsked = json_decode( $_POST['matos'], true );
+$unitsAsked = json_decode( $_POST['units'], true ); // TODO FIXME FINISH
 $js = substr($infosPlan['picker_start'], 6); $ms = substr($infosPlan['picker_start'], 4, 2); $as = substr($infosPlan['picker_start'], 0, 4);
 $je = substr($infosPlan['picker_end'], 6);   $me = substr($infosPlan['picker_end'], 4, 2);   $ae = substr($infosPlan['picker_end'], 0, 4);
 //$dateStart  = DateTime::createFromFormat('Ymd', $infosPlan['picker_start']);

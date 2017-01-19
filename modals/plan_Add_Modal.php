@@ -1,4 +1,8 @@
 <?php
+/////
+///// OBSOLÈTE (utilisé dans la page debug uniquement)
+/////
+
 if (session_id() == '') session_start();
 require_once ('initInclude.php');
 require_once ('common.inc.php');		// OBLIGATOIRE pour les sessions, à placer TOUJOURS EN HAUT du code !!

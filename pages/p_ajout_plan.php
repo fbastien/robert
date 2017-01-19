@@ -9,6 +9,7 @@ $lp = new Liste();
 $listeBenef = $lp->getListe ( TABLE_STRUCT, 'id, label' );
 $listeTekos = $lp->getListe ( TABLE_TEKOS, 'id, surnom, categorie', 'surnom', 'ASC' );
 $listeMatos = $lp->getListe ( TABLE_MATOS, '*', 'ref', "ASC" ) ;
+$listeMatosUnit = $lp->getListe ( TABLE_MATOS_UNIT, '*', 'ref', "ASC" );
 $listePacks = $lp->getListe ( TABLE_PACKS, '*', 'ref', "ASC" ) ;
 $lp = null ;
 
@@ -45,6 +46,7 @@ if (isset($_SESSION['plan_add'])) {						// Sinon, on rappelle les valeurs du pl
 	$recupEnd   = date('Ymd', $recupPlan->getPlanEndDate());
 	$recupTekos = $recupPlan->getPlanTekos();
 	$recupMatos = $recupPlan->getPlanMatos();
+	$recupMatosUnits = $recupPlan->getPlanMatosUnits();
 	$refreshEtape1 = "		refreshEtapesBtns(1);\n";
 }
 else {													// Sinon, on met des valeurs par défaut
@@ -112,6 +114,11 @@ if (isset($recupTekos) && $recupTekos[0] != '') {
 	echo "		refreshEtapesBtns(2);\n";
 }
 if (isset($recupMatos)) {
+	foreach ($recupMatosUnits as $m => $ul) {
+		echo "		matosIdUnits['$m'] = [];\n" ;
+		foreach ($ul as $u)
+			echo "		matosIdUnits['$m'].push($u);\n" ;
+	}
 	foreach ($recupMatos as $m => $q)
 		echo "		matosIdQte['$m'] = $q; qteMatos_update($m);\n" ;
 	echo "		refreshEtapesBtns(3);\n";

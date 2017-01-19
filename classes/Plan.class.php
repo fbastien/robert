@@ -33,6 +33,7 @@ class Plan implements Iterator {
 	const PLAN_cBENEFICIAIRE = 'beneficiaire';
 	const PLAN_cTECKOS       = 'techniciens';
 	const PLAN_cMATOS		 = 'materiel';
+	const PLAN_cUNITS		 = 'units'; // TODO FIXME
 	const PLAN_cCONFIRM		 = 'confirm';
 
 	const PLAN_cDETAILS_ID      = 'id_plandetails' ;
@@ -40,6 +41,7 @@ class Plan implements Iterator {
 	const PLAN_cDETAILS_SUBDATE = 'jour' ;
 	const PLAN_cDETAILS_TECKOS  = 'techniciens' ;
 	const PLAN_cDETAILS_MATOS   = 'materiel' ;
+	const PLAN_cDETAILS_UNITS   = 'units'; // TODO FIXME
 	const PLAN_cDETAILS_COMMENT = 'details_remarque' ;
 
 	const PLAN_ERROR_INVALID_DATE        = 'Format de date non valide';
@@ -168,6 +170,8 @@ class Plan implements Iterator {
 	public function getPlanBenef ()     { return ( $this->infos->getInfo( Plan::PLAN_cBENEFICIAIRE )); }
 	public function getPlanMatos ()		{ return ( json_decode( $this->infos->getInfo( Plan::PLAN_cMATOS ), true) ); }
 	public function getPlanMatosBrut ()	{ return ( $this->infos->getInfo( Plan::PLAN_cMATOS )); }
+	public function getPlanMatosUnits ()	{ return ( json_decode( $this->infos->getInfo( Plan::PLAN_cUNITS ), true) ); }
+	public function getPlanMatosUnitsBrut () { return ( $this->infos->getInfo( Plan::PLAN_cUNITS )); }
 	public function getPlanTekos ()		{ return ( explode(' ', $this->infos->getInfo( Plan::PLAN_cTECKOS )) ); }
 	public function getPlanTekosBrut ()	{ return ( $this->infos->getInfo( Plan::PLAN_cTECKOS )); }
 	public function getPlanConfirm ()   { return ( $this->infos->getInfo( Plan::PLAN_cCONFIRM )); }
@@ -267,6 +271,7 @@ class Plan implements Iterator {
 		// met en mémoire les valeurs tekos et matos du plan (= par défaut)
 		$tekIds = $this->infos->getInfo( Plan::PLAN_cTECKOS ) ;
 		$matosList = $this->infos->getInfo( Plan::PLAN_cMATOS );
+		$unitsList = $this->infos->getInfo( Plan::PLAN_cUNITS );
 
 		// pour chaque jour compris entre plan_start et plan_end, ajoute au tableau des sousPlans
 		while ( $SPstamp < $endStamp ) {
@@ -275,6 +280,7 @@ class Plan implements Iterator {
 			$sPlan->addInfo ( Plan::PLAN_cDETAILS_SUBDATE,  $SPstamp ) ;
 			$sPlan->addInfo ( Plan::PLAN_cDETAILS_TECKOS ,  $tekIds ) ;
 			$sPlan->addInfo ( Plan::PLAN_cDETAILS_MATOS ,   $matosList ) ;
+			$sPlan->addInfo ( Plan::PLAN_cDETAILS_UNITS ,   $unitsList ) ;
 			$this->sousPlans[] = $sPlan ;
 			unset ( $sPlan ) ;
 			$SPstamp += $stampJour;
@@ -345,8 +351,10 @@ class Plan implements Iterator {
 	public function getSousPlanComment(){ return $this->sousPlans[$this->ssPlanIndex]->getInfo( Plan::PLAN_cDETAILS_COMMENT ); }
 	// retourne un tableau des tekos du sous plan courant (index idSousPlan => tableau des idTekos
 	public function getSousPlanTekos ()	{ return explode (" ", $this->sousPlans[$this->ssPlanIndex]->getInfo( Plan::PLAN_cDETAILS_TECKOS )) ; }
-	// retourne un tableau du matos du sous plan courant (tableau à 2 dimensions : idSousPlan => [idMatos, quantité] )
+	// retourne un tableau du matos du sous plan courant (tableau à 2 dimensions : idSousPlan => [idMatos => quantité] )
 	public function getSousPlanMatos ()	{ return json_decode($this->sousPlans[$this->ssPlanIndex]->getInfo( Plan::PLAN_cDETAILS_MATOS ), true) ; }
+	// retourne un tableau du matos unitaire du sous plan courant (tableau à 3 dimensions : idSousPlan => [idMatos => [liste des idMatosUnit]] )
+	public function getSousPlanMatosUnits () { return json_decode($this->sousPlans[$this->ssPlanIndex]->getInfo( Plan::PLAN_cDETAILS_UNITS ), true) ; } // TODO FIXME
 
 	// défini l'id du sous plan (à utiliser seulement pour écrasement en bdd)
 	public function setSousPlanId ($id)			  { $this->sousPlans[$this->ssPlanIndex]->addInfo( Plan::PLAN_cDETAILS_ID, $id ); }
@@ -356,8 +364,10 @@ class Plan implements Iterator {
 	public function setSousPlanComment ($comment) { $this->sousPlans[$this->ssPlanIndex]->addInfo( Plan::PLAN_cDETAILS_COMMENT, $comment   ); }
 	// défini la liste des tekos du sous plan courant (liste d'IDs séparés par des ' ')
 	public function setSousPlanTekos ($tekosList) { $this->sousPlans[$this->ssPlanIndex]->addInfo( Plan::PLAN_cDETAILS_TECKOS,  $tekosList ); }
-	// défini la liste du matos du plan courant (tableau à 2 dimensions : idSousPlan => [idMatos, quantité] )
+	// défini la liste du matos du plan courant (tableau à 2 dimensions : idSousPlan => [idMatos => quantité] )
 	public function setSousPlanMatos ($matosList) { $matos = json_encode($matosList); $this->sousPlans[$this->ssPlanIndex]->addInfo( Plan::PLAN_cDETAILS_MATOS, $matos ); }
+	// définit la liste du matos unitaire du plan courant (tableau à 3 dimensions : idSousPlan => [idMatos => [liste des idMatosUnit]] )
+	public function setSousPlanMatosUnits ($unitsList) { $units = json_encode($unitsList); $this->sousPlans[$this->ssPlanIndex]->addInfo( Plan::PLAN_cDETAILS_UNITS, $units ); } // TODO FIXME
 
 	// sauvegarde le sous plan COURANT
 	public function saveSousPlan () {

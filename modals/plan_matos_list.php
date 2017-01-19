@@ -2,6 +2,12 @@
 <div id="toolTipPopup" class="ui-state-highlight ui-corner-all pad10 hide"></div>
 
 <div class="addSection ui-widget-content ui-corner-all leftText pad20 hide" id="etape-3">
+	<div class="ui-widget-header ui-corner-all pad5 gros">Ajout par code-barres</div>
+	<br />
+	<div class="center">Code barre : <input type="text" id="addMatosCB" style="width: 200px; height: 40px;" /></div>
+	<br />
+	<br />
+	
 	<div class="ui-widget-header ui-corner-all pad5 gros">Choix du matériel</div>
 	<br />
 	<div class="ui-state-disabled pad10 ui-corner-all leftText shadowIn" id="messHelpMatos" style="float:right; ">
@@ -46,10 +52,10 @@
 				( $ext == '1')? $externeHideDispo = "display:none;" : $externeHideDispo = '';
 
 				echo "<div id='pack-$id' class='ui-state-default leftText big packPik cat-$categPack $externeClass'>
-						<div class='inline mid rightText' style='width:100px; '>
+						<div class='inline mid rightText accordionOpen' style='width:100px; '>
 							<span class='ui-state-disabled'>PACK</span>
 						</div>
-						<div class='inline mid rightText' style='width:100px;'>
+						<div class='inline mid rightText accordionOpen' style='width:100px;'>
 							$externeIcon
 						</div>
 						<div class='inline mid matos_categ rightText accordionOpen' style='width:100px;'>
@@ -91,6 +97,7 @@
 		
 		$matos_by_categ = creerSousCatArray($listeMatos);
 		$categById		= simplifySousCatArray();
+		$unitsByMatos = groupUnitsByMatos($listeMatosUnit);
 		
 //		echo '<pre>'; print_r($matos_by_categ); echo '</pre>';
 		
@@ -116,15 +123,15 @@
 					( $ext == '1')? $externeIcon = "<img src='gfx/icones/matosExterne.png' alt='externe' popup='matériel externe au parc !<br />A louer chez <b>$extChezQui</b>' />" : $externeIcon = '';
 					( $ext == '1')? $externeClass = "matosExterne" : $externeClass = '';
 					( $ext == '1')? $externeHideDispo = "class='hide'" : $externeHideDispo = '';
-
+					
 					echo "<div id='matos-$id' class='ui-state-default matosPik cat-$categMat $externeClass pad3'>
 								<div class='inline mid rightText' style='width:100px; '>
 									<span class='ui-state-disabled'>DETAIL</span>
 								</div>
-								<div class='inline mid rightText' style='width:100px;'>
+								<div class='inline mid rightText' style='width:50px;'>
 									$externeIcon
 								</div>
-								<div class='inline mid matos_categ rightText' style='width:100px;'>
+								<div class='inline mid matos_categ rightText'>
 									<img src='gfx/icones/categ-$categMat.png' alt='$categMat' title='catégorie $categMat' class='marge30l' />
 								</div>
 								<div class='inline mid quart leftText pad30L matos_name' ext='$ext'>$label</div>
@@ -137,9 +144,14 @@
 									</div>
 									<div class='inline mid qtePik bordFin bordSection' id='$id'><input type='text' class='qtePikInput hide' size='2' value='0' /></div>
 									<div class='inline mid matos_plus'><button class='bouton plus'><span class='ui-icon ui-icon-plusthick'></span></button></div>
-
+									<div class='matosPikUnit hide'>";
+					foreach($unitsByMatos[$id] as $matosUnit) {
+						if($matosUnit['id_matosdetail'] == $id && ! $matosUnit['panne']) {
+							echo "<div class='inline padV10' style='white-space: nowrap;'><input type='checkbox' class='boxPikUnit' id='boxPikUnit-${matosUnit['id_matosunit']}' value='${matosUnit['id_matosunit']}' /> <label for='boxPikUnit-${matosUnit['id_matosunit']}'>${matosUnit['ref']}</label></div>"; // TODO FIXME
+						}
+					}
+					echo "</div>
 								</div>
-
 								<div class='inline mid quart'>
 									<div class='inline mid demi petit rightText'><span class='matos_PU'>$pu €</span></div>
 									<div class='inline mid demi gros'> = <span class='matos_PRICE'>0</span> €</div>

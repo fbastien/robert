@@ -1,3 +1,7 @@
+/////
+///// OBSOLÈTE (utilisé dans la page debug uniquement)
+/////
+
 
 var separator	= ' ';
 var matosIdQte	= {} ;

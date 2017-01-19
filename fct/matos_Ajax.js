@@ -121,6 +121,7 @@ $(function() {
 	$("#addMatos").click(function () {
 		var label		= encodeURIComponent($('#newMatosLabel').val()) ;
 		var ref			= $('#newMatosRef').val() ;
+		var code		= $('#newMatosCode').val() ;
 		var categ		= $('#newMatosCateg').val() ;
 		var Souscateg	= $('#newMatosSousCateg').val() ;
 		var Qtotale		= $('#newMatosQtotale').val() ;
@@ -145,17 +146,18 @@ $(function() {
 		for(var i = 0; i < matosUnitsList.length; i++) {
 			var row = matosUnitsList.eq(i);
 			var unitRef = row.find('.newMatosUnitRef').val();
+			var unitCode = row.find('.newMatosUnitCode').val();
 			var unitExterne = (row.find('.newMatosUnitExterne').is(':checked') ? 1 : 0);
 			var unitDateAchat = row.find('.newMatosUnitDateAchat').val();
 			var unitOwnerExt = row.find('.newMatosUnitOwnerExt').val();
 			var unitRemarque = encodeURIComponent(row.find('.newMatosUnitRemarque').val());
 			
-			if (unitRef.length == 0) {
+			if (unitCode.length == 0) {
 				alert('Vous devez remplir tous les champs marqués d\'une étoile !');
 				return;
 			}
-			if (unitRef == ref) {
-				alert('Les références doivent toutes être différentes !');
+			if (unitRef == ref || unitCode == code) {
+				alert('Les références et codes-barres doivent toutes être différents !');
 				return;
 			}
 			for(var j = 0; j < matosUnitsData.length; j++) {
@@ -167,6 +169,7 @@ $(function() {
 			
 			matosUnitsData.push({
 					'ref' : unitRef,
+					'code' : unitCode,
 					'externe' : unitExterne,
 					'dateAchat' : unitDateAchat,
 					'ownerExt' : unitOwnerExt,
@@ -254,6 +257,7 @@ function addMatosUnitRow() {
 	// Ajout de la ligne
 	var newRow = $('<tr class="ui-state-hover sousCategLine">\
 			<td><input type="text" class="newMatosUnitRef" size="15" /></td>\
+			<td><input type="text" class="newMatosUnitCode" size="15" /></td>\
 			<td><input type="checkbox" class="newMatosUnitExterne" /></td>\
 			<td>\
 				<div class="newMatosUnitDateAchatDiv">Acheté le : <input type="text" class="newMatosUnitDateAchat inputCal2" size="9" /></div>\

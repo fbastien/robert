@@ -314,6 +314,7 @@ if ( @$action == 'sessModifMatos'){
 	if (!isset($_SESSION[$typeSess])) die("Pas de plan enregistré en session... Désolé !");
 	$p = unserialize($_SESSION[$typeSess]);
 	$p->addPlanInfo(Plan::PLAN_cMATOS, $matList);
+	$p->addPlanInfo(Plan::PLAN_cUNITS, $unitList);
 	$_SESSION[$typeSess] = serialize($p);
 	// on sauvegarde
 	try {
@@ -365,8 +366,9 @@ if ( @$action == 'refreshSessionAddPlan') {
 			$_SESSION['plan_add'] = serialize($addPlan);
 			$retour['error'] = 'OK';
 		}
-		elseif (isset($matosList)) {
+		elseif (isset($matosList) && isset($unitsList)) {
 			$addPlan->addPlanInfo('materiel', $matosList);
+			$addPlan->addPlanInfo(Plan::PLAN_cUNITS, $unitsList); // TODO FIXME
 			$_SESSION['plan_add'] = serialize($addPlan);
 			$retour['error'] = 'OK';
 		}

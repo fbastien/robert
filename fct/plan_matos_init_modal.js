@@ -1,6 +1,7 @@
 
 var separator	= ' ';
 var matosIdQte	= {} ;
+var matosIdUnits = {};
 var tekosIds	= [] ;
 
 // Retour au calendrier pendant l'ajout de plan (annule tout)
@@ -157,21 +158,22 @@ $(function() {
 		var id = 0;
 		if( $(this).children('button').hasClass('plus') == true ) {
 			$(this).parents('.matosPik').addClass('ui-state-highlight');
-			$(this).parent('.matosDispo').find('.qtePikInput').removeClass("hide").addClass('show');
-			$(this).parents().children('.qtePik').addClass("padV10");
+			$(this).parent('.matosDispo').find('.qtePikInput, .matosPikUnit').removeClass("hide").addClass('show');
+			$(this).parents().children('.qtePik, .matosPikIdent').addClass("padV10");
 			$(this).children('button').removeClass('plus').addClass('moins').children('span').children('span').removeClass('ui-icon-plusthick').addClass('ui-icon-minusthick');
-			$(this).parents().children('.qtePik').children('.qtePikInput').focus();
+			$(this).parents().children('.qtePik, .matosPikIdent').children('.qtePikInput').focus();
 			id   = parseInt($(this).parents().children('.qtePik').attr('id'), 10);
 			matosIdQte[id] = 1 ;
+			matosIdUnits[id] = [];
 		}
 		else {
-			$(this).parent('.matosDispo').find('.qtePikInput').removeClass('show').addClass('hide');
+			$(this).parent('.matosDispo').find('.qtePikInput, .matosPikUnit').removeClass('show').addClass('hide');
 			$(this).children('button').removeClass('moins').addClass('plus').children('span').children('span').removeClass('ui-icon-minusthick').addClass('ui-icon-plusthick');
 			$(this).parents().children('.qtePik').removeClass("padV10");
 			$(this).parents('.matosPik').removeClass('ui-state-highlight');
 			id   = parseInt($(this).parents().children('.qtePik').attr('id'), 10);
 			delete matosIdQte[id];
-
+			delete matosIdUnits[id];
 		}
 		qteMatos_update(id);
 		prixTotal();
@@ -187,10 +189,29 @@ $(function() {
 		var id		= parseInt($(this).parents('.qtePik').attr('id'), 10) ;
 		var newQte	= $(this).val();
 		matosIdQte[id]  = parseInt(newQte, 10) ;
+		// TODO FIXME ne pas autoriser une valeur inférieure au nombre d'unités sélectionnées
 		qteMatos_update(id);
 		prixTotal();
 		aLouer();
 		recalcDispoPacks();
+	});
+
+/// clic sur la checkbox d'un matériel unitaire
+	$("#matosHolder").on ('change', '.boxPikUnit' , function() { // TODO FIXME
+		var idMatos = parseInt($(this).parents().children('.qtePik').attr('id'), 10);
+		var idUnit = $(this).val();
+		
+		// Ajout
+		if($(this).prop('checked')) {
+			matosIdUnits[idMatos].push(idUnit);
+			// TODO FIXME incrémenter la quantité
+		} else {
+			var matosUnits = matosIdUnits[idMatos];
+			var uncheckedIndex = matosUnits.indexOf(idUnit);
+			matosUnits.splice(uncheckedIndex, 1);
+			matosIdUnits[idMatos] = matosUnits;
+			// TODO FIXME décrémenter la quantité
+		}
 	});
 
 
@@ -236,6 +257,15 @@ $(function() {
 			else $('#qtePik-'+idPack).show();
 		}
 	});
+	
+	// TODO FIXME
+	$("#addMatosCB").on('keypress', function (e) {
+        if(e.which === 13){
+           alert('Ajout du matériel '+$(this).val());
+           // TODO FIXME
+           $(this).val('');
+        }
+  });
 
 
 });
@@ -341,6 +371,11 @@ function displayTekosMatos (data) {
 			$("#matos-"+idMatos).children(".matosDispo").find(".qteDispo_update").html( qteDispo );
 		else $("#matos-"+idMatos).children(".matosDispo").find(".qteDispo_update").html( qteTotale - matosIdQte[idMatos] );
 		$("#matos-"+idMatos).children(".matosDispo").find(".qteDispo_onload").html( qteDispo );
+		if (matosIdUnits.hasOwnProperty(idMatos)) {
+			matosIdUnits[idMatos].forEach(function(idUnit) {
+				$("#boxPikUnit-"+idUnit).prop('checked', true); // TODO FIXME tout décocher avant ?
+			});
+		}
 
 		if (isFullParc == 'false' ) {
 			var messagePopup = '';
@@ -428,12 +463,16 @@ function qteMatos_update ( id ) {
 	if (qte <= 0) {
 		$("#matos-" + id).children(".matosDispo").find(".qtePikInput").hide();
 		delete matosIdQte[id];
+		$("#matos-" + id).children(".matosDispo").find(".matosPikUnit").hide();
+		delete matosIdUnits[id];
 		$("#matos-" + id).children(".matosDispo").find(".qtePik").removeClass('padV10');
 		$("#matos-" + id).find('.matos_plus').children('button').removeClass('moins').addClass('plus').find('.ui-icon').removeClass('ui-icon-minusthick').addClass('ui-icon-plusthick');
 	}
 	else {
 		$("#matos-" + id).addClass('ui-state-highlight');
 		$("#matos-" + id).children(".matosDispo").find(".qtePikInput").show();
+		$("#matos-" + id).children(".matosDispo").find(".matosPikUnit").show();
+		if(matosIdUnits[id] === undefined) matosIdUnits[id] = [];
 		$("#matos-" + id).children(".matosDispo").find(".qtePik").addClass('padV10');
 		$("#matos-" + id).find('.matos_plus').children('button').removeClass('plus').addClass('moins').find('.ui-icon').removeClass('ui-icon-plusthick').addClass('ui-icon-minusthick');
 	}

@@ -19,6 +19,7 @@ $lp = new Liste();
 $listeBenef = $lp->getListe ( TABLE_STRUCT, 'id, label' );
 $listeTekos = $lp->getListe ( TABLE_TEKOS, 'id, surnom, categorie', 'surnom', 'ASC' );
 $listeMatos = $lp->getListe ( TABLE_MATOS, '*', 'categorie', "ASC" ) ;
+$listeMatosUnit = $lp->getListe ( TABLE_MATOS_UNIT, '*', 'ref', "ASC" );
 $listePacks = $lp->getListe ( TABLE_PACKS, '*', 'categorie', "ASC" ) ;
 $lp = null ;
 
@@ -152,7 +153,7 @@ if (!isset($_SESSION['plan_mod_backup'])) {
 ?>
 	$(function() {
 <?php foreach ($tekosPlanMod as $t) echo "		tekosIds.push('$t'); $('.tek_name[id*=\"$t\"]').click();\n" ?>
-<?php foreach ($matosPlanMod as $m => $q) echo "		matosIdQte['$m'] = $q; qteMatos_update($m);\n" ?> //  /* $('.qtePik[id*=\"$m\"]').children('.qtePikInput').show().val('$q').focus(); */
+<?php foreach ($matosPlanMod as $m => $q) echo "		matosIdQte['$m'] = $q; qteMatos_update($m);\n" ?>
 		$("#themeSel").parent('p').hide();
 		$("#modifInfoUserActif").hide();
 		$("#modPlanBenef").autocomplete( { source: autoCompleteBENEF });

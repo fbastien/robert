@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+<dataset>
+	<table name="robert_matos_detail">
+		<column>id</column>
+		<column>label</column>
+		<column>ref</column>
+		<column>panne</column>
+		<column>categorie</column>
+		<column>sousCateg</column>
+		<column>Qtotale</column>
+		<column>tarifLoc</column>
+		<column>valRemp</column>
+		<column>dateAchat</column>
+		<column>ownerExt</column>
+		<column>remarque</column>
+		<row>
+			<value>4</value>
+			<value>Matériel identifié Matos_Actions_Test</value>
+			<value>Matos_Actions_Test::3</value>
+			<value>0</value>
+			<value>son</value>
+			<value>2</value>
+			<value>3</value>
+			<value>2.5</value>
+			<value>10.0</value>
+			<value>2017-01-18</value>
+			<null />
+			<value>Matériel partiellement identifié unitairement pour les tests dans Matos_Actions_Test</value>
+		</row>
+	</table>
+	
+	<table name="robert_matos_unit">
+		<column>id_matosunit</column>
+		<column>id_matosdetail</column>
+		<column>ref</column>
+		<column>panne</column>
+		<column>dateAchat</column>
+		<column>ownerExt</column>
+		<column>remarque</column>
+		<row>
+			<value>7</value>
+			<value>4</value>
+			<value>Matos_Actions_Test::4</value>
+			<value>0</value>
+			<value>2017-01-17</value>
+			<null />
+			<value>Matériel identifié unitairement pour les tests dans Matos_Actions_Test</value>
+		</row>
+		<row>
+			<value>8</value>
+			<value>4</value>
+			<value>Matos_Actions_Test::5</value>
+			<value>0</value>
+			<null />
+			<value>Prestataire Matos_Actions_Test</value>
+			<value>Matériel identifié unitairement pour les tests dans Matos_Actions_Test</value>
+		</row>
+	</table>
+</dataset>

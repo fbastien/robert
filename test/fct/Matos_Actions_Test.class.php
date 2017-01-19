@@ -26,6 +26,8 @@ class Matos_Actions_Test extends PageTestCase
 	private static $matosInterneDataset;
 	/** @var PHPUnit_Extensions_Database_DataSet_IDataSet Dataset d'un matériel supplémentaire appartenant à un prestataire externe. */
 	private static $matosExterneDataset;
+	/** @var PHPUnit_Extensions_Database_DataSet_IDataSet Dataset d'un matériel supplémentaire dont une partie est identifiée unitairement. */
+	private static $matosUnitsDataset;
 	/** @var array Liste des tables dont le contenu est à tester. */
 	private static $tables = array('robert_matos_detail', 'robert_matos_unit');
 	
@@ -39,6 +41,7 @@ class Matos_Actions_Test extends PageTestCase
 		self::setTestedPage('fct'.DIRECTORY_SEPARATOR.'matos_actions.php');
 		self::$matosInterneDataset = new PHPUnit_Extensions_Database_DataSet_XmlDataSet(__DIR__.DIRECTORY_SEPARATOR.'matos_actions_interne_dataset.xml');
 		self::$matosExterneDataset = new PHPUnit_Extensions_Database_DataSet_XmlDataSet(__DIR__.DIRECTORY_SEPARATOR.'matos_actions_externe_dataset.xml');
+		self::$matosUnitsDataset = new PHPUnit_Extensions_Database_DataSet_XmlDataSet(__DIR__.DIRECTORY_SEPARATOR.'matos_actions_units_dataset.xml');
 	}
 	
 	/**
@@ -82,6 +85,7 @@ class Matos_Actions_Test extends PageTestCase
 	 * 
 	 * Cas de test :
 	 * * Matériel interne
+	 * * Aucun matériel identifié unitairement
 	 * 
 	 * @test
 	 */
@@ -105,7 +109,7 @@ class Matos_Actions_Test extends PageTestCase
 		$this->callTestedPage();
 		
 		// Vérification du message retourné
-		$this->assertSame("Matériel ${matos['ref']} Ajouté !", $this->getOutput());
+		$this->assertSame("Matériel {$matos['ref']} Ajouté !", $this->getOutput());
 		// Vérification du contenu de la base de données
 		$expectedData = new PHPUnit_Extensions_Database_DataSet_CompositeDataSet(array($this->getDataSet(), self::$matosInterneDataset));
 		foreach (self::$tables as $tableName) {
@@ -118,6 +122,7 @@ class Matos_Actions_Test extends PageTestCase
 	 * 
 	 * Cas de test :
 	 * * Matériel externe
+	 * * Aucun matériel identifié unitairement
 	 * 
 	 * @test
 	 */
@@ -141,9 +146,62 @@ class Matos_Actions_Test extends PageTestCase
 		$this->callTestedPage();
 		
 		// Vérification du message retourné
-		$this->assertSame("Matériel ${matos['ref']} Ajouté !", $this->getOutput());
+		$this->assertSame("Matériel {$matos['ref']} Ajouté !", $this->getOutput());
 		// Vérification du contenu de la base de données
 		$expectedData = new PHPUnit_Extensions_Database_DataSet_CompositeDataSet(array($this->getDataSet(), self::$matosExterneDataset));
+		foreach (self::$tables as $tableName) {
+			$this->assertTableContents($expectedData->getTable($tableName), $tableName);
+		}
+	}
+	
+	/**
+	 * Teste l'ajout d'un matériel (pour l'écran accessible depuis de la liste du matériel).
+	 * 
+	 * Cas de test :
+	 * * Plusieurs matériels identifiés unitairement
+	 * * Matériel unitaire interne
+	 * * Matériel unitaire externe
+	 * 
+	 * @test
+	 */
+	public function testActionAddMatosUnits() {
+		// Préparation des données
+		$matos = self::$matosUnitsDataset->getTable('robert_matos_detail')->getRow(0);
+		$_POST['action'] = 'addMatos';
+		$_POST['ref'] = $matos['ref'];
+		$_POST['label'] = $matos['label'];
+		$_POST['categorie'] = $matos['categorie'];;
+		$_POST['sousCateg'] = $matos['sousCateg'];
+		$_POST['tarifLoc'] = $matos['tarifLoc'];
+		$_POST['valRemp'] = $matos['valRemp'];
+		$_POST['Qtotale'] = $matos['Qtotale'];
+		$_POST['remarque'] = $matos['remarque'];
+		$_POST['externe'] = '0';
+		$_POST['dateAchat'] = $matos['dateAchat'];
+		$_POST['ownerExt'] = 'N/A';
+		$matosUnitInt = self::$matosUnitsDataset->getTable('robert_matos_unit')->getRow(0);
+		$matosUnitExt = self::$matosUnitsDataset->getTable('robert_matos_unit')->getRow(1);
+		$_POST['matosUnits'] = array(
+			array('ref' => $matosUnitInt['ref'],
+					'externe' => '0',
+					'dateAchat' => $matosUnitInt['dateAchat'],
+					'ownerExt' => 'N/A',
+					'remarque' => $matosUnitInt['remarque']),
+			array('ref' => $matosUnitExt['ref'],
+					'externe' => '1',
+					'dateAchat' => '2017-01-18',
+					'ownerExt' => $matosUnitExt['ownerExt'],
+					'remarque' => $matosUnitExt['remarque']));
+		
+		// Test
+		$this->callTestedPage();
+		
+		// Vérification du message retourné
+		$this->assertStringStartsWith("Matériel {$matos['ref']} Ajouté !", $this->getOutput());
+		$this->assertContains("<br />Matériel unitaire {$matosUnitInt['ref']} Ajouté !", $this->getOutput());
+		$this->assertContains("<br />Matériel unitaire {$matosUnitExt['ref']} Ajouté !", $this->getOutput());
+		// Vérification du contenu de la base de données
+		$expectedData = new PHPUnit_Extensions_Database_DataSet_CompositeDataSet(array($this->getDataSet(), self::$matosUnitsDataset));
 		foreach (self::$tables as $tableName) {
 			$this->assertTableContents($expectedData->getTable($tableName), $tableName);
 		}

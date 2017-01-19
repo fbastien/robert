@@ -17,7 +17,7 @@
  *
  */
 
-class Matos implements Iterator {
+class MatosUnit implements Iterator {
 
 	/** erreur si une donnée ne correspond pas */
 	const UPDATE_ERROR_DATA = 'donnée invalide' ;
@@ -29,7 +29,7 @@ class Matos implements Iterator {
 	const INFO_DONT_EXIST	= 'donnée inexistante' ;
 	/** erreur si info est une donnée sensible */
 	const INFO_FORBIDDEN	= 'donnée interdite' ;
-	/** erreur si la référence du matos n'est pas renseignée au __construct */
+	/** erreur si la référence du matos unitaire n'est pas renseignée au __construct */
 	const REF_MANQUE		= 'Il manque la référence !';
 	/** erreur si il manque des infos lors de la sauvegarde */
 	const MANQUE_INFO		= 'Pas assez d\'info pour sauvegarder';
@@ -39,12 +39,12 @@ class Matos implements Iterator {
 	/** retour général, si la fonction n'a pas marché */
 	const MATOS_ERROR       = false ;
 	
-	/** champ BDD où trouver la référence du matos */
-	const REF_MATOS			= 'ref';
-	/** champ BDD où trouver l'id du matos */
-	const ID_MATOS			= 'id';
+	/** champ BDD où trouver la référence du matos unitaire */
+	const REF_MATOS_UNIT	= 'ref';
+	/** champ BDD où trouver l'id du matos unitaire */
+	const ID_MATOS_UNIT		= 'id_matosunit';
 	
-	/** @var Infos Gestion en BDD des informations générales du matos. */
+	/** @var Infos Gestion en BDD des informations du matos unitaire. */
 	private $infos;
 	/** @var int|string ID (ou autre champ BDD) du matos à construire. */
 	private $id;
@@ -53,11 +53,11 @@ class Matos implements Iterator {
 	
 	public function __construct ($champ='new', $id='') {
 		// Création de l'instance de 'Infos'
-		$this->infos = new Infos( TABLE_MATOS );
+		$this->infos = new Infos( TABLE_MATOS_UNIT );
 		if ( $champ == 'new' )
 			return;
 		if ( $id == '' )
-			throw new Exception(Matos::REF_MANQUE);
+			throw new Exception(MatosUnit::REF_MANQUE);
 		$this->id = $id;
 		// Récupération des données en BDD
 		$this->loadFromBD( $champ, $this->id );
@@ -68,21 +68,25 @@ class Matos implements Iterator {
 			$this->infos->loadInfos( $keyFilter, $value );
 			$this->baseInfo = $this->infos->getInfo();
 		}
-		catch (Exception $e) { throw new Exception(Matos::INFO_ERREUR); }
+		catch (Exception $e) {
+			throw new Exception(MatosUnit::INFO_ERREUR);
+		}
 	}
 	
 	public function getExterne() {
 		return $this->infos->getInfo('ownerExt') === null ? '0' : '1';
 	}
 	
-	public function getMatosInfos ($what='') {
+	public function getMatosUnitInfos ($what='') {
 		if ($what == '') {
 			// Récup toutes les infos
 			try {
 				$info = $this->infos->getInfo();
 				$info['externe'] = $this->getExterne();
 			}
-			catch (Exception $e) { return $e->getMessage(); }
+			catch (Exception $e) {
+				return $e->getMessage();
+			}
 		}
 		else {
 			// Récup une seule info
@@ -94,18 +98,21 @@ class Matos implements Iterator {
 				}
 			}
 			// Si existe pas, récup de l'erreur
-			catch (Exception $e) { return $e->getMessage(); }
+			catch (Exception $e) {
+				return $e->getMessage();
+			}
 		}
 		return $info;
 	}
 	
-	/** (Re)définit les infos du matos */
+	/** (Re)définit les infos du matos unitaire */
 	public function setVals ($arrKeysVals) {
 		// Gestion des champs avec une valeur particulière
 		if(isset($arrKeysVals['externe'])) {
 			if($arrKeysVals['externe'] === '1') {
 				$arrKeysVals['dateAchat'] = null;
-			} elseif($arrKeysVals['externe'] === '0') {
+			}
+			elseif($arrKeysVals['externe'] === '0') {
 				$arrKeysVals['ownerExt'] = null;
 			}
 			unset($arrKeysVals['externe']);
@@ -121,34 +128,46 @@ class Matos implements Iterator {
 	public function updateMatos ($typeInfo = false, $newInfo = false) {
 		// Si on spécifie une clé/valeur, on update que celle-ci
 		if ($typeInfo !== false && $newInfo !== false) {
-			try { $this->infos->update($typeInfo, $newInfo); return "Mise à jour de $typeInfo effectuée !"; }
-			catch (Exception $e) { return $e->getMessage(); }
+			try {
+				$this->infos->update($typeInfo, $newInfo);
+				return "Mise à jour de $typeInfo effectuée !";
+			}
+			catch (Exception $e) {
+				return $e->getMessage();
+			}
 		}
-		else { // Sinon, on compare les nouvelles valeurs avec les anciennes
-			$retour = ''; $newInfos = $this->infos->getInfo();
+		// Sinon, on compare les nouvelles valeurs avec les anciennes
+		else {
+			$retour = '';
+			$newInfos = $this->infos->getInfo();
 			$diffInfos = array_diff_assoc($newInfos, $this->baseInfo); // retourne un tableau ne contenant que la différence
 			foreach ($diffInfos as $key => $val) {
 				// effectue l'update seulement pour les champs qui sont différents, sauf pour ID qui est en auto-increment
-				try { $this->infos->update($key, $val); $retour .= "Mise à jour de $key effectuée !<br />"; }
-				catch (Exception $e) { return $e->getMessage(); }
+				try {
+					$this->infos->update($key, $val);
+					$retour .= "Mise à jour de $key effectuée !<br />";
+				}
+				catch (Exception $e) {
+					return $e->getMessage();
+				}
 			}
 			return $retour;
 		}
 	}
 	
-	/** Sauvegarde d'un NOUVEAU MATOS */
+	/** Sauvegarde d'un nouveau matos unitaire */
 	public function save () {
 		$verifInfo = $this->infos->getInfo();
 		// Check si on a bien tout ce qu'il faut avant de sauvegarder en BDD
-		if ( !$verifInfo['label'] || !$verifInfo['ref'] || !$verifInfo['Qtotale'] || (!$verifInfo['tarifLoc'] && !is_numeric($verifInfo['tarifLoc'])) || !$verifInfo['categorie'] || (!$verifInfo['valRemp'] && !is_numeric($verifInfo['valRemp'])))
-			throw new Exception(Matos::MANQUE_INFO);
+		if ( !$verifInfo['ref'] )
+			throw new Exception(MatosUnit::MANQUE_INFO);
 		
 		$this->infos->save();
-		return Matos::MATOS_OK ;
+		return MatosUnit::MATOS_OK ;
 	}
 	
 	public function deleteMatos () {
-		$nb = $this->infos->delete(Matos::ID_MATOS, $this->id);
+		$nb = $this->infos->delete(MatosUnit::ID_MATOS_UNIT, $this->id);
 		return $nb ;
 	}
 	

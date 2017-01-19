@@ -17,13 +17,40 @@ if ( $action == 'select') {
 if ( $action == 'addMatos') {
 	if ($label == '' || $ref == '' || $Qtotale == '' || $tarifLoc == '' || $valRemp == '') { echo 'Pas assez de données... '; return; }
 	unset($_POST['action']);
-	$tmpMatos = new Matos ();
-	$tmpMatos->setVals ($_POST);
+
+	$tmpMatos = new Matos();
+	unset($_POST['matosUnits']);
+	$tmpMatos->setVals($_POST);
+	// TODO Vérifier que la référence n'existe pas déjà dans la table robert_matos_unit
 	
-	try { if ( $tmpMatos->save() ) echo "Matériel $ref Ajouté !"; }
-	catch (Exception $e) { echo $e->getMessage(); }
-	
-	unset ($tmpMatos) ;
+	try {
+		if ( $tmpMatos->save() )
+			echo "Matériel $ref Ajouté !";
+		$tmpMatos->loadFromBD(Matos::REF_MATOS, $ref);
+		$idMatos = $tmpMatos->getMatosInfos('id');
+		
+		if (isset($matosUnits)) {
+			foreach ($matosUnits as $unit) {
+				$tmpUnit = new MatosUnit();
+				$unit['id_matosdetail'] = $idMatos;
+				$tmpUnit->setVals($unit);
+				// TODO Vérifier que la référence n'existe pas déjà dans la table robert_matos_detail
+				
+				try {
+					if ( $tmpUnit->save() )
+						echo "<br />Matériel unitaire {$unit['ref']} Ajouté !";
+				} catch (Exception $e) {
+					echo '<br />'.$e->getMessage();
+				}
+			}
+		}
+	}
+	catch (Exception $e) {
+		echo $e->getMessage();
+	}
+	unset($tmpMatos);
+	unset($tmpUnit);
+	unset($matosUnits);
 }
 
 if ( $action == 'addMatosJson') {

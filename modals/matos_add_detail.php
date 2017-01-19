@@ -33,67 +33,91 @@ $liste_ssCat = $lm->getListe(TABLE_MATOS_CATEG, '*', 'ordre', 'ASC');
 <div class="ui-widget-content ui-corner-all leftText ajouteurPage">
 	<div class="ui-widget-header ui-corner-all center">Ajout de matériel</div>
 	<br />
-	<div class="inline top center pad3" style="width: 140px;">
-		<div class="ui-widget-header ui-corner-all">Référence : <b class="red">*</b></div>
-		<input type="text" id="newMatosRef" size="15" />
-	</div>
-	<div class="inline top center pad3" style="width: 600px;">
-		<div class="ui-widget-header ui-corner-all">Désignation complète : <b class="red">*</b></div>
-		<input type="text" id="newMatosLabel" size="72" />
+	<div class="ui-widget-header ui-corner-all center">Informations générales</div>
+	<div class="ui-widget-content ui-corner-all" style="padding: 1ex;">
+		<div class="inline top center pad3" style="width: 140px;">
+			<div class="ui-widget-header ui-corner-all">Référence : <b class="red">*</b></div>
+			<input type="text" id="newMatosRef" size="15" />
+		</div>
+		<div class="inline top center pad3" style="width: 600px;">
+			<div class="ui-widget-header ui-corner-all">Désignation complète : <b class="red">*</b></div>
+			<input type="text" id="newMatosLabel" size="72" />
+		</div>
+		<br />
+		<div class="inline top center pad3" style="width: 140px;">
+			<div class="ui-widget-header ui-corner-all">Catégorie : <b class="red">*</b></div>
+			<select id="newMatosCateg">
+				<option value="son">SON</option>
+				<option value="lumiere">LUMIÈRE</option>
+				<option value="structure">STRUCTURE</option>
+				<option value="transport">TRANSPORT</option>
+			</select>
+		</div>
+		<div class="inline top center pad3" style="width: 200px;">
+			<div class="ui-widget-header ui-corner-all">Sous Categ :</div>
+			<select id="newMatosSousCateg">
+				<option value="0">---</option>
+				<?php
+				foreach ($liste_ssCat as $ssCat) {
+					echo '<option value="'.$ssCat['id'].'">'.$ssCat['label'].'</option>';
+				}
+				?>
+			</select>
+		</div>
+		<div class="inline top center pad3" style="width: 120px;">
+			<div class="ui-widget-header ui-corner-all">Tarif loc. : <b class="red">*</b></div>
+			<input class="NumericInput" type="text" id="newMatosTarifLoc" size="6" /> €
+		</div>
+		<div class="inline top center pad3" style="width: 130px;">
+			<div class="ui-widget-header ui-corner-all">Val. Remp. : <b class="red">*</b></div>
+			<input class="NumericInput" type="text" id="newMatosValRemp" size="8" /> €
+		</div>
+		<div class="inline top center pad3" style="width: 120px;">
+			<div class="ui-widget-header ui-corner-all">Qté Parc : <b class="red">*</b></div>
+			<input class="NumericInput" type="text" id="newMatosQtotale" size="7" />
+		</div>
+		<br />
+		<div class="inline top center pad3" style="width: 480px;">
+			<div class="ui-widget-header ui-corner-all">Remarque :</div>
+			<textarea id="newMatosRemark" cols="55" rows="5"></textarea>
+		</div>
+		<div class="inline top center pad3" style="width: 130px;">
+			<div class="ui-widget-header ui-corner-all">Externe ?</div>
+			<input type="checkbox" id="newMatosExterne" class="externeBox" />
+		</div>
+		<div class="inline top center pad3" style="width: 120px;">
+			<div id="dateAchatDiv">
+				<div class="ui-widget-header ui-corner-all">Acheté le :</div>
+				<input type="text" id="newMatosDateAchat" class="inputCal2" size="9" />
+			</div>
+			<div id="chezQuiDiv" class="hide">
+				<div class="ui-widget-header ui-corner-all">À louer chez :</div>
+				<input type="text" id="newMatosExtOwner" size="9" />
+			</div>
+		</div>
 	</div>
 	<br />
-	<div class="inline top center pad3" style="width: 140px;">
-		<div class="ui-widget-header ui-corner-all">Catégorie : <b class="red">*</b></div>
-		<select id="newMatosCateg">
-			<option value="son">SON</option>
-			<option value="lumiere">LUMIÈRE</option>
-			<option value="structure">STRUCTURE</option>
-			<option value="transport">TRANSPORT</option>
-		</select>
-	</div>
-	<div class="inline top center pad3" style="width: 200px;">
-		<div class="ui-widget-header ui-corner-all">Sous Categ :</div>
-		<select id="newMatosSousCateg">
-			<option value="0">---</option>
-			<?php
-			foreach ($liste_ssCat as $ssCat) {
-				echo '<option value="'.$ssCat['id'].'">'.$ssCat['label'].'</option>';
-			}
-			?>
-		</select>
-	</div>
-	<div class="inline top center pad3" style="width: 120px;">
-		<div class="ui-widget-header ui-corner-all">Tarif loc. : <b class="red">*</b></div>
-		<input class="NumericInput" type="text" id="newMatosTarifLoc" size="6" /> €
-	</div>
-	<div class="inline top center pad3" style="width: 130px;">
-		<div class="ui-widget-header ui-corner-all">Val. Remp. : <b class="red">*</b></div>
-		<input class="NumericInput" type="text" id="newMatosValRemp" size="8" /> €
-	</div>
-	<div class="inline top center pad3" style="width: 120px;">
-		<div class="ui-widget-header ui-corner-all">Qté Parc : <b class="red">*</b></div>
-		<input class="NumericInput" type="text" id="newMatosQtotale" size="7" />
+	<div class="ui-widget-header ui-corner-all center">Matériel identifié unitairement</div>
+	<div class="ui-widget-content ui-corner-all" style="padding: 1ex;">
+		<table id="listeMatosUnit" class="tableListe">
+			<thead>
+				<tr class="titresListe">
+					<th>Référence <b class="red">*</b></th>
+					<th colspan="2" style="text-align: left;">Externe ?</th>
+					<th>Remarque</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+		<br />
+		<div class="big center" title="Ajouter un matériel identifié">
+			<button class="bouton" id="addMatosUnit" onclick="addMatosUnitRow()"><span class="ui-icon ui-icon-plusthick"></span></button>
+		</div>
 	</div>
 	<br />
-	<div class="inline top center pad3" style="width: 480px;">
-		<div class="ui-widget-header ui-corner-all">Remarque :</div>
-		<textarea id="newMatosRemark" cols="55" rows="5"></textarea>
-	</div>
-	<div class="inline top center pad3" style="width: 130px;">
-		<div class="ui-widget-header ui-corner-all">Externe ?</div>
-		<input type="checkbox" id="newMatosExterne" class="externeBox" />
-	</div>
-	<div class="inline top center pad3" style="width: 120px;">
-		<div id="dateAchatDiv">
-			<div class="ui-widget-header ui-corner-all">Acheté le :</div>
-			<input type="text" id="newMatosDateAchat" class="inputCal2" size="9" />
-		</div>
-		<div id="chezQuiDiv" class="hide">
-			<div class="ui-widget-header ui-corner-all">A louer chez :</div>
-			<input type="text" id="newMatosExtOwner" size="9" />
-		</div>
-	</div>
-	<div class="inline bot">
+	<div class="center bot">
 		<button class="bouton" id="addMatos">AJOUTER</button>
 	</div>
 </div>

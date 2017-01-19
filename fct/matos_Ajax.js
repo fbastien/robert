@@ -106,7 +106,7 @@ $(function() {
 
 	// Si click sur matos externe, change l'info de date par "chez qui ?"
 	$('.externeBox').click(function () {
-		if ($(this).attr('checked') == 'checked') {
+		if ($(this).is(':checked')) {
 			$('#dateAchatDiv').hide();
 			$('#chezQuiDiv').show();
 		}
@@ -129,23 +129,68 @@ $(function() {
 		var tarifLoc	= $('#newMatosTarifLoc').val() ;
 		var valRemp		= $('#newMatosValRemp').val() ;
 		var remarque	= encodeURIComponent($('#newMatosRemark').val()) ;
-		var externe		= 0;
-		if ($('#newMatosExterne').attr('checked')) externe	= 1 ;
+		var externe		= ($('#newMatosExterne').is(':checked') ? 1 : 0);
 
-		if (label == '' || ref == '' || categ == '' || Qtotale == '' || tarifLoc == '' || valRemp == '') {
+		if (label.length == 0 || ref.length == 0 || categ.length == 0 || Qtotale.length == 0 || tarifLoc.length == 0 || valRemp.length == 0) {
 			alert('Vous devez remplir tous les champs marqués d\'une étoile !');
 			return;
 		}
+		if (! $.isNumeric(Qtotale) || Qtotale % 1 !== 0 || Qtotale <= 0) {
+			alert('Quantité totale invalide !');
+			return;
+		}
+		
+		var matosUnitsList = $('table#listeMatosUnit > tbody > tr');
+		var matosUnitsData = [];
+		for(var i = 0; i < matosUnitsList.length; i++) {
+			var row = matosUnitsList.eq(i);
+			var unitRef = row.find('.newMatosUnitRef').val();
+			var unitExterne = (row.find('.newMatosUnitExterne').is(':checked') ? 1 : 0);
+			var unitDateAchat = row.find('.newMatosUnitDateAchat').val();
+			var unitOwnerExt = row.find('.newMatosUnitOwnerExt').val();
+			var unitRemarque = encodeURIComponent(row.find('.newMatosUnitRemarque').val());
+			
+			if (unitRef.length == 0) {
+				alert('Vous devez remplir tous les champs marqués d\'une étoile !');
+				return;
+			}
+			if (unitRef == ref) {
+				alert('Les références doivent toutes être différentes !');
+				return;
+			}
+			for(var j = 0; j < matosUnitsData.length; j++) {
+				if(unitRef == matosUnitsData[j].ref) {
+					alert('Les références doivent toutes être différentes !');
+					return;
+				}
+			}
+			
+			matosUnitsData.push({
+					'ref' : unitRef,
+					'externe' : unitExterne,
+					'dateAchat' : unitDateAchat,
+					'ownerExt' : unitOwnerExt,
+					'remarque' : unitRemarque});
+		}
+		
 		var strAjax = 'action=addMatos&label='+label+'&ref='+ref
 					 +'&categorie='+categ+'&sousCateg='+Souscateg
 					 +'&Qtotale='+Qtotale+'&dateAchat='+dateAchat
 					 +'&tarifLoc='+tarifLoc+'&valRemp='+valRemp
 					 +'&externe='+externe+'&ownerExt='+ownerExt
 					 +'&remarque='+remarque ;
+		for (var i = 0; i < matosUnitsData.length; i++) {
+			strAjax += '&matosUnits['+i+'][ref]='+matosUnitsData[i].ref
+					+'&matosUnits['+i+'][externe]='+matosUnitsData[i].externe
+					+'&matosUnits['+i+'][dateAchat]='+matosUnitsData[i].dateAchat
+					+'&matosUnits['+i+'][ownerExt]='+matosUnitsData[i].ownerExt
+					+'&matosUnits['+i+'][remarque]='+matosUnitsData[i].remarque;
+		}
 		AjaxFct(strAjax, 'matos_actions', false, 'retourAjax', 'matos_list_detail');
 	});
 
 });
+
 
 function refreshSousCatLine () {
 	$('.sousCategLine').each(function(){
@@ -169,15 +214,83 @@ function displaySelMatos (data) {
 	$('#modMatosExtOwner').val(data.ownerExt);
 	$('#modMatosRem').val(data.remarque);
 	if (data.externe == '1') {
-		 $('#modMatosExterne').attr('checked', 'checked');
-		 $('#dateAchatDiv').hide();
-		 $('#chezQuiDiv').show();
+		$('#modMatosExterne').attr('checked', 'checked');
+		$('#dateAchatDiv').hide();
+		$('#chezQuiDiv').show();
 	}
 	else {
 		$('#modMatosExterne').removeAttr('checked');
-		 $('#chezQuiDiv').hide();
-		 $('#dateAchatDiv').show();
+		$('#chezQuiDiv').hide();
+		$('#dateAchatDiv').show();
 	}
+}
+
+
+/** Ajoute, dans le formulaire d'ajout de matériel, une ligne supplémentaire dans le tableau du matériel identifié unitairement. */
+function addMatosUnitRow() {
+	// Gestion de la quantité totale
+	var quantiteTotale = $('input#newMatosQtotale').val();
+	var listeUnits = $('table#listeMatosUnit > tbody');
+	if(! (($.isNumeric(quantiteTotale) && quantiteTotale % 1 === 0 && quantiteTotale > 0) // La quantité de matériel doit être un entier positif
+			|| (quantiteTotale.length == 0 && listeUnits.children().length == 0))) // Exception faite au début quand la quantité est vide (alors considérée comme 1) et que c'est la première fois qu'une ligne est ajoutée
+	{
+		alert('La quantité totale de matériel est incorrecte.');
+		return;
+	}
+	if(quantiteTotale.length == 0) {
+		quantiteTotale = 1;
+		$('input#newMatosQtotale').val(quantiteTotale);
+	}
+	else {
+		quantiteTotale = parseInt(quantiteTotale);
+	}
+	if(listeUnits.children().size() >= quantiteTotale) {
+		if(! confirm('Tout le matériel est déjà identifié unitairement. Augmenter la quantité totale pour ajouter ce nouveau matériel ?')) {
+			return;
+		}
+		$('input#newMatosQtotale').val(++quantiteTotale);
+	}
+	
+	// Ajout de la ligne
+	var newRow = $('<tr class="ui-state-hover sousCategLine">\
+			<td><input type="text" class="newMatosUnitRef" size="15" /></td>\
+			<td><input type="checkbox" class="newMatosUnitExterne" /></td>\
+			<td>\
+				<div class="newMatosUnitDateAchatDiv">Acheté le : <input type="text" class="newMatosUnitDateAchat inputCal2" size="9" /></div>\
+				<div class="newMatosUnitOwnerExtDiv">À louer chez : <input type="text" class="newMatosUnitOwnerExt" size="9" /></div>\
+			</td>\
+			<td><textarea class="newMatosUnitRemarque" cols="25" style="height: 18px;"></textarea></td>\
+			<td><button class="bouton delUnitRow"><span class="ui-icon ui-icon-trash"></span></button></td>\
+			</tr>');
+	newRow.find(".inputCal2").datepicker({dateFormat: 'yy-mm-dd', firstDay: 1, changeMonth: true, changeYear: true});
+	// Gestion de la case à cocher "externe ?"
+	newRow.find('.newMatosUnitOwnerExtDiv').hide();
+	newRow.find('input.newMatosUnitExterne').click($.proxy(function () {
+				var dateAchatDiv = this.find('.newMatosUnitDateAchatDiv');
+				var ownerExtDiv = this.find('.newMatosUnitOwnerExtDiv');
+				if(this.find('input.newMatosUnitExterne').is(':checked')) {
+					dateAchatDiv.hide();
+					ownerExtDiv.show();
+				}
+				else {
+					ownerExtDiv.hide();
+					dateAchatDiv.show();
+				}
+			}, newRow));
+	// Gestion du boutton de suppression de la ligne
+	newRow.find('button.delUnitRow')
+		.button()
+		.click($.proxy(function() {
+				if(! confirm('Supprimer le matériel identifié "'+this.find('.newMatosUnitRef').val()+'" ?')) {
+					return;
+				}
+				this.remove();
+				if(confirm('Retrancher le matériel supprimé de la quantité totale ?')) {
+					var champQuantite = $('#newMatosQtotale');
+					champQuantite.val(champQuantite.val() - 1);
+				}
+			}, newRow));
+	listeUnits.append(newRow);
 }
 
 

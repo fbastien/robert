@@ -161,7 +161,7 @@ if (!isset($_SESSION['plan_mod_backup'])) {
 		$('#etape-3').show();
 		$('#raccourcisPlans').hide();
 		$('#tekosHolder').attr('id', 'tekosmodalHolder');
-		$('#togglePacksMatos').click();
+		// $('#togglePacksMatos').click(); // TODO Lancer le clic seulement si l'affichage par défaut est par pack
 	});
 </script>
 

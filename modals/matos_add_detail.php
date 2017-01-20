@@ -37,15 +37,15 @@ $liste_ssCat = $lm->getListe(TABLE_MATOS_CATEG, '*', 'ordre', 'ASC');
 	<div class="ui-widget-content ui-corner-all" style="padding: 1ex;">
 		<div class="inline top center pad3" style="width: 140px;">
 			<div class="ui-widget-header ui-corner-all">Référence : <b class="red" title="Remplir au moins la référence ou le code-barres">**</b></div>
-			<input type="text" id="newMatosRef" size="15" />
+			<input type="text" id="newMatosRef" style="width: 100%;" />
 		</div>
 		<div class="inline top center pad3" style="width: 450px;">
 			<div class="ui-widget-header ui-corner-all">Désignation complète : <b class="red">*</b></div>
-			<input type="text" id="newMatosLabel" size="50" />
+			<input type="text" id="newMatosLabel" style="width: 100%;" />
 		</div>
 		<div class="inline top center pad3" style="width: 140px;">
-			<div class="ui-widget-header ui-corner-all">Code barres : <b class="red" title="Remplir au moins la référence ou le code-barres">**</b></div></div>
-			<input type="text" id="newMatosCode" size="15" />
+			<div class="ui-widget-header ui-corner-all">Code barres : <b class="red" title="Remplir au moins la référence ou le code-barres">**</b></div>
+			<input type="text" id="newMatosCode" style="width: 100%;" />
 		</div>
 		<br />
 		<div class="inline top center pad3" style="width: 140px;">

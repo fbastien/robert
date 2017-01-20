@@ -4,18 +4,20 @@
 <div class="addSection ui-widget-content ui-corner-all leftText pad20 hide" id="etape-3">
 	<div class="ui-widget-header ui-corner-all pad5 gros">Ajout par code-barres</div>
 	<br />
-	<div class="center">Code barre : <input type="text" id="addMatosCB" style="width: 200px; height: 40px;" /></div>
+	<div class="center">Code-barres : <input type="text" id="addMatosCB" style="width: 200px; height: 40px;" /></div>
 	<br />
 	<br />
 	
 	<div class="ui-widget-header ui-corner-all pad5 gros">Choix du matériel</div>
 	<br />
 	<div class="ui-state-disabled pad10 ui-corner-all leftText shadowIn" id="messHelpMatos" style="float:right; ">
-		Bouton "+" pour ajouter un pack,<br /> Bouton "-" pour en enlever un.
+<?php /* Bouton "+" pour ajouter un pack,<br /> Bouton "-" pour en enlever un. */ ?>
+		Bouton "+" pour ajouter un matériel,<br /> tapez ensuite la quantité voulue, ou "-" pour l\'enlever.
 	</div>
 	<div class="inline top leftText mini">
 		<div class="inline top center enorme" style="width: 160px;">
-			<button class="bouton big" id="togglePacksMatos" title="voir le matériel en détail pour être plus précis">MATÉRIEL au détail</button>
+<?php /* <button class="bouton big" id="togglePacksMatos" title="voir le matériel en détail pour être plus précis">MATÉRIEL au détail</button> */ // TODO config pour choisir lequel afficher en premier ?>
+			<button class="bouton big" id="togglePacksMatos" title="voir le matériel en pack pour gagner du temps">PACKS de matériel</button>
 		</div>
 		<button class="inline top bouton" id='add_Matos_Rapide' title="Ajouter un matériel vite fait">
 			<span class="ui-icon ui-icon-plusthick doigt">ajouter</span>
@@ -38,7 +40,7 @@
 	<br />
 	
 
-	<div id="packsHolder" class="center shadowOut">
+	<div id="packsHolder" class="center shadowOut hide">
 		<?php
 			foreach ( $listePacks as $k => $v ){
 				$id         = $v['id'] ;
@@ -92,7 +94,7 @@
 		?>
 	</div>
 	
-	<div id="matosHolder" class="center shadowOut gros hide"> <?php
+	<div id="matosHolder" class="center shadowOut gros"> <?php
 		include('matos_tri_sousCat.php');
 		
 		$matos_by_categ = creerSousCatArray($listeMatos);

@@ -260,12 +260,40 @@ $(function() {
 	
 	// TODO FIXME
 	$("#addMatosCB").on('keypress', function (e) {
-        if(e.which === 13){
-           alert('Ajout du matériel '+$(this).val());
-           // TODO FIXME
-           $(this).val('');
-        }
-  });
+	if(e.which === 13){
+		var matosGenWithCode = $("#matosHolder .matos_name:contains('"+$(this).val()+"')");
+		if(matosGenWithCode.length > 0) {
+			var matosButtonDiv = matosGenWithCode.parent().find('.matos_plus');
+			if(matosButtonDiv.children('button.plus').length > 0) {
+				matosButtonDiv.click();
+			}
+			else {
+				var quantiteInput = matosButtonDiv.siblings('.qtePik').find('.qtePikInput');
+				quantiteInput.val(parseInt(quantiteInput.val()) + 1);
+				quantiteInput.blur();
+			}
+		}
+		else {
+			var matosUnitWithCode = $("#matosHolder .matosPikUnit label:contains('"+$(this).val()+"')");
+			if(matosUnitWithCode.length > 0) {
+				matosUnitWithCode.siblings("input[id='"+matosUnitWithCode.attr('for')+"']").prop('checked', true);
+				var matosButtonDiv = matosUnitWithCode.closest('.matosPikUnit').siblings('.matos_plus')
+				if(matosButtonDiv.children('button.plus').length > 0) {
+					matosButtonDiv.click();
+				}
+				else {
+					// TODO FIXME appeler le même mécanisme que lors du cochage de la case
+					var quantiteInput = matosUnitWithCode.closest('.matosDispo').find('.qtePikInput');
+					quantiteInput.val(parseInt(quantiteInput.val()) + 1);
+					quantiteInput.blur();
+				}
+			}
+			else
+				alert('Matériel "'+$(this).val()+'" non trouvé');
+			}
+			$(this).val('');
+		}
+	});
 
 
 });

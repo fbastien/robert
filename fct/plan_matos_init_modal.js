@@ -643,6 +643,7 @@ function addTekosToSP(timeStamp, tekosList){
 function addMatosToBDD(){
 		var label		= encodeURIComponent($('#newMatosLabel').val()) ;
 		var ref			= $('#newMatosRef').val() ;
+		var code		= $('#newMatosCode').val() ;
 		var categ		= $('#newMatosCateg').val() ;
 		var Souscateg	= $('#newMatosSousCateg').val() ;
 		var Qtotale		= $('#newMatosQtotale').val() ;
@@ -658,7 +659,7 @@ function addMatosToBDD(){
 			alert('Vous devez remplir tous les champs marqués d\'une étoile !');
 			return false;
 		}
-		var strAjax = 'action=addMatosJson&label='+label+'&ref='+ref
+		var strAjax = 'action=addMatosJson&label='+label+'&ref='+ref+'&codeBarres='+code
 					 +'&categorie='+categ+'&sousCateg='+Souscateg
 					 +'&Qtotale='+Qtotale+'&dateAchat='+dateAchat
 					 +'&tarifLoc='+tarifLoc+'&valRemp='+valRemp

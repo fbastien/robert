@@ -176,11 +176,15 @@ $liste_ssCat = $lm->getListe(TABLE_MATOS_CATEG, '*', 'ordre', 'ASC');
 <div class="ui-widget-content ui-corner-all leftText petit hide" id="addMatosModal">
 	<div class="inline top center pad3" style="width: 140px;">
 		<div class="ui-widget-header ui-corner-all">Référence : <b class="red">*</b></div>
-		<input type="text" id="newMatosRef" class="addMatosInput" size="15" />
+		<input type="text" id="newMatosRef" class="addMatosInput" style="width: 100%;" />
 	</div>
-	<div class="inline top center pad3" style="width: 600px;">
+	<div class="inline top center pad3" style="width: 450px;">
 		<div class="ui-widget-header ui-corner-all">Désignation complète : <b class="red">*</b></div>
-		<input type="text" id="newMatosLabel" class="addMatosInput" size="72" />
+		<input type="text" id="newMatosLabel" class="addMatosInput" style="width: 100%;" />
+	</div>
+	<div class="inline top center pad3" style="width: 140px;">
+		<div class="ui-widget-header ui-corner-all">Code-barres :</div>
+		<input type="text" id="newMatosCode" class="addMatosInput" style="width: 100%;" />
 	</div>
 	<br />
 	<div class="inline top center pad3" style="width: 140px;">

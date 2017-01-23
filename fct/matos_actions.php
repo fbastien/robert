@@ -101,25 +101,22 @@ if ( $action == 'delete') {
 	try {
 		$l = new Liste();
 		$listeDelUnits = $l->getListe(TABLE_MATOS_UNIT, 'id_matosunit', 'id_matosunit', '', 'id_matosdetail', '=', $id);
-		if ($listeDelUnits === false) {
-			$retour['error'] = "Impossible de supprimer le matériel identifié unitairement...";
-		}
-		else {
+		if (is_array($listeDelUnits)) {
 			foreach ($listeDelUnits as $idUnitDel) {
 				$delUnit = new MatosUnit('id_matosunit', $idUnitDel);
 				if ($delUnit->deleteMatosUnit() <= 0) {
 					$retour['error'] = "Impossible de supprimer le matériel identifié unitairement...";
 				}
 			}
-			if (! isset($retour['error'])) {
-				$delMatos = new Matos('id', $id);
-				if ($delMatos->deleteMatos() > 0) {
-					$retour['error'] = 'OK';
-					$retour['type'] = 'reloadPage';
-				}
-				else
-					$retour['error'] = "Impossible de supprimer le matériel...";
+		}
+		if (! isset($retour['error'])) {
+			$delMatos = new Matos('id', $id);
+			if ($delMatos->deleteMatos() > 0) {
+				$retour['error'] = 'OK';
+				$retour['type'] = 'reloadPage';
 			}
+			else
+				$retour['error'] = "Impossible de supprimer le matériel...";
 		}
 	}
 	catch (Exception $e){

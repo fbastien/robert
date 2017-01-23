@@ -110,8 +110,11 @@ class Matos implements Iterator {
 			}
 			unset($arrKeysVals['externe']);
 		}
-		if($arrKeysVals['remarque'] === '') {
-			$arrKeysVals['remarque'] = null;
+		// Gestion des champs qui peuvent être NULL
+		foreach (array('codeBarres', 'dateAchat', 'ownerExt', 'remarque') as $champ) {
+			if($arrKeysVals[$champ] === '') {
+				$arrKeysVals[$champ] = null;
+			}
 		}
 		
 		foreach ($arrKeysVals as $key => $val)

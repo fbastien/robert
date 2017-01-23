@@ -73,6 +73,7 @@ $(function() {
 		var idMatos		= $('#modMatosId').val();
 		var label		= encodeURIComponent($('#modMatosLabel').val());
 		var ref			= $('#modMatosRef').val();
+		var code		= $('#modMatosCode').val();
 		var categ		= $('#modMatosCateg').val();
 		var sscateg		= $('#modMatosSousCateg').val();
 		var Qtotale		= $('#modMatosQteTot').val();
@@ -85,7 +86,7 @@ $(function() {
 		var externe		= 0;
 		if ($('#modMatosExterne').attr('checked')) externe	= 1 ;
 
-		var AjaxStr = 'action=modif&id='+idMatos+'&label='+label+'&ref='+ref
+		var AjaxStr = 'action=modif&id='+idMatos+'&label='+label+'&ref='+ref+'&codeBarres='+code
 						+'&categorie='+categ+'&sousCateg='+sscateg
 						+'&Qtotale='+Qtotale+'&dateAchat='+dateAchat
 						+'&tarifLoc='+tarifLoc+'&valRemp='+valRemp+'&panne='+panne
@@ -146,37 +147,35 @@ $(function() {
 		for(var i = 0; i < matosUnitsList.length; i++) {
 			var row = matosUnitsList.eq(i);
 			var unitRef = row.find('.newMatosUnitRef').val();
-			var unitCode = row.find('.newMatosUnitCode').val();
 			var unitExterne = (row.find('.newMatosUnitExterne').is(':checked') ? 1 : 0);
 			var unitDateAchat = row.find('.newMatosUnitDateAchat').val();
 			var unitOwnerExt = row.find('.newMatosUnitOwnerExt').val();
 			var unitRemarque = encodeURIComponent(row.find('.newMatosUnitRemarque').val());
 			
-			if (unitCode.length == 0) {
+			if (unitRef.length == 0) {
 				alert('Vous devez remplir tous les champs marqués d\'une étoile !');
 				return;
 			}
-			if (unitRef == ref || unitCode == code) {
-				alert('Les références et codes-barres doivent toutes être différents !');
+			if (unitRef == code) {
+				alert('Les codes-barres doivent tous être différents !');
 				return;
 			}
 			for(var j = 0; j < matosUnitsData.length; j++) {
 				if(unitRef == matosUnitsData[j].ref) {
-					alert('Les références doivent toutes être différentes !');
+					alert('Les codes-barres doivent tous être différents !');
 					return;
 				}
 			}
 			
 			matosUnitsData.push({
 					'ref' : unitRef,
-					'code' : unitCode,
 					'externe' : unitExterne,
 					'dateAchat' : unitDateAchat,
 					'ownerExt' : unitOwnerExt,
 					'remarque' : unitRemarque});
 		}
 		
-		var strAjax = 'action=addMatos&label='+label+'&ref='+ref
+		var strAjax = 'action=addMatos&label='+label+'&ref='+ref+'&codeBarres='+code
 					 +'&categorie='+categ+'&sousCateg='+Souscateg
 					 +'&Qtotale='+Qtotale+'&dateAchat='+dateAchat
 					 +'&tarifLoc='+tarifLoc+'&valRemp='+valRemp
@@ -207,6 +206,7 @@ function displaySelMatos (data) {
 	$('#modMatosId').val(data.id);
 	$('#modMatosRef').val(data.ref);
 	$('#modMatosLabel').val(data.label);
+	$('#modMatosCode').val(data.codeBarres);
 	$('#modMatosQteTot').val(data.Qtotale);
 	$('#modMatosTarif').val(data.tarifLoc);
 	$('#modMatosValRemp').val(data.valRemp);
@@ -257,7 +257,6 @@ function addMatosUnitRow() {
 	// Ajout de la ligne
 	var newRow = $('<tr class="ui-state-hover sousCategLine">\
 			<td><input type="text" class="newMatosUnitRef" size="15" /></td>\
-			<td><input type="text" class="newMatosUnitCode" size="15" /></td>\
 			<td><input type="checkbox" class="newMatosUnitExterne" /></td>\
 			<td>\
 				<div class="newMatosUnitDateAchatDiv">Acheté le : <input type="text" class="newMatosUnitDateAchat inputCal2" size="9" /></div>\

@@ -56,6 +56,7 @@ $listeMatosUnit = $lm->getListe(TABLE_MATOS_UNIT, '*', 'ref');
 	<table class="tableListe">
 		<tr class="titresListe">
 			<th class="ui-state-disabled">Référence</th>
+			<th class="ui-state-disabled">Code-barres</th>
 			<th class="ui-state-disabled">Désignation complète</th>
 			<th class="ui-state-disabled">Catégorie</th>
 			<th class="ui-state-disabled">Tarif loc.</th>
@@ -104,6 +105,7 @@ $listeMatosUnit = $lm->getListe(TABLE_MATOS_UNIT, '*', 'ref');
 					
 					echo '<tr class="ui-state-default matosLine '.$hideExterne.' cat-'.$info['categorie'].'">
 							<td>'.$info['ref'].'</td>
+							<td>'.$info['codeBarres'].'</td>
 							<td popup="'.$remark.'">'.$info['label'].'</td>
 							<td><img src="./gfx/icones/categ-'.$info['categorie'].'.png" alt="'.$info['categorie'].'" /></td>
 							<td>'.$info['tarifLoc'].' &euro;</td>
@@ -148,11 +150,15 @@ $listeMatosUnit = $lm->getListe(TABLE_MATOS_UNIT, '*', 'ref');
 		<input type="hidden" id="modMatosId" />
 		<div class="inline top center pad3" style="width: 140px;">
 			<div class="ui-widget-header ui-corner-all">Référence :</div>
-			<input type="text" id="modMatosRef" size="15" />
+			<input type="text" id="modMatosRef" style="width: 100%;" />
 		</div>
-		<div class="inline top center pad3" style="width: 600px;">
+		<div class="inline top center pad3" style="width: 450px;">
 			<div class="ui-widget-header ui-corner-all">Désignation complète :</div>
-			<input type="text" id="modMatosLabel" size="72" />
+			<input type="text" id="modMatosLabel" style="width: 100%;" />
+		</div>
+		<div class="inline top center pad3" style="width: 140px;">
+			<div class="ui-widget-header ui-corner-all">Code-barres :</div>
+			<input type="text" id="modMatosCode" style="width: 100%;" />
 		</div>
 		<br />
 		<div class="inline top center pad3" style="width: 120px;">
@@ -194,7 +200,7 @@ $listeMatosUnit = $lm->getListe(TABLE_MATOS_UNIT, '*', 'ref');
 		<br />
 		<div class="inline top center pad3" style="width: 480px;">
 			<div class="ui-widget-header ui-corner-all">Remarque :</div>
-			<textarea id="modMatosRem" cols="55" rows="5"></textarea>
+			<textarea id="modMatosRem" rows="5" style="width: 100%;"></textarea>
 		</div>
 		<div class="inline top center pad3" style="width: 130px;">
 			<div class="ui-widget-header ui-corner-all">Externe ?</div>

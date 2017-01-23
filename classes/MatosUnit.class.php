@@ -125,7 +125,7 @@ class MatosUnit implements Iterator {
 			$this->infos->addInfo($key, $val);
 	}
 	
-	public function updateMatos ($typeInfo = false, $newInfo = false) {
+	public function updateMatosUnit ($typeInfo = false, $newInfo = false) {
 		// Si on spécifie une clé/valeur, on update que celle-ci
 		if ($typeInfo !== false && $newInfo !== false) {
 			try {
@@ -166,7 +166,7 @@ class MatosUnit implements Iterator {
 		return MatosUnit::MATOS_OK ;
 	}
 	
-	public function deleteMatos () {
+	public function deleteMatosUnit () {
 		$nb = $this->infos->delete(MatosUnit::ID_MATOS_UNIT, $this->id);
 		return $nb ;
 	}

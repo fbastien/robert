@@ -23,6 +23,10 @@ CREATE TABLE `robert_matos_unit` (
 -- ----------------------- --
 
 ALTER TABLE `robert_matos_detail`
+	ADD COLUMN `codeBarres`
+		VARCHAR(16) DEFAULT NULL
+		AFTER `ref`,
+	ADD UNIQUE KEY `codeBarres` (`codeBarres`),
 	MODIFY COLUMN `panne`
 		INT(4) NOT NULL,
 	MODIFY COLUMN `dateAchat`
@@ -44,11 +48,12 @@ ALTER TABLE `robert_plans_details`
 
 ALTER TABLE `robert_users`
 	ADD COLUMN `ldap_uid`
-		VARCHAR(255) NULL
+		VARCHAR(255) DEFAULT NULL
 		AFTER `id`,
 	ADD UNIQUE KEY `ldap_uid` (`ldap_uid`),
 	MODIFY COLUMN `password`
-		VARCHAR(32) NULL;
+		VARCHAR(32) DEFAULT NULL;
+-- TODO ajouter trigger
 
 -- ---------------------- --
 -- Conversion des données --

@@ -36,7 +36,7 @@ $liste_ssCat = $lm->getListe(TABLE_MATOS_CATEG, '*', 'ordre', 'ASC');
 	<div class="ui-widget-header ui-corner-all center">Informations générales</div>
 	<div class="ui-widget-content ui-corner-all" style="padding: 1ex;">
 		<div class="inline top center pad3" style="width: 140px;">
-			<div class="ui-widget-header ui-corner-all">Référence : <b class="red" title="Remplir au moins la référence ou le code-barres">**</b></div>
+			<div class="ui-widget-header ui-corner-all">Référence : <b class="red">*</b></div>
 			<input type="text" id="newMatosRef" style="width: 100%;" />
 		</div>
 		<div class="inline top center pad3" style="width: 450px;">
@@ -44,7 +44,7 @@ $liste_ssCat = $lm->getListe(TABLE_MATOS_CATEG, '*', 'ordre', 'ASC');
 			<input type="text" id="newMatosLabel" style="width: 100%;" />
 		</div>
 		<div class="inline top center pad3" style="width: 140px;">
-			<div class="ui-widget-header ui-corner-all">Code barres : <b class="red" title="Remplir au moins la référence ou le code-barres">**</b></div>
+			<div class="ui-widget-header ui-corner-all">Code-barres :</div>
 			<input type="text" id="newMatosCode" style="width: 100%;" />
 		</div>
 		<br />
@@ -83,7 +83,7 @@ $liste_ssCat = $lm->getListe(TABLE_MATOS_CATEG, '*', 'ordre', 'ASC');
 		<br />
 		<div class="inline top center pad3" style="width: 480px;">
 			<div class="ui-widget-header ui-corner-all">Remarque :</div>
-			<textarea id="newMatosRemark" cols="55" rows="5"></textarea>
+			<textarea id="newMatosRemark" rows="5" style="width: 100%;"></textarea>
 		</div>
 		<div class="inline top center pad3" style="width: 130px;">
 			<div class="ui-widget-header ui-corner-all">Externe ?</div>
@@ -106,8 +106,7 @@ $liste_ssCat = $lm->getListe(TABLE_MATOS_CATEG, '*', 'ordre', 'ASC');
 		<table id="listeMatosUnit" class="tableListe">
 			<thead>
 				<tr class="titresListe">
-					<th>Référence</th>
-					<th>Code barres <b class="red">*</b></th>
+					<th>Code-barres <b class="red">*</b></th>
 					<th colspan="2" style="text-align: left;">Externe ?</th>
 					<th>Remarque</th>
 					<th>Action</th>

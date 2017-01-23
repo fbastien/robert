@@ -52,6 +52,8 @@ UPDATE `robert_users`
 -- ----------------------- --
 
 ALTER TABLE `robert_matos_detail`
+	DROP KEY `codeBarres`,
+	DROP COLUMN `codeBarres`,
 	MODIFY COLUMN `panne`
 		INT(3) NOT NULL,
 	MODIFY COLUMN `dateAchat`
@@ -72,6 +74,7 @@ ALTER TABLE `robert_users`
 	DROP COLUMN `ldap_uid`,
 	MODIFY COLUMN `password`
 		VARCHAR(32) NOT NULL;
+-- TODO supprimer trigger
 
 -- -------------------------------- --
 -- Suppression des nouvelles tables --

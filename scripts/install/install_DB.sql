@@ -81,20 +81,22 @@ CREATE TABLE `robert_devis` (
 DROP TABLE IF EXISTS `robert_matos_detail`;
 
 CREATE TABLE `robert_matos_detail` (
-		`id`        INT(6)       NOT NULL AUTO_INCREMENT,
-		`label`     VARCHAR(256) NOT NULL,
-		`ref`       VARCHAR(128) NOT NULL,
-		`panne`     INT(4)       NOT NULL,
-		`categorie` VARCHAR(128) NOT NULL,
-		`sousCateg` INT(4)       NOT NULL,
-		`Qtotale`   INT(4)       NOT NULL,
-		`tarifLoc`  FLOAT        NOT NULL,
-		`valRemp`   FLOAT        NOT NULL,
-		`dateAchat` DATE         DEFAULT NULL,
-		`ownerExt`  VARCHAR(256) DEFAULT NULL,
-		`remarque`  TEXT         DEFAULT NULL,
+		`id`         INT(6)       NOT NULL AUTO_INCREMENT,
+		`label`      VARCHAR(256) NOT NULL,
+		`ref`        VARCHAR(128) NOT NULL,
+		`codeBarres` VARCHAR(16)  DEFAULT NULL,
+		`panne`      INT(4)       NOT NULL,
+		`categorie`  VARCHAR(128) NOT NULL,
+		`sousCateg`  INT(4)       NOT NULL,
+		`Qtotale`    INT(4)       NOT NULL,
+		`tarifLoc`   FLOAT        NOT NULL,
+		`valRemp`    FLOAT        NOT NULL,
+		`dateAchat`  DATE         DEFAULT NULL,
+		`ownerExt`   VARCHAR(256) DEFAULT NULL,
+		`remarque`   TEXT         DEFAULT NULL,
 		PRIMARY KEY (`id`),
 		UNIQUE KEY `ref` (`ref`),
+		UNIQUE KEY `codeBarres` (`codeBarres`),
 		KEY `sousCateg` (`sousCateg`) )
 	ENGINE = MyISAM,
 	AUTO_INCREMENT = 1,
@@ -272,11 +274,12 @@ CREATE TABLE `robert_tekos` (
 
 DROP TABLE IF EXISTS `robert_users`;
 
+-- TODO trigger pour empêcher d'avoir ldap_uid et password NULL en même temps
 CREATE TABLE `robert_users` (
 		`id`                  INT(10)      NOT NULL AUTO_INCREMENT,
-		`ldap_uid`            VARCHAR(255) NULL,
+		`ldap_uid`            VARCHAR(255) DEFAULT NULL,
 		`email`               VARCHAR(255) NOT NULL,
-		`password`            VARCHAR(32)  NULL,
+		`password`            VARCHAR(32)  DEFAULT NULL,
 		`nom`                 CHAR(30)     NOT NULL,
 		`prenom`              CHAR(30)     NOT NULL,
 		`level`               INT(1)       NOT NULL DEFAULT '1',

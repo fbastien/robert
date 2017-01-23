@@ -146,7 +146,7 @@
 									</div>
 									<div class='inline mid qtePik bordFin bordSection' id='$id'><input type='text' class='qtePikInput hide' size='2' value='0' /></div>
 									<div class='inline mid matos_plus'><button class='bouton plus'><span class='ui-icon ui-icon-plusthick'></span></button></div>
-									<div class='matosPikUnit hide'>";
+									<div class='matosPikUnit padV10 hide'>";
 					foreach($unitsByMatos[$id] as $matosUnit) {
 						if($matosUnit['id_matosdetail'] == $id && ! $matosUnit['panne']) {
 							echo "<div class='inline padV10' style='white-space: nowrap;'><input type='checkbox' class='boxPikUnit' id='boxPikUnit-${matosUnit['id_matosunit']}' value='${matosUnit['id_matosunit']}' /> <label for='boxPikUnit-${matosUnit['id_matosunit']}'>${matosUnit['ref']}</label></div>"; // TODO FIXME

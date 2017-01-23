@@ -159,9 +159,8 @@ $(function() {
 		if( $(this).children('button').hasClass('plus') == true ) {
 			$(this).parents('.matosPik').addClass('ui-state-highlight');
 			$(this).parent('.matosDispo').find('.qtePikInput, .matosPikUnit').removeClass("hide").addClass('show');
-			$(this).parents().children('.qtePik, .matosPikIdent').addClass("padV10");
 			$(this).children('button').removeClass('plus').addClass('moins').children('span').children('span').removeClass('ui-icon-plusthick').addClass('ui-icon-minusthick');
-			$(this).parents().children('.qtePik, .matosPikIdent').children('.qtePikInput').focus();
+			$(this).parents().children('.qtePik').children('.qtePikInput').focus();
 			id   = parseInt($(this).parents().children('.qtePik').attr('id'), 10);
 			matosIdQte[id] = 1 ;
 			matosIdUnits[id] = [];
@@ -169,7 +168,6 @@ $(function() {
 		else {
 			$(this).parent('.matosDispo').find('.qtePikInput, .matosPikUnit').removeClass('show').addClass('hide');
 			$(this).children('button').removeClass('moins').addClass('plus').children('span').children('span').removeClass('ui-icon-minusthick').addClass('ui-icon-plusthick');
-			$(this).parents().children('.qtePik').removeClass("padV10");
 			$(this).parents('.matosPik').removeClass('ui-state-highlight');
 			id   = parseInt($(this).parents().children('.qtePik').attr('id'), 10);
 			delete matosIdQte[id];

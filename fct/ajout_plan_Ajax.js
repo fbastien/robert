@@ -204,7 +204,10 @@ function nextEtape () {
 				var tekosRequest = JSON.encode(tekosIds);
 				$('#recapPlan').load('modals/planAdd_recap.php', {'infos':infosRequest, 'matos':matosRequest, 'units':unitsRequest, 'tekos':tekosRequest}); // TODO FIXME
 			}
-			$('#etape-'+etape).show(transition);
+			$('#etape-'+etape).show(transition, function() {
+				if (etape == 3)
+					displayDivMatosCB();
+			});
 		}
 		else alert(etapeNotValidMsg);
 	}

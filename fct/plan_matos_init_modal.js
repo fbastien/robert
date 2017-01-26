@@ -3,6 +3,10 @@ var separator	= ' ';
 var matosIdQte	= {} ;
 var matosIdUnits = {};
 var tekosIds	= [] ;
+var divMatosCB;
+var divMatosCBScroll;
+var divMatosCBOffset;
+var isDivMatosCBFixed = false;
 
 // Retour au calendrier pendant l'ajout de plan (annule tout)
 function retourCalendar () {
@@ -153,7 +157,6 @@ $(function() {
 /// Click sur le plus ou sur la croix pour ajouter un matos à la liste
 	//$(".matos_plus").click(function() {
 	$("#matosHolder").on ( 'click', '.matos_plus' , function() {
-		var name	  = $(this).parents('.matos_name').html();
 		var isExterne = $(this).parents(".matosPik").hasClass('matosExterne');
 		var id = 0;
 		if( $(this).children('button').hasClass('plus') == true ) {
@@ -203,7 +206,9 @@ $(function() {
 		if($(this).prop('checked')) {
 			matosIdUnits[idMatos].push(idUnit);
 			// TODO FIXME incrémenter la quantité
-		} else {
+		}
+		// Retrait
+		else {
 			var matosUnits = matosIdUnits[idMatos];
 			var uncheckedIndex = matosUnits.indexOf(idUnit);
 			matosUnits.splice(uncheckedIndex, 1);
@@ -256,40 +261,79 @@ $(function() {
 		}
 	});
 	
-	// TODO FIXME
-	$("#addMatosCB").on('keypress', function (e) {
-	if(e.which === 13){
-		var matosGenWithCode = $("#matosHolder .matos_name:contains('"+$(this).val()+"')");
-		if(matosGenWithCode.length > 0) {
-			var matosButtonDiv = matosGenWithCode.parent().find('.matos_plus');
-			if(matosButtonDiv.children('button.plus').length > 0) {
-				matosButtonDiv.click();
-			}
-			else {
-				var quantiteInput = matosButtonDiv.siblings('.qtePik').find('.qtePikInput');
-				quantiteInput.val(parseInt(quantiteInput.val()) + 1);
-				quantiteInput.blur();
-			}
+	// Maintien du champ d'ajout de matériel par code-barres visible en haut de la liste
+	divMatosCB = $('#divMatosCB');
+	divMatosCBScroll = divMatosCB.closest(mode_ajout ? '.colonne' : '#modalMatos');
+	divMatosCBScroll.scroll(function(){
+		// Appel de la fonction de mise à jour uniquement lors du changement entre les positions normale et fixe
+		if (isDivMatosCBFixed != ($(this).scrollTop() >= divMatosCBOffset)) {
+			displayDivMatosCB();
 		}
-		else {
-			var matosUnitWithCode = $("#matosHolder .matosPikUnit label:contains('"+$(this).val()+"')");
-			if(matosUnitWithCode.length > 0) {
-				matosUnitWithCode.siblings("input[id='"+matosUnitWithCode.attr('for')+"']").prop('checked', true);
-				var matosButtonDiv = matosUnitWithCode.closest('.matosPikUnit').siblings('.matos_plus')
+	});
+	var resizeTimer;
+	$(window).resize(function() {
+		clearTimeout(resizeTimer);
+		resizeTimer = setTimeout(displayDivMatosCB, 100);
+	});
+	
+	// Ajout de matériel à partir de son code-barres
+	$("#addMatosCB").on('keypress', function (e) {
+		if(e.which === 13 && $(this).val().length > 0){
+			var message = '';
+			var isError = false;
+			// Recherche du code-barres dans le matériel au détail
+			var matosGenWithCode = $("#matosHolder .matos_code:contains('"+$(this).val()+"')");
+			if(matosGenWithCode.length > 0) {
+				var matosButtonDiv = matosGenWithCode.closest('.matosPik').find('.matos_plus');
 				if(matosButtonDiv.children('button.plus').length > 0) {
 					matosButtonDiv.click();
 				}
 				else {
-					// TODO FIXME appeler le même mécanisme que lors du cochage de la case
-					var quantiteInput = matosUnitWithCode.closest('.matosDispo').find('.qtePikInput');
-					quantiteInput.val(parseInt(quantiteInput.val()) + 1);
-					quantiteInput.blur();
+					var quantiteInput = matosButtonDiv.siblings('.qtePik').find('.qtePikInput');
+					quantiteInput
+						.focus()
+						.val(parseInt(quantiteInput.val(), 10) + 1)
+						.blur();
+				}
+				message = 'Matériel "'+ matosGenWithCode.siblings('.matos_name').html().trim() +'" ajouté à la liste.';
+			}
+			else {
+				// Recherche du code-barres dans le matériel identifié unitairement
+				var matosUnitWithCode = $("#matosHolder .matosPikUnit label:contains('"+$(this).val()+"')");
+				if(matosUnitWithCode.length > 0) {
+					var matosButtonDiv = matosUnitWithCode.closest('.matosPikUnit').siblings('.matos_plus');
+					var matosUnitBox = matosUnitWithCode.siblings("input[id='"+matosUnitWithCode.attr('for')+"']");
+					if(matosButtonDiv.children('button.plus').length > 0) {
+						matosButtonDiv.click();
+					}
+					if(matosUnitBox.is(':checked')) {
+						isError = true;
+						message = 'Le matériel "'+ matosUnitWithCode.closest('.matosPik').find('.matos_name').html().trim()
+							+'" avec le code-barres "'+ $(this).val() +'" est déjà présent dans la liste.';
+					}
+					else {
+						matosUnitWithCode.siblings("input[id='"+matosUnitWithCode.attr('for')+"']")
+							.prop('checked', true)
+							.change()
+							.focus();
+						message = 'Matériel "'+ matosUnitWithCode.closest('.matosPik').find('.matos_name').html().trim() +'" ajouté à la liste.';
+					}
+				}
+				// Code-barres non trouvé
+				else {
+					isError = true;
+					message = 'Le code-barres "'+ $(this).val() +'" ne correspond à aucun matériel.';
 				}
 			}
-			else
-				alert('Matériel "'+$(this).val()+'" non trouvé');
-			}
-			$(this).val('');
+			$('#divMatosCBMsg')
+				.html(message)
+				.removeClass('ui-state-error ui-state-highlight')
+				.addClass(isError ? 'ui-state-error' : 'ui-state-highlight')
+				.show()
+				.effect('pulsate', 300);
+			$(this)
+				.val('')
+				.focus();
 		}
 	});
 
@@ -354,7 +398,8 @@ function displayTekosMatos (data) {
 	$("#periode").html( '<b>'+data.periodeStart +'</b> au <b>'+ data.periodeEnd +'</b>' );
 
 	$('#displayNbPlanSimult').html('');
-	if (mode_ajout == false) data.nbPlansPeriode --;
+	if (mode_ajout == false)
+		data.nbPlansPeriode --;
 	if ( data.nbPlansPeriode > 0 ) {
 		var plurielPlan = '';
 		if ( data.nbPlansPeriode > 1 )
@@ -395,11 +440,13 @@ function displayTekosMatos (data) {
 		$("#matos-"+idMatos).children(".matosDispo").find(".qteDispo_total").html ( qteTotale );
 		if (matosIdQte[idMatos] == undefined)
 			$("#matos-"+idMatos).children(".matosDispo").find(".qteDispo_update").html( qteDispo );
-		else $("#matos-"+idMatos).children(".matosDispo").find(".qteDispo_update").html( qteTotale - matosIdQte[idMatos] );
+		else
+			$("#matos-"+idMatos).children(".matosDispo").find(".qteDispo_update").html( qteTotale - matosIdQte[idMatos] );
 		$("#matos-"+idMatos).children(".matosDispo").find(".qteDispo_onload").html( qteDispo );
 		if (matosIdUnits.hasOwnProperty(idMatos)) {
 			matosIdUnits[idMatos].forEach(function(idUnit) {
 				$("#boxPikUnit-"+idUnit).prop('checked', true); // TODO FIXME tout décocher avant ?
+				// TODO gérer le matos unitaire déjà pris sur d'autres plans
 			});
 		}
 
@@ -465,6 +512,31 @@ function displayTekosMatos (data) {
 ////////////////////////////// FONCTIONS D'UPDATE DE SÉLECTION MATOS //////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+/** Met à jour la position du champ d'ajout de matériel par code-barres afin qu'il soit toujours visible */
+function displayDivMatosCB() {
+	var nextDiv = divMatosCB.next('.ui-widget-header');
+	if (divMatosCBOffset === undefined) {
+		divMatosCBOffset = (mode_ajout ? divMatosCB.offset().top : divMatosCB.position().top);
+	}
+	if(divMatosCBScroll.scrollTop() >= divMatosCBOffset) {
+		divMatosCB.css({
+			'position': 'fixed',
+			'top': (mode_ajout ? 10 : divMatosCB.closest('#modalMatos').offset().top)+'px'
+		});
+		divMatosCB.children('.ui-widget-header').width(nextDiv.width());
+		nextDiv.css({'margin-top': (20 + divMatosCB.height())});
+		isDivMatosCBFixed = true;
+	}
+	else {
+		divMatosCB.css({
+			'position': '',
+			'top': ''
+		});
+		nextDiv.css({'margin-top': 10});
+		isDivMatosCBFixed = false;
+	}
+}
 
 function addMatos ( id, qte ) {
 	if ( matosIdQte[id] == undefined ) matosIdQte[id] = 0 ;
@@ -551,8 +623,8 @@ function aLouer (){
 		id = parseInt ( id, 10 );
 		var qteAsked = matosIdQte[id] ;
 		var moins = qteOnload - qteAsked ;
-		var externe = $(obj).children('.matos_name').attr('ext');
-		var name = $(obj).children(".matos_name").html();
+		var externe = $(obj).find('.matos_name').attr('ext');
+		var name = $(obj).find(".matos_name").html();
 
 		if ( moins < 0 && ! isNaN(moins) && externe == '0' ) {
 			if ( qteOnload < 0 ) moins = moins - qteOnload ;
@@ -674,43 +746,41 @@ function matos_list_detail( retour ){
 	if ( retour.success != 'SUCCESS' ) { alert (retour.success) ;  return; }
 
 	retour = retour.matos ;
-	var externeIcon = '';
-	var externeClass = '';
-	var externeHideDispo = '';
-	if ( retour.externe == '1'){
-		externeIcon = "<img src='gfx/icones/matosExterne.png' alt='externe' popup='matériel externe au parc !<br />A louer chez <b>"+ retour.ownerExt +"</b>' />";
-		externeClass = "matosExterne"  ;
-		externeHideDispo = "class='hide'"  ;
-	}
+	var isExterne = (retour.externe == '1'); // TODO FIXME ?
 
-	var newMatos= "<div id='matos-"+ retour.id +"' class='ui-state-default matosPik cat-"+ retour.categorie + " " +externeClass+" pad3'>"
-						+" <div class='inline mid rightText' style='width:100px; '>"
-							+" <span class='ui-state-disabled'>DETAIL</span>"
-						+" </div>"
-						+" <div class='inline mid rightText' style='width:100px;'>"
-							+ externeIcon
-						+" </div>"
-						+" <div class='inline mid matos_categ rightText' style='width:100px;'>"
-							+" <img src='gfx/icones/categ-"+ retour.categorie +".png' alt='"+ retour.categorie +"' title='catégorie "+ retour.categorie +"' class='marge30l' />"
-						+" </div>"
-						+" <div class='inline mid quart leftText pad30L matos_name' ext='"+ retour.externe +"'>"+ retour.ref +"</div>"
-						+" <div class='inline mid quart matosDispo rightText mini' style='width:200px;'>"
-							+" <div class='inline mid qteDispo'>"
-								+" <div><span>Total : </span><span class='qteDispo_total'> "+ retour.Qtotale + " </span></div>"
-								+" <div "+ externeHideDispo +"><span>Dispo : </span><span class='qteDispo_update'> "+ retour.Qtotale + " </span></div>"
-								+" <div class='hide'><span class='qteDispo_onload'> "+ retour.Qtotale + " </span></div>"
-								+" <div class='qtePanne center'></div>"
-							+" </div>"
-							+" <div class='inline mid qtePik bordFin bordSection' id='"+ retour.id+"'><input type='text' class='qtePikInput hide' size='2' value='0' /></div>"
-							+" <div class='inline mid matos_plus'><button class='bouton plus'><span class='ui-icon ui-icon-plusthick'></span></button></div>"
-						+" </div>"
-						+" <div class='inline mid quart'>"
-							+" <div class='inline mid demi petit rightText'><span class='matos_PU'>"+ retour.tarifLoc +" €</span></div>"
-							+" <div class='inline mid demi gros'> = <span class='matos_PRICE'>0</span> €</div>"
-						+" </div>"
-				 +" </div>" ;
+	var newMatos =
+		'<div id="matos-'+ retour.id +'" class="ui-state-default matosPik cat-'+ retour.categorie +' '+ (isExterne ? 'matosExterne' : '') +' pad3">'
+			+'<div class="inline mid rightText" style="width: 100px;">'
+				+'<span class="ui-state-disabled">DETAIL</span>'
+			+'</div>'
+			+'<div class="inline mid rightText" style="width: 50px;">'
+				+ (isExterne ? '<img src="gfx/icones/matosExterne.png" alt="externe" popup="Matériel externe au parc !&lt;br /&gt;A louer chez &lt;b&gt;'+ retour.ownerExt +'&lt;/b&gt;" /&gt;' : '')
+			+'</div>'
+			+'<div class="inline mid matos_categ rightText">'
+				+'<img src="gfx/icones/categ-'+ retour.categorie +'.png" alt="'+ retour.categorie +'" title="catégorie '+ retour.categorie +'" class="marge30l" />'
+			+'</div>'
+			+'<div class="inline mid quart leftText pad30L">'
+				+'<div class="floatRight matos_code">'+ retour.codeBarres +'</div>' // TODO CHECK
+				+'<div class="matos_name" ext="'+ (isExterne ? '1' : '0') +'">'+ retour.ref +'</div>'
+			+'</div>'
+			+'<div class="inline mid quart matosDispo rightText mini" style="width: 200px;">'
+				+'<div class="inline mid qteDispo">'
+					+'<div><span>Total : </span><span class="qteDispo_total">'+ retour.Qtotale +'</span></div>'
+					+'<div '+ ($isExterne ? 'class="hide"' : '') +'><span>Dispo : </span><span class="qteDispo_update">'+ retour.Qtotale + '</span></div>'
+					+'<div class="hide"><span class="qteDispo_onload">'+ retour.Qtotale + '</span></div>'
+					+'<div class="qtePanne center"></div>'
+				+'</div>'
+				+'<div class="inline mid qtePik bordFin bordSection" id="'+ retour.id +'"><input type="text" class="qtePikInput hide" size="2" value="0" /></div>'
+				+'<div class="inline mid matos_plus"><button class="bouton plus"><span class="ui-icon ui-icon-plusthick"></span></button></div>'
+				+'<div class="matosPikUnit padV10 hide"></div>'
+			+'</div>'
+			+'<div class="inline mid quart">'
+				+'<div class="inline mid demi petit rightText"><span class="matos_PU">'+ retour.tarifLoc +' €</span></div>'
+				+'<div class="inline mid demi gros"> = <span class="matos_PRICE">0</span> €</div>'
+			+'</div>'
+		+'</div>';
 
-	$('#matosHolder').find('.sousCategLine[idSsCat*="'+retour.sousCateg+'"]').show().after( newMatos ) ;
+	$('#matosHolder').find('.sousCategLine[idSsCat="'+retour.sousCateg+'"]').show().after( newMatos ) ;
 	$('.bouton').button();
 }
 

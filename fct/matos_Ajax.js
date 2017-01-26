@@ -245,7 +245,7 @@ function addMatosUnitRow() {
 		$('input#newMatosQtotale').val(quantiteTotale);
 	}
 	else {
-		quantiteTotale = parseInt(quantiteTotale);
+		quantiteTotale = parseInt(quantiteTotale, 10);
 	}
 	if(listeUnits.children().size() >= quantiteTotale) {
 		if(! confirm('Tout le matériel est déjà identifié unitairement. Augmenter la quantité totale pour ajouter ce nouveau matériel ?')) {

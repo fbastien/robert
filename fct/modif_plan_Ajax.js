@@ -110,9 +110,11 @@ $(function(){
 								buttons:{'Ok'     : function() { saveModMatosList() ; },
 										 'Annuler': function() { $(this).dialog("close") ; } },
 								close: function(e,u) {$("#tekosmodalHolder").off('click', '.tekosPik');
-													  $("#modalTekos").off('click', '.filtreTekos');}
+													  $("#modalTekos").off('click', '.filtreTekos');},
+								drag: function(e,u) { displayDivMatosCB(); }
 		});
 		initToolTip('#matosHolder', -120);
+		displayDivMatosCB();
 	});
 
 

@@ -2,17 +2,19 @@
 <div id="toolTipPopup" class="ui-state-highlight ui-corner-all pad10 hide"></div>
 
 <div class="addSection ui-widget-content ui-corner-all leftText pad20 hide" id="etape-3">
-	<div class="ui-widget-header ui-corner-all pad5 gros">Ajout par code-barres</div>
-	<br />
-	<div class="center">Code-barres : <input type="text" id="addMatosCB" style="width: 200px; height: 40px;" /></div>
-	<br />
-	<br />
+	<div id="divMatosCB" class="fondSect1 ui-corner-all shadowOut" style="z-index: 1100;">
+		<div class="ui-widget-header ui-corner-all pad5 gros">Ajout par code-barres</div>
+		<br />
+		<div id="divMatosCBMsg" class="floatRight ui-corner-all pad20 marge30r hide"></div>
+		<div class="marge30l">Code-barres : <input type="text" id="addMatosCB" style="width: 200px; height: 40px;" /></div>
+		<br />
+	</div>
 	
 	<div class="ui-widget-header ui-corner-all pad5 gros">Choix du matériel</div>
 	<br />
 	<div class="ui-state-disabled pad10 ui-corner-all leftText shadowIn" id="messHelpMatos" style="float:right; ">
 <?php /* Bouton "+" pour ajouter un pack,<br /> Bouton "-" pour en enlever un. */ ?>
-		Bouton "+" pour ajouter un matériel,<br /> tapez ensuite la quantité voulue, ou "-" pour l\'enlever.
+		Bouton "+" pour ajouter un matériel,<br /> tapez ensuite la quantité voulue, ou "-" pour l'enlever.
 	</div>
 	<div class="inline top leftText mini">
 		<div class="inline top center enorme" style="width: 160px;">
@@ -41,128 +43,147 @@
 	
 
 	<div id="packsHolder" class="center shadowOut hide">
-		<?php
-			foreach ( $listePacks as $k => $v ){
-				$id         = $v['id'] ;
-				$label      = $v['ref'] ;
-				$categPack  = $v['categorie'] ;
-				$qte        = $v['Qtotale'];
-				$detail		= json_decode($v['detail'], true);
-				$ext		= $v['externe'];
-				( $ext == '1')? $externeIcon  = "<img src='gfx/icones/matosExterne.png' alt='externe' title='matériel externe au parc' />" : $externeIcon = '';
-				( $ext == '1')? $externeClass = "matosExterne" : $externeClass = '';
-				( $ext == '1')? $externeHideDispo = "display:none;" : $externeHideDispo = '';
-
-				echo "<div id='pack-$id' class='ui-state-default leftText big packPik cat-$categPack $externeClass'>
-						<div class='inline mid rightText accordionOpen' style='width:100px; '>
-							<span class='ui-state-disabled'>PACK</span>
-						</div>
-						<div class='inline mid rightText accordionOpen' style='width:100px;'>
-							$externeIcon
-						</div>
-						<div class='inline mid matos_categ rightText accordionOpen' style='width:100px;'>
-							<div class='inline mid pack_categ'><img src='gfx/icones/categ-$categPack.png' alt='$categPack' /></div>	
-						</div>							
-						<div class='inline mid quart leftText pad30L pack_name accordionOpen'>$label</div>
-						<div class='inline mid quart packDispo rightText mini'>
-							<div class='inline mid qteDispo' style='$externeHideDispo'>
-								Dispo : <span class='qteDispo_QTE'></span>
-								<span class='qteDispo_MAX hide'></span>
-							</div>
-							<div class='inline togglePack enorme'>
-								<button class='bouton pack_plus' id='plus' href='#'><span class='ui-icon ui-icon-plusthick'></span></button>
-								<button class='bouton pack_plus' id='moins' href='#'><span class='ui-icon ui-icon-minusthick'></span></button>
-							</div>
-						</div>
-						<div class='inline mid padV10 bordFin bordSection' style='display:none;' id='qtePik-$id' title='Combien on peut en faire avec la sélection de matériel actuelle'>0</div>
-					</div>
-					<div id='packDetail-$id' class='pad5 leftText packDetail'>
-						<div class='inline quart ui-state-disabled'>Détail du pack :</div>
-						<div class='inline quart ui-state-disabled'>Disponible :</div>";
-					foreach ($detail as $id => $qte) {
-						foreach ($listeMatos as $k => $matos) {
-							if ($matos['id'] == $id)
-								$ref = $matos['ref'];
-						}
-						echo "<div id='pD-$id' class='packItem pD-$id'>
-								<div class='inline quart marge30l leftText'><span class='need'>$qte</span> x $ref</div>
-								<div class='inline quart leftText dispo'></div>
-							  </div>";
-					}
-				echo "</div>";
-			}
-		?>
-	</div>
-	
-	<div id="matosHolder" class="center shadowOut gros"> <?php
-		include('matos_tri_sousCat.php');
-		
-		$matos_by_categ = creerSousCatArray($listeMatos);
-		$categById		= simplifySousCatArray();
-		$unitsByMatos = groupUnitsByMatos($listeMatosUnit);
-		
-//		echo '<pre>'; print_r($matos_by_categ); echo '</pre>';
-		
-		if (is_array($matos_by_categ)) {
-			foreach ($categById as $catInfo) {
-				$index = $catInfo['id'];
-				$hideSsCat = '';						// n'affiche rien si la sous catégorie est vide !
-				if (!is_array(@$matos_by_categ[$index]))
-					$hideSsCat = 'style="display:none;"';
-				echo '<div class="leftText gros gras pad5 sousCategLine" idSsCat="'.$index.'" '.$hideSsCat.'>'.$catInfo['label'].'</div>';
-				foreach ($matos_by_categ[$index] as $v) {
-					$id         = $v['id'] ;
-					$label      = $v['ref'] ;
-					$categMat   = $v['categorie'] ;
-					$qte        = $v['Qtotale'];
-					$panne      = $v['panne'];
-					$pu         = $v['tarifLoc'];
-					$ext        = ($v['ownerExt'] === null ? '0' : '1');
-					$extChezQui = $v['ownerExt'];
-
-					$qte -= $panne ; 
-					( $panne > 0 )? $affichPanne = "<span class='mini red'>(+ $panne en panne)</span>" : $affichPanne = '';
-					( $ext == '1')? $externeIcon = "<img src='gfx/icones/matosExterne.png' alt='externe' popup='matériel externe au parc !<br />A louer chez <b>$extChezQui</b>' />" : $externeIcon = '';
-					( $ext == '1')? $externeClass = "matosExterne" : $externeClass = '';
-					( $ext == '1')? $externeHideDispo = "class='hide'" : $externeHideDispo = '';
-					
-					echo "<div id='matos-$id' class='ui-state-default matosPik cat-$categMat $externeClass pad3'>
-								<div class='inline mid rightText' style='width:100px; '>
-									<span class='ui-state-disabled'>DETAIL</span>
-								</div>
-								<div class='inline mid rightText' style='width:50px;'>
-									$externeIcon
-								</div>
-								<div class='inline mid matos_categ rightText'>
-									<img src='gfx/icones/categ-$categMat.png' alt='$categMat' title='catégorie $categMat' class='marge30l' />
-								</div>
-								<div class='inline mid quart leftText pad30L matos_name' ext='$ext'>$label</div>
-								<div class='inline mid quart matosDispo rightText mini' style='width:200px;'>
-									<div class='inline mid qteDispo'>
-										<div><span>Total : </span><span class='qteDispo_total'> $qte </span></div>
-										<div $externeHideDispo><span>Dispo : </span><span class='qteDispo_update'></span></div>
-										<div class='hide'><span class='qteDispo_onload'></span></div>
-										<div class='qtePanne center'>$affichPanne</div>
-									</div>
-									<div class='inline mid qtePik bordFin bordSection' id='$id'><input type='text' class='qtePikInput hide' size='2' value='0' /></div>
-									<div class='inline mid matos_plus'><button class='bouton plus'><span class='ui-icon ui-icon-plusthick'></span></button></div>
-									<div class='matosPikUnit padV10 hide'>";
-					foreach($unitsByMatos[$id] as $matosUnit) {
-						if($matosUnit['id_matosdetail'] == $id && ! $matosUnit['panne']) {
-							echo "<div class='inline padV10' style='white-space: nowrap;'><input type='checkbox' class='boxPikUnit' id='boxPikUnit-${matosUnit['id_matosunit']}' value='${matosUnit['id_matosunit']}' /> <label for='boxPikUnit-${matosUnit['id_matosunit']}'>${matosUnit['ref']}</label></div>"; // TODO FIXME
-						}
-					}
-					echo "</div>
-								</div>
-								<div class='inline mid quart'>
-									<div class='inline mid demi petit rightText'><span class='matos_PU'>$pu €</span></div>
-									<div class='inline mid demi gros'> = <span class='matos_PRICE'>0</span> €</div>
-								</div>
-							</div>";
-				}
+<?php
+foreach ( $listePacks as $pack ) {
+	$id         = $pack['id'] ;
+	$label      = $pack['ref'] ;
+	$categPack  = $pack['categorie'] ;
+	$qte        = $pack['Qtotale'];
+	$detail		= json_decode($pack['detail'], true);
+	$ext		= $pack['externe'];
+	$isExterne = ($ext == '1');
+?>
+		<div id="pack-<?= $id ?>" class="ui-state-default leftText big packPik cat-<?= $categPack ?> <?= $isExterne ? 'matosExterne' : '' ?>">
+			<div class="inline mid rightText accordionOpen" style="width:100px;">
+				<span class="ui-state-disabled">PACK</span>
+			</div>
+			<div class="inline mid rightText accordionOpen" style="width:100px;">
+				<?php if ($isExterne) { ?><img src="gfx/icones/matosExterne.png" alt="externe" title="matériel externe au parc" /><?php } ?>
+			</div>
+			<div class="inline mid matos_categ rightText accordionOpen" style="width:100px;">
+				<div class="inline mid pack_categ"><img src="gfx/icones/categ-<?= $categPack ?>.png" alt="<?= $categPack ?>" /></div>	
+			</div>							
+			<div class="inline mid quart leftText pad30L pack_name accordionOpen"><?= $label ?></div>
+			<div class="inline mid quart packDispo rightText mini">
+				<div class="inline mid qteDispo" <?php if ($isExterne) { ?>style="display: none;"<?php } ?>>
+					Dispo : <span class="qteDispo_QTE"></span>
+					<span class="qteDispo_MAX hide"></span>
+				</div>
+				<div class="inline togglePack enorme">
+					<button class="bouton pack_plus" id="plus" href="#"><span class="ui-icon ui-icon-plusthick"></span></button>
+					<button class="bouton pack_plus" id="moins" href="#"><span class="ui-icon ui-icon-minusthick"></span></button>
+				</div>
+			</div>
+			<div class="inline mid padV10 bordFin bordSection" style="display:none;" id="qtePik-<?= $id ?>" title="Combien on peut en faire avec la sélection de matériel actuelle">0</div>
+		</div>
+		<div id="packDetail-<?= $id ?>" class="pad5 leftText packDetail">
+			<div class="inline quart ui-state-disabled">Détail du pack :</div>
+			<div class="inline quart ui-state-disabled">Disponible :</div>
+<?php
+	foreach ($detail as $id => $qte) {
+		foreach ($listeMatos as $matos) {
+			if ($matos['id'] == $id) {
+				$ref = $matos['ref'];
+				break;
 			}
 		}
-	?></div>
+?>
+			<div id="pD-<?= $id ?>" class="packItem pD-<?= $id ?>">
+				<div class="inline quart marge30l leftText"><span class="need"><?= $qte ?></span> x <?= $ref ?></div>
+				<div class="inline quart leftText dispo"></div>
+			</div>
+<?php
+	}
+?>
+		</div>
+<?php
+}
+?>
+	</div>
+	
+	<div id="matosHolder" class="center shadowOut gros">
+<?php
+include('matos_tri_sousCat.php');
+
+$matos_by_categ = creerSousCatArray($listeMatos);
+$categById		= simplifySousCatArray();
+$unitsByMatos = groupUnitsByMatos($listeMatosUnit);
+
+if (is_array($matos_by_categ)) {
+	foreach ($categById as $catInfo) {
+		$index = $catInfo['id'];
+		$isEmptyCat = ! is_array(@$matos_by_categ[$index]); // n'affiche rien si la sous catégorie est vide !
+?>
+		<div class="leftText gros gras pad5 sousCategLine" idSsCat="<?= $index ?>" <?php if ($isEmptyCat) { ?>style="display: none;"<?php } ?>><?= $catInfo['label'] ?></div>
+<?php
+		foreach ($matos_by_categ[$index] as $matos) {
+			$id         = $matos['id'] ;
+			$label      = $matos['ref'] ;
+			$codeBarres = $matos['codeBarres'];
+			$categMat   = $matos['categorie'] ;
+			$qte        = $matos['Qtotale'];
+			$panne      = $matos['panne'];
+			$pu         = $matos['tarifLoc'];
+			$isExterne  = ($matos['ownerExt'] !== null);
+			$extChezQui = $matos['ownerExt'];
+			
+			$qte -= $panne ;
+			
+			// En cas de modification de ce bloc, reporter dans la fonction matos_list_detail (fichier plan_matos_init_modal.js)
+?>
+		<div id="matos-<?= $id ?>" class="ui-state-default matosPik cat-<?= $categMat ?> <?= $isExterne ? 'matosExterne' : '' ?> pad3">
+			<div class="inline mid rightText" style="width: 100px;">
+				<span class="ui-state-disabled">DETAIL</span>
+			</div>
+			<div class="inline mid rightText" style="width: 50px;">
+				<?php if ($isExterne) { ?><img src="gfx/icones/matosExterne.png" alt="externe" popup="Matériel externe au parc !&lt;br /&gt;A louer chez &lt;b&gt;<?= $extChezQui ?>&lt;/b&gt;" /><?php } ?>
+			</div>
+			<div class="inline mid matos_categ rightText">
+				<img src="gfx/icones/categ-<?= $categMat ?>.png" alt="<?= $categMat ?>" title="catégorie <?= $categMat ?>" class="marge30l" />
+			</div>
+			<div class="inline mid quart leftText pad30L">
+				<div class="floatRight matos_code"><?= $codeBarres ?></div>
+				<div class="matos_name" ext="<?= $isExterne ? '1' : '0' ?>"><?= $label ?></div>
+			</div>
+			<div class="inline mid quart matosDispo rightText mini" style="width: 200px;">
+				<div class="inline mid qteDispo">
+					<div><span>Total : </span><span class="qteDispo_total"><?= $qte ?></span></div>
+					<div <?php if ($isExterne) { ?>class="hide"<?php } ?>><span>Dispo : </span><span class="qteDispo_update"></span></div>
+					<div class="hide"><span class="qteDispo_onload"></span></div>
+					<div class="qtePanne center">
+<?php if ( $panne > 0 ) { ?>
+						<span class="mini red">(+ <?= $panne ?> en panne)</span>
+<?php } ?>
+					</div>
+				</div>
+				<div class="inline mid qtePik bordFin bordSection" id="<?= $id ?>"><input type="text" class="qtePikInput hide" size="2" value="0" /></div>
+				<div class="inline mid matos_plus"><button class="bouton plus"><span class="ui-icon ui-icon-plusthick"></span></button></div>
+				<div class="matosPikUnit padV10 hide">
+<?php
+			foreach($unitsByMatos[$id] as $matosUnit) {
+				if($matosUnit['id_matosdetail'] !== $id || $matosUnit['panne'])
+					continue;
+?>
+					<div class="inline padV10" style="white-space: nowrap;">
+						<input type="checkbox" class="boxPikUnit" id="boxPikUnit-<?= $matosUnit['id_matosunit'] ?>" value="<?= $matosUnit['id_matosunit'] ?>" />
+						<label for="boxPikUnit-<?= $matosUnit['id_matosunit'] ?>"><?= $matosUnit['ref'] ?></label>
+					</div>
+<?php
+			}
+?>
+				</div>
+			</div>
+			<div class="inline mid quart">
+				<div class="inline mid demi petit rightText"><span class="matos_PU"><?= $pu ?> €</span></div>
+				<div class="inline mid demi gros"> = <span class="matos_PRICE">0</span> €</div>
+			</div>
+		</div>
+<?php
+		}
+	}
+}
+?>
+	</div>
 	
 	<br />
 	<br />
@@ -200,11 +221,9 @@ $liste_ssCat = $lm->getListe(TABLE_MATOS_CATEG, '*', 'ordre', 'ASC');
 		<div class="ui-widget-header ui-corner-all">Sous Categ :</div>
 		<select id="newMatosSousCateg">
 			<option value="0">---</option>
-			<?php
-			foreach ($liste_ssCat as $ssCat) {
-				echo '<option value="'.$ssCat['id'].'">'.$ssCat['label'].'</option>';
-			}
-			?>
+<?php foreach ($liste_ssCat as $ssCat) { ?>
+			<option value="<?= $ssCat['id'] ?>"><?= $ssCat['label'] ?></option>
+<?php } ?>
 		</select>
 	</div>
 	<div class="inline top center pad3" style="width: 120px;">

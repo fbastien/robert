@@ -12,7 +12,7 @@ include('plan_Add_Modal.php');
 		$liste = new Liste ( Plan::PLAN_cID.',' . Plan::PLAN_cTITRE ) ;
 		$l = $liste->getListe(TABLE_PLANS) ;
 		
-		if ( count($l) > 0 ){
+		if ( $l !== false ){
 			$combo = "<select id='plansTitres'><option value='noSelect' disabled='disabled' selected >LISTE DES PLANS ENREGISTRÉS</option>";
 			foreach ($l as $k =>$v){
 				$id = $v[Plan::PLAN_cID] ; $ti = $v[Plan::PLAN_cTITRE] ; 

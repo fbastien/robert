@@ -4,7 +4,7 @@
 /////
 
 if (session_id() == '') session_start();
-require_once ('initInclude.php');
+require_once ('modals/initInclude.php');
 require_once ('common.inc.php');		// OBLIGATOIRE pour les sessions, à placer TOUJOURS EN HAUT du code !!
 require_once ('checkConnect.php' );
 require_once ('date_fr.php');
@@ -35,7 +35,7 @@ $varsBenefs = substr($varsBenefs,0,strlen($varsBenefs)-1 ) ;
 <script type="text/javascript" src="./js/init_all_pages.js"></script>
 <script type="text/javascript" src="./js/JSON.js"></script>
 
-<script type="text/javascript" src="./fct/plans_ajax.js"></script>
+<script type="text/javascript" src="./debug/plans_ajax.js"></script>
 <script type="text/javascript">
 	var autoCompleteBENEF = [<?php echo $varsBenefs; ?>];
 	$(function() {

@@ -85,6 +85,9 @@ if ( $action == 'modif') {
 		case AUTH_LDAP:
 			if (! $config[CONF_AUTH_LDAP])
 				die("L'authentification par LDAP est désactivée.");
+			if (! extension_loaded('ldap')) {
+				die("L'extension LDAP n'est pas activée sur le serveur.");
+			}
 			if (!isset($_POST['ldap']) || $_POST['ldap'] == '')
 				die("Il manque le login LDAP");
 			

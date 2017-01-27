@@ -18,6 +18,9 @@
 		"phpunit/dbunit" : ">=1.2-stable",
 		"phpunit/phpunit" : ">=4.8-stable"
 	},
+	"suggest" : {
+		"ext-ldap" : "Nécessaire pour activer l'authentification des comptes par LDAP"
+	},
 	"autoload" : {
 		"classmap" : ["classes/"]
 	},

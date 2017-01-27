@@ -119,7 +119,7 @@ if ($_SESSION['user']->getUserInfos('prenom') != "Demo") : ?>
 	}
 	
 	$curLDAP = $_SESSION['user']->getUserInfos(Users::USERS_LDAP);
-	$isAuthLDAP = ($curLDAP !== false );
+	$isAuthLDAP = ($curLDAP !== null);
 ?>
 	<br />
 	<div class="ui-state-default ui-corner-all center">

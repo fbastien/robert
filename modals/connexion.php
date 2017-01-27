@@ -25,11 +25,10 @@
 	</form>
 </div>
 <br /><br />
-<?php
-if ($errAuth === true) echo '<div class="ui-state-error ui-corner-all pad10 enorme center">ERREUR ! mauvais login / mot de passe !</div>';
-if (isset($_GET['action']) && $_GET['action'] == 'deconx') echo '<div class="ui-state-default ui-corner-all pad10 enorme center" id="byebye">A bientôt !</div>';
-else echo '<div class="ui-state-default ui-corner-all pad10 enorme center" id="byebye">BIENVENUE !</div>';
-?>
+<?php if ($connectResult !== true) { ?>
+<div class="ui-state-error ui-corner-all pad10 enorme center"><?= $connectResult ?></div>
+<?php } ?>
+<div class="ui-state-default ui-corner-all pad10 enorme center" id="byebye"><?= (isset($_GET['action']) && $_GET['action'] == 'deconx') ? 'A bientôt !' : 'BIENVENUE !' ?></div>
 
 <div class="center">
 	<div class="inline ui-state-highlight ui-corner-all shadowOut padV10 gros leftText" id="messageAccueil" style="width:85%; display:none;">

@@ -123,20 +123,14 @@ class Connecting {
 		$login = preg_replace('/\\\'/', '', $login); // Empêcher les injections SQL en virant les '
 
 		if ($deny_login == true)
-			exit('Trop de tentatives de connexion. Merci de recommencer dans quelques minutes.');
+			throw new Exception('Trop de tentatives de connexion. Merci de recommencer dans quelques minutes.');
 		else {
-			try {
-				$isAuthValid = $this->authenticate($login, $password);
-				if ($isAuthValid) {
-					$this->connected = true;
-					$this->setSecuredData();
-					$this->updateUser($this->user['id'], 1);
-					return true;
-				}
-			}
-			catch (Exception $e) {
-				echo $e->getMessage();
-				// die();
+			$isAuthValid = $this->authenticate($login, $password);
+			if ($isAuthValid) {
+				$this->connected = true;
+				$this->setSecuredData();
+				$this->updateUser($this->user['id'], 1);
+				return true;
 			}
 			
 			NoBF::addTentative($login);
@@ -165,7 +159,8 @@ class Connecting {
 			$toTestLogin = $_COOKIE[COOKIE_NAME_LOG];
 			$toTestPassword = $_COOKIE[COOKIE_NAME_PASS];
 			$toTestToken = $_COOKIE[COOKIE_NAME_TOKEN];
-		} elseif (isset($_SESSION[COOKIE_NAME_AUTH]) && !empty($_SESSION[COOKIE_NAME_LOG]) && !empty($_SESSION[COOKIE_NAME_PASS])) {
+		}
+		elseif (isset($_SESSION[COOKIE_NAME_AUTH]) && !empty($_SESSION[COOKIE_NAME_LOG]) && !empty($_SESSION[COOKIE_NAME_PASS])) {
 			$toTestAuth = $_SESSION[COOKIE_NAME_AUTH];
 			$toTestLogin = $_SESSION[COOKIE_NAME_LOG];
 			$toTestPassword = $_SESSION[COOKIE_NAME_PASS];
@@ -179,8 +174,13 @@ class Connecting {
 		}
 
 		if (!empty($toTestAuth) && !empty($toTestLogin) && !empty($toTestPassword)) {
-			// teste si l'utilisateur existe bel et bien
-			$isAuthValid = $this->authenticate($toTestLogin, $toTestPassword, true);
+			try {
+				// teste si l'utilisateur existe bel et bien
+				$isAuthValid = $this->authenticate($toTestLogin, $toTestPassword, true);
+			}
+			catch(Exception $ex) {
+				$isAuthValid = false;
+			}
 			if ($isAuthValid) {
 				$this->connected = true;
 
@@ -196,7 +196,8 @@ class Connecting {
 				return false;
 			}
 		}
-		else return false;
+		else
+			return false;
 	}
 	
 	/**
@@ -235,27 +236,32 @@ class Connecting {
 				return ($this->user['password'] === $pwdToCompare);
 			}
 			// Authentification par LDAP
-			else {
-				// TODO Déplacer dans une classe dédiée à LDAP
+			else { // TODO Déplacer dans une classe dédiée à LDAP
+				if (! extension_loaded('ldap')) {
+					throw new Exception("L'extension LDAP n'est pas activée sur le serveur.");
+				}
+				
 				// Le mot de passe ne doit pas être vide pour ne pas être considéré comme une connexion LDAP anonyme
 				if ($password === '') {
 					return false;
 				}
 				
-				$ldap = ldap_connect($config[CONF_LDAP_HOST]);
+				$ldap = @ldap_connect($config[CONF_LDAP_HOST]);
 				if (! $ldap) {
-					throw new Exception("Erreur de connexion LDAP");
+					throw new Exception("Erreur de connexion LDAP : ".ldap_error($ldap));
 				}
 				
-				if(! ldap_bind($ldap, $config[CONF_LDAP_RDN], $config[CONF_LDAP_PASS])) {
+				if(! @ldap_bind($ldap, $config[CONF_LDAP_RDN], $config[CONF_LDAP_PASS])) {
+					$ex = new Exception("Erreur LDAP : ".ldap_error($ldap), ldap_errno($ldap));
 					ldap_unbind($ldap);
-					throw new Exception("Erreur LDAP : ".@ldap_error($ldap));
+					throw $ex;
 				}
 				// Vérification que l'utilisateur existe dans LDAP et récupération de son DN
-				$ldap_result = ldap_search($ldap, $config[CONF_LDAP_BASE], "(".LDAP_LOGIN."=$login)", array(LDAP_DN));
+				$ldap_result = @ldap_search($ldap, $config[CONF_LDAP_BASE], "(".LDAP_LOGIN."=$login)", array(LDAP_DN));
 				if (! $ldap_result) {
+					$ex = new Exception("Erreur LDAP : ".ldap_error($ldap), ldap_errno($ldap));
 					ldap_unbind($ldap);
-					throw new Exception("Erreur LDAP : ".ldap_error($ldap), ldap_errno($ldap));
+					throw $ex;
 				}
 				$ldap_data = ldap_get_entries($ldap, $ldap_result);
 				if ($ldap_data['count'] == 1) {

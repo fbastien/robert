@@ -29,10 +29,18 @@ $Auth = new Connecting($bdd);
 
 // CONNEXION
 if ( isset ($_POST['conx']) &&  isset ($_POST['login']) && isset ($_POST['password']) ) {
-    if (!$Auth->connect($_POST['login'], $_POST['password'])) $errAuth = true;
-	else $errAuth = false;
+	try {
+		$connectResult = $Auth->connect($_POST['login'], $_POST['password']);
+		if($connectResult === false) {
+			$connectResult = "ERREUR ! mauvais login / mot de passe !";
+		}
+	}
+	catch (Exception $ex) {
+		$connectResult = $ex->getMessage();
+	}
 }
-else $errAuth = false;
+else
+	$connectResult = true;
 
 
 // DECONNEXION
@@ -60,7 +68,8 @@ else {
 			unset ($_SESSION["user"]);
 		}
 	}
-	else $logged = false ;
+	else
+		$logged = false ;
 }
 
 
@@ -69,9 +78,9 @@ function chooseThemeFolder() {
 		$repCss = 'css/'.$_SESSION['theme'];
 		if (file_exists($repCss))
 			return $repCss ;
-		else return 'css/human';
+		else
+			return 'css/human';
 	}
-	else return 'css/human';
+	else
+		return 'css/human';
 }
-
-?>

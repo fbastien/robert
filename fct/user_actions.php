@@ -153,6 +153,10 @@ function modifOwnUser () {
 				$retour['error'] = "L'authentification par LDAP est désactivée.";
 				break;
 			}
+			if (! extension_loaded('ldap')) {
+				$retour['error'] = "L'extension LDAP est désactivée sur le serveur.";
+				break;
+			}
 			if (! isset($_POST['ldap']) || $_POST['ldap'] == '') {
 				$retour['error'] = "Il manque le login du compte LDAP.";
 				break;
@@ -188,31 +192,30 @@ function modifOwnUser () {
 			$retour['error'] = "Il manque le type d'authentification...";
 			break;
 	}
-	if (!isset($retour['error'])) {
+	if (! isset($retour['error'])) {
 		try {
 			if ( $tmpUser->save() ) {
 				// Si le login et/ou le mot de passe ont été modifiés, on reconnecte le user pour remettre les bons identifiants dans les cookies et la session
 				if ($reconnect == true) {
 					$Auth = new Connecting($bdd);
-					if (!$Auth->connect( ($_POST['auth'] == AUTH_LDAP ? $_POST['ldap'] : $_POST['email']), $_POST['password']))
-						$errAuth = true;
-					else
-						$errAuth = false;
-					if ($errAuth == true) {
-						$retour['error'] = "Impossible de vous reconnecter automatiquement !\nLe mot de passe doit être erroné...\n\nMerci de vous reconnecter manuellement.";
-						$retour['type'] = "reloadPage";
+					try {
+						if ($Auth->connect( ($_POST['auth'] == AUTH_LDAP ? $_POST['ldap'] : $_POST['email']), $_POST['password'])) {
+							$_SESSION['user'] = $tmpUser;
+							$retour['error'] = "OK";
+						}
+						else {
+							$retour['error'] = "Impossible de vous reconnecter automatiquement !\nLe mot de passe doit être erroné...\n\nMerci de vous reconnecter manuellement.";
+						}
 					}
-					else {
-						$_SESSION['user'] = $tmpUser;
-						$retour['error'] = "OK";
-						$retour['type'] = "reloadPage";
+					catch (Exception $ex) {
+						$retour['error'] = "Impossible de vous reconnecter automatiquement !\n".$ex->getMessage();
 					}
 				}
 				else {
 					$_SESSION['user'] = $tmpUser;
 					$retour['error'] = "OK";
-					$retour['type'] = "reloadPage";
 				}
+				$retour['type'] = "reloadPage";
 			}
 		}
 		catch (Exception $e){

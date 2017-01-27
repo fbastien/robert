@@ -34,34 +34,40 @@
 		?>
 		<div id="Page" class="fondPage bordPage">
 
-            <div class="colonne L bordSection ui-widget ui-corner-all fondSect1 center">
-				<?php
-				if ( isset($_SESSION["user"])) {
-					echo '<div id="logo">
-							<img src="gfx/Robert2.png" width="100%" />
-							<br /><br />
-						</div>';
+			<div class="colonne L bordSection ui-widget ui-corner-all fondSect1 center">
+<?php
+if ( isset($_SESSION["user"])) {
+?>
+				<div id="logo">
+					<img src="gfx/Robert2.png" width="100%" />
+					<br /><br />
+				</div>
+<?php
+	$page_admin = array ('calendrier', 'materiel', 'gens', 'beneficiaires', 'infos', 'sauvegarde' );
+	$page_users = array ('calendrier', 'materiel', 'gens', 'beneficiaires' );
+	$choose = array();
 
-					$page_admin = array ('calendrier', 'materiel', 'gens', 'beneficiaires', 'infos', 'sauvegarde' );
-					$page_users = array ('calendrier', 'materiel', 'gens', 'beneficiaires' );
-					$choose = array();
+	if ( $_SESSION['user']->isAdmin() )
+		$choose = $page_admin ;
+	else
+		$choose = $page_users ;
 
-					if ( $_SESSION['user']->isAdmin() ) $choose = $page_admin ;  else $choose = $page_users ;
-
-					foreach ( $choose as $k ){
-						$nomPage = $k;
-						$classUi = 'default';
-						if (isset($_GET['go']) && @$_GET['go'] == $nomPage)
-							$classUi = 'highlight';
-						elseif ((!isset($_GET['go']) || @$_GET['go'] == 'ajout_plan' || @$_GET['go'] == 'modif_plan') && $k == 'calendrier')
-							$classUi = 'highlight';
-						echo "<div class='ui-state-$classUi ui-corner-all menu_icon'>
-								<a href='?go=$nomPage'><img class='img_menu' src='gfx/icones/menu/$nomPage.png' />
-								<br />".strtoupper($nomPage)."</a>
-							  </div>";
-					}
-				}
-				?>
+	foreach ( $choose as $k ){
+		$nomPage = $k;
+		$classUi = 'default';
+		if (isset($_GET['go']) && @$_GET['go'] == $nomPage)
+			$classUi = 'highlight';
+		elseif ((!isset($_GET['go']) || @$_GET['go'] == 'ajout_plan' || @$_GET['go'] == 'modif_plan') && $k == 'calendrier')
+			$classUi = 'highlight';
+?>
+				<div class="ui-state-<?= $classUi ?> ui-corner-all menu_icon">
+					<a href="?go=<?= $nomPage ?>"><img class="img_menu" src="gfx/icones/menu/<?= $nomPage ?>.png" />
+						<br /><?= strtoupper($nomPage) ?></a>
+				</div>
+<?php
+	}
+}
+?>
 				<span class="boutonMenu petit noMarge" title="Indiquez ici les bugs que vous trouvez, mais aussi les choses que vous aimeriez voir sur la prochaine version...">
 					<a href="http://www.robert.polosson.com/index.php?go=7bugHunter" target="_new"><b>BugHunter</b></a>
 				</span>
@@ -71,35 +77,36 @@
 
 
 			<div class="colonne C bordSection ui-widget ui-corner-all fondSect2 petit">
-				<?php if ( !isset($_SESSION['user']) ) include ('modals/connexion.php');
-					else {
-						if ( isset($_GET["go"])) {
-							$goto = 'pages/p_' . $_GET["go"] .'.php';
-							if ( ( @include ($goto) ) == false)
-								echo "<div class='ui-state-error ui-corner-all pad20 big center'>
-										<p>La page <b>\"".$_GET['go']."\"</b> n'existe pas !</p>
-										<p><a href='?go=calendrier'>RETOUR AU CALENDRIER</a></p>
-									</div>";
-						}
-						else include ('pages/p_calendrier.php');
-					}
-				?>
+<?php
+if ( !isset($_SESSION['user']) )
+	include ('modals/connexion.php');
+else {
+	if ( isset($_GET["go"])) {
+		$goto = 'pages/p_' . $_GET["go"] .'.php';
+		if ( ( @include ($goto) ) == false) {
+?>
+				<div class="ui-state-error ui-corner-all pad20 big center">
+					<p>La page <b>"<?= $_GET['go'] ?>"</b> n'existe pas !</p>
+					<p><a href='?go=calendrier'>RETOUR AU CALENDRIER</a></p>
+				</div>
+<?php
+		}
+	}
+	else
+		include ('pages/p_calendrier.php');
+}
+?>
 			</div>
 
-
 			<div class="colonne R bordSection ui-widget ui-corner-all fondSect1 petit center">
-				<?php
-				if ($logged == true) {
-					include('menuRight.php');
-				}
-				?>
-
+<?php
+if ($logged == true) {
+	include('menuRight.php');
+}
+?>
 			</div>
 
 		</div>
-
-		<?php // include('pages/footPage.php'); ?>
-
 	</div>
 </body>
 </html>

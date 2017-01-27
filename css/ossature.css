@@ -19,12 +19,6 @@ a { border:none; text-decoration:underline; font-size:inherit; outline: none; }
 	overflow: hidden;
 }
 
-#topPage {
-	position: absolute;
-	top: 0px; left: 10px; right: 10px;
-	height: 90px;
-	display : none;
-}
 	#logo {
 /*		position: absolute;
 		top: 5px; left: 10px;
@@ -32,50 +26,12 @@ a { border:none; text-decoration:underline; font-size:inherit; outline: none; }
 		padding: 5px;*/
 		text-align: center;
 	}
-	#titrePage {
-		position: absolute;
-		top: 20px; left: 350px; right: 400px;
-		padding: 5px;
-		font-size: 1.5em;
-		font-weight: bold;
-	}
-	#connexion {
-		position: absolute;
-		top: 20px; right: 0px;
-		width: 300px;
-		padding: 5px;
-		font-size: 0.9em;
-	}
 
 	#connexionRobert {
 		text-align: auto; 
 		width: 99%;
 		padding-top:30px;
 		text-align:center;
-	}
-
-#footPage {
-	position: absolute;
-	bottom: 0px; left: 10px; right: 10px;
-	height: 30px;
-	font-size: 0.8em;
-}
-	#licence {
-		position: absolute;
-		top: 0px; left: 0px;
-		width: 50%;
-		padding: 5px;
-	}
-	#mentions {
-		position: absolute;
-		top: 0px; left: 50%; right: 200px;
-		padding: 5px;
-	}
-	#siteMap {
-		position: absolute;
-		top: 0px; right: 0px;
-		width: 200px;
-		padding: 5px;
 	}
 
 #Page {

@@ -172,6 +172,7 @@ $(function() {
 			$(this).parent('.matosDispo').find('.qtePikInput, .matosPikUnit').removeClass('show').addClass('hide');
 			$(this).children('button').removeClass('moins').addClass('plus').children('span').children('span').removeClass('ui-icon-minusthick').addClass('ui-icon-plusthick');
 			$(this).parents('.matosPik').removeClass('ui-state-highlight');
+			// TODO FIXME uncheck unit checkboxes
 			id   = parseInt($(this).parents().children('.qtePik').attr('id'), 10);
 			delete matosIdQte[id];
 			delete matosIdUnits[id];
@@ -188,9 +189,13 @@ $(function() {
 /// après avoir tapé une quantité de matos
 	$("#matosHolder").on ( 'blur', ".qtePikInput", function() {
 		var id		= parseInt($(this).parents('.qtePik').attr('id'), 10) ;
-		var newQte	= $(this).val();
-		matosIdQte[id]  = parseInt(newQte, 10) ;
-		// TODO FIXME ne pas autoriser une valeur inférieure au nombre d'unités sélectionnées
+		var newQte	= parseInt($(this).val(), 10);
+		var nbUnits = $(this).closest('.matosDispo').find('input.boxPikUnit:checked').size();
+		if (newQte < nbUnits) {
+			alert("La quantité ne peut pas être inférieure au nombre de matériels unitaires sélectionnés");
+			newQte = nbUnits;
+		}
+		matosIdQte[id]  = newQte;
 		qteMatos_update(id);
 		prixTotal();
 		aLouer();
@@ -198,14 +203,18 @@ $(function() {
 	});
 
 /// clic sur la checkbox d'un matériel unitaire
-	$("#matosHolder").on ('change', '.boxPikUnit' , function() { // TODO FIXME
+	$("#matosHolder").on ('change', '.boxPikUnit' , function() {
 		var idMatos = parseInt($(this).parents().children('.qtePik').attr('id'), 10);
 		var idUnit = $(this).val();
+		var quantite = parseInt($(this).closest('.matosDispo').find('input.qtePikInput').val(), 10);
+		var nbCheckedUnits = $(this).closest('.matosPikUnit').find('input.boxPikUnit:checked').size();
 		
 		// Ajout
 		if($(this).prop('checked')) {
 			matosIdUnits[idMatos].push(idUnit);
-			// TODO FIXME incrémenter la quantité
+			if (nbCheckedUnits > quantite) {
+				matosIdQte[idMatos] = (++quantite);
+			}
 		}
 		// Retrait
 		else {
@@ -213,8 +222,13 @@ $(function() {
 			var uncheckedIndex = matosUnits.indexOf(idUnit);
 			matosUnits.splice(uncheckedIndex, 1);
 			matosIdUnits[idMatos] = matosUnits;
-			// TODO FIXME décrémenter la quantité
+			matosIdQte[idMatos] = (--quantite);
 		}
+		
+		qteMatos_update(idMatos);
+		prixTotal();
+		aLouer();
+		recalcDispoPacks();
 	});
 
 
@@ -546,7 +560,7 @@ function addMatos ( id, qte ) {
 
 
 function qteMatos_update ( id ) {
-	var max  =  $("#matos-" + id).children(".matosDispo").find(".qteDispo_onload").html()
+	var max  =  $("#matos-" + id).children(".matosDispo").find(".qteDispo_onload").html();
 	max = parseInt ( max, 10 );
 	var pu = $("#matos-" + id).find(".matos_PU").html() ;
 	pu = parseFloat ( pu );

@@ -49,10 +49,10 @@ $(function() {
 
 
 	// Affichage du détail d'un matos
-	$('.showMDtr').click(function() {
-		$('.mDetail').hide();
-		var idMatos = $(this).attr('id');
-		$('#matosDetailTR-'+idMatos).toggle();
+	$('.matosLine').has('.showMDtr').click(function(event) {
+		if($(event.target).is('button:not(.showMDtr'))
+			return;
+		$('#matosDetailTR-'+$(this).find('.showMDtr').attr('id')).toggle();
 	});
 
 

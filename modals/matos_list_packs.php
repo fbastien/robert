@@ -94,7 +94,6 @@ else $liste_packs = $l->getListe(TABLE_PACKS, '*', 'ref');
 						<td class="rightText">
 							<button class="bouton showPDtr" id="'.$info['id'].'" title="Afficher le détail du pack"><span class="ui-icon ui-icon-search"></span></button>
 							'.$boutonsModo.'
-							<button class="bouton printMatos"  id="'.$info['id'].'" title="imprimer"><span class="ui-icon ui-icon-print"></span></button>
 						</td>
 					</tr>
 					<tr class="shadowIn center pDetail hide" id="packDetailTR-'.$info['id'].'">

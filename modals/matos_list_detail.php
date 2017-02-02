@@ -18,7 +18,6 @@ $lm = new Liste();
 $liste_ssCat = $lm->getListe(TABLE_MATOS_CATEG, '*', 'ordre', 'ASC');
 $listeMatosUnit = $lm->getListe(TABLE_MATOS_UNIT, '*', 'ref');
 
-
 ?>
 <script src="./fct/matos_Ajax.js"></script>
 <script>
@@ -65,81 +64,78 @@ $listeMatosUnit = $lm->getListe(TABLE_MATOS_UNIT, '*', 'ref');
 			<th class="ui-state-disabled">En panne</th>
 			<th class="ui-state-disabled">Actions</th>
 		</tr>
-		
-		<?php
-		include('matos_tri_sousCat.php');
-		
-		$matos_by_categ = creerSousCatArray($liste_matos);
-		$categById		= simplifySousCatArray($liste_ssCat);
-		$unitsByMatos = groupUnitsByMatos($listeMatosUnit);
-		
-		if (is_array($matos_by_categ)) {
-			foreach ($categById as $catInfo) {
-				$index = $catInfo['id'];
-				if (!is_array(@$matos_by_categ[$index])) continue;		// n'affiche rien si la sous catégorie est vide !
-				echo '<tr class="ui-state-hover sousCategLine"><td colspan="8" class="leftText gros gras" style="padding-left:20px;">'.$catInfo['label'].'</td></tr>';
-				foreach ($matos_by_categ[$index] as $info) {
-					if ( $_SESSION['user']->isLevelMod() ) {
-						$boutonsModo = '<button class="bouton selectMatos" id="'.$info['id'].'" nom="'.$info['ref'].'" title="modifier"><span class="ui-icon ui-icon-pencil"></span></button>
-										<button class="bouton deleteMatos" id="'.$info['id'].'" nom="'.$info['ref'].'" title="supprimer"><span class="ui-icon ui-icon-trash"></span></button>';
-					} else $boutonsModo = '';
-					
-					$boutonUnits = isset($unitsByMatos[$info['id']]) ? '<button class="bouton showMDtr" id="'.$info['id'].'" title="Afficher le matériel identifié"><span class="ui-icon ui-icon-tag"></span></button>' : '';
-					
-					$popupExterne = '';
-					$hideExterne = 'matosInterne';
-					if ($info['ownerExt'] !== null) {
-						$popupExterne = ' class="ui-state-error" popup="EXTERNE AU PARC !<br /><br />A louer chez : <b>'.$info['ownerExt'].'</b>"';
-						$hideExterne = 'matosExterne ';
-						if (@$modeRecherche != true) $hideExterne .= 'hide';
-						else $hideExterne .= 'ui-state-active';
-					}
-					
-					$remark = addslashes($info['remarque']);
-					$remark = preg_replace('/\\n/', '<br />', $remark);
-					
-					$qteDispo = $info['panne'] ;
-					
-					$popupPanne = '';
-					if ($info['panne'] >= 1) $popupPanne = 'ui-state-error';
-					
-					echo '<tr class="ui-state-default matosLine '.$hideExterne.' cat-'.$info['categorie'].'">
-							<td>'.$info['ref'].'</td>
-							<td>'.$info['codeBarres'].'</td>
-							<td popup="'.$remark.'">'.$info['label'].'</td>
-							<td><img src="./gfx/icones/categ-'.$info['categorie'].'.png" alt="'.$info['categorie'].'" /></td>
-							<td>'.$info['tarifLoc'].' &euro;</td>
-							<td>'.$info['valRemp'].' &euro;</td>
-							<td'.$popupExterne.'>'.$info['Qtotale'].'</td>
-							<td class="'.$popupPanne.'">'.$qteDispo.'</td>
-							<td class="rightText printHide">
-								'.$boutonUnits.'
-								'.$boutonsModo
-								/* <button class="bouton printMatos" id="'.$info['id'].'" title="imprimer"><span class="ui-icon ui-icon-print"></span></button> */ .'
-							</td>
-						</tr>';
-					
-					if(isset($unitsByMatos[$info['id']])) {
-						echo '<tr class="shadowIn center mDetail hide" id="matosDetailTR-'.$info['id'].'">
-							<td valign="top" class="pad20"><br />Matériel <b>"'.$info['ref'].'"</b> identifié :</td>
-							<td colspan="7" class="leftText pad20"><br />';
-						foreach ($unitsByMatos[$info['id']] as $infoUnit) {
-							$classPanne = $infoUnit['panne'] ? 'ui-state-error' : '';
-							$spanPanne = $infoUnit['panne'] ? '<i class="mini">(en panne)</i>' : '';
-							$unitExtraInfo = '';
-							if($infoUnit['dateAchat'] && $infoUnit['dateAchat'] > 0) $unitExtraInfo .= ' (acheté le '.$infoUnit['dateAchat'].')';
-							if($infoUnit['ownerExt']) $unitExtraInfo .= ' (chez '.$infoUnit['ownerExt'].')';
-							$unitRemarque = preg_replace('/\\n/', '<br />', addslashes($infoUnit['remarque']));
-							echo "<div class='inline padV10 $classPanne' style='width:20%;'>".$infoUnit['ref']." $spanPanne</div><div class='inline padV10'>".$unitRemarque.$unitExtraInfo."</div><br />";
-						}
-						echo '<br /></td>
-							</tr>';
-					}
+<?php
+include('matos_tri_sousCat.php');
+
+$matos_by_categ = creerSousCatArray($liste_matos);
+$categById		= simplifySousCatArray($liste_ssCat);
+$unitsByMatos = groupUnitsByMatos($listeMatosUnit);
+
+if (is_array($matos_by_categ)) {
+	foreach ($categById as $catInfo) {
+		$index = $catInfo['id'];
+		if (!is_array(@$matos_by_categ[$index]))
+			continue; // n'affiche rien si la sous catégorie est vide !
+?>
+		<tr class="ui-state-hover sousCategLine">
+			<td colspan="8" class="leftText gros gras" style="padding-left:20px;"><?= $catInfo['label'] ?></td>
+		</tr>
+<?php
+		foreach ($matos_by_categ[$index] as $info) {
+			$isExterne = ($info['ownerExt'] !== null);
+?>
+		<tr class="ui-state-default matosLine <?= $isExterne ? 'matosExterne '.(@$modeRecherche != true ? 'hide' : 'ui-state-active') : 'matosInterne' ?> cat-<?= $info['categorie'] ?>">
+			<td><?= $info['ref'] ?></td>
+			<td><?= $info['codeBarres'] ?></td>
+			<td popup="<?= preg_replace('/\\n/', '<br />', addslashes($info['remarque'])) ?>">
+				<?= $info['label'] ?></td>
+			<td><img src="./gfx/icones/categ-<?= $info['categorie'] ?>.png" alt="<?= $info['categorie'] ?>" /></td>
+			<td><?= $info['tarifLoc'] ?> &euro;</td>
+			<td><?= $info['valRemp'] ?> &euro;</td>
+			<td <?php if($isExterne) { ?>class="ui-state-error" popup="EXTERNE AU PARC !&lt;br /&gt;&lt;br /&gt;A louer chez : &lt;b&gt;<?= $info['ownerExt'] ?>&lt;/b&gt;"<?php } ?>>
+				<?= $info['Qtotale'] ?></td>
+			<td <?php if($info['panne'] >= 1) { ?>class="ui-state-error"<?php } ?>>
+				<?= $info['panne'] ?></td>
+			<td class="rightText printHide">
+<?php if (isset($unitsByMatos[$info['id']])) { ?>
+				<button class="bouton showMDtr" id="<?= $info['id'] ?>" title="Afficher le matériel identifié"><span class="ui-icon ui-icon-tag"></span></button>
+<?php } ?>
+<?php if ( $_SESSION['user']->isLevelMod() ) { ?>
+				<button class="bouton selectMatos" id="<?= $info['id'] ?>" nom="<?= $info['ref'] ?>" title="modifier"><span class="ui-icon ui-icon-pencil"></span></button>
+				<button class="bouton deleteMatos" id="<?= $info['id'] ?>" nom="<?= $info['ref'] ?>" title="supprimer"><span class="ui-icon ui-icon-trash"></span></button>
+<?php } ?>
+			</td>
+		</tr>
+<?php
+			if(isset($unitsByMatos[$info['id']])) {
+?>
+		<tr class="shadowIn center mDetail hide" id="matosDetailTR-<?= $info['id'] ?>">
+			<td colspan="2" valign="top" class="pad20"><br />Matériel <b>"<?= $info['ref'] ?>"</b> identifié :</td>
+			<td colspan="7" class="leftText pad20"><br />
+<?php
+				foreach ($unitsByMatos[$info['id']] as $infoUnit) {
+?>
+				<div class="inline padV10 <?= $infoUnit['panne'] ? 'ui-state-error' : '' ?>" style="width: 20%;">
+					<?= $infoUnit['ref'] ?>
+					<?php if($infoUnit['panne']) { ?><i class="mini">(en panne)</i><?php } ?>
+				</div>
+				<div class="inline padV10">
+					<?= preg_replace('/\\n/', '<br />', addslashes($infoUnit['remarque'])) ?>
+					<?= ($infoUnit['dateAchat'] && $infoUnit['dateAchat'] > 0) ? ' (acheté le '.$infoUnit['dateAchat'].')' : '' ?>
+					<?= $infoUnit['ownerExt'] ? ' (chez '.$infoUnit['ownerExt'].')' : '' ?>
+				</div><br />
+<?php
 				}
+?>
+				<br /></td>
+		</tr>
+<?php
 			}
 		}
-	?>
-</table>
+	}
+}
+?>
+	</table>
 	<br />
 </div>
 

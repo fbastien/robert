@@ -97,6 +97,7 @@ if ( @$action == 'afficheTekosMatos') {
 					$planDetails['matos'][$k]['infoPlans'][$index]['qteC']  = $info['qteC'];			// nbre de matos confirmé pour ce plan
 					$planDetails['matos'][$k]['infoPlans'][$index]['qteA']  = $info['qteA'];			// nbre de matos en attente pour ce plan
 				}
+				// TODO gérer aussi le matos unitaire
 				$qteDispoPourPack -= $matosBusy['QteConfirm'] + $matosBusy['QteAttente'] + $v['panne'];
 			}
 			if ($lp != false) $cal->createPack($v['id'], $qteDispoPourPack );
@@ -180,6 +181,7 @@ if ( @$action == 'modPlan') {
 		$backupSsPlans["$ts"][Plan::PLAN_cDETAILS_ID]       = $tmpPlan->getSousPlanId();
 		$backupSsPlans["$ts"][Plan::PLAN_cDETAILS_TECKOS]   = implode(" ", $tmpPlan->getSousPlanTekos());
 		$backupSsPlans["$ts"][Plan::PLAN_cDETAILS_MATOS]    = $tmpPlan->getSousPlanMatos();
+		$backupSsPlans["$ts"][Plan::PLAN_cDETAILS_UNITS]    = $tmpPlan->getSousPlanMatosUnits();
 		$backupSsPlans["$ts"][Plan::PLAN_cDETAILS_COMMENT]  = $tmpPlan->getSousPlanComment();
 		$backupSsPlans["$ts"][Plan::PLAN_cDETAILS_PGROUPID] = $tmpPlan->getPlanGroupID();
 	}
@@ -219,6 +221,7 @@ if ( @$action == 'modPlan') {
 			$tmpPlan->setSousPlanId     ( $backupSsPlans[$k][Plan::PLAN_cDETAILS_ID]);
 			$tmpPlan->setSousPlanTekos  ( $backupSsPlans[$k][Plan::PLAN_cDETAILS_TECKOS] ) ;
 			$tmpPlan->setSousPlanMatos  ( $backupSsPlans[$k][Plan::PLAN_cDETAILS_MATOS]) ;
+			$tmpPlan->setSousPlanMatosUnits($backupSsPlans[$k][Plan::PLAN_cDETAILS_UNITS]);
 			$tmpPlan->setSousPlanComment( $backupSsPlans[$k][Plan::PLAN_cDETAILS_COMMENT] ) ;
 		}
 	}
@@ -367,7 +370,7 @@ if ( @$action == 'refreshSessionAddPlan') {
 		}
 		elseif (isset($matosList) && isset($unitsList)) {
 			$addPlan->addPlanInfo('materiel', $matosList);
-			$addPlan->addPlanInfo(Plan::PLAN_cUNITS, $unitsList); // TODO FIXME
+			$addPlan->addPlanInfo(Plan::PLAN_cUNITS, $unitsList);
 			$_SESSION['plan_add'] = serialize($addPlan);
 			$retour['error'] = 'OK';
 		}

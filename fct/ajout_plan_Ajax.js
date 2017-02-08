@@ -40,9 +40,9 @@ $(function() {
 		if (etape == 4) {
 			var infosRequest = JSON.encode(infosNewPlan);
 			var matosRequest = JSON.encode(matosIdQte);
-			var unitsRequest = JSON.encode(matosIdUnits); // TODO FIXME
+			var unitsRequest = JSON.encode(matosIdUnits);
 			var tekosRequest = JSON.encode(tekosIds);
-			$('#recapPlan').load('modals/planAdd_recap.php', {'infos':infosRequest, 'matos':matosRequest, 'units':unitsRequest, 'tekos':tekosRequest}); // TODO FIXME
+			$('#recapPlan').load('modals/planAdd_recap.php', {'infos':infosRequest, 'matos':matosRequest, 'units':unitsRequest, 'tekos':tekosRequest});
 		}
 		$('#etape-'+etape).show(transition);
 		refreshEtapesBtns ();
@@ -200,9 +200,9 @@ function nextEtape () {
 			if (etape == 4) {
 				var infosRequest = JSON.encode(infosNewPlan);
 				var matosRequest = JSON.encode(matosIdQte);
-				var unitsRequest = JSON.encode(matosIdUnits); // TODO FIXME
+				var unitsRequest = JSON.encode(matosIdUnits);
 				var tekosRequest = JSON.encode(tekosIds);
-				$('#recapPlan').load('modals/planAdd_recap.php', {'infos':infosRequest, 'matos':matosRequest, 'units':unitsRequest, 'tekos':tekosRequest}); // TODO FIXME
+				$('#recapPlan').load('modals/planAdd_recap.php', {'infos':infosRequest, 'matos':matosRequest, 'units':unitsRequest, 'tekos':tekosRequest});
 			}
 			$('#etape-'+etape).show(transition, function() {
 				if (etape == 3)
@@ -318,7 +318,7 @@ function validationEtape (nEtape) {
 		}
 		else {
 			var matosList = JSON.encode(matosIdQte);
-			var unitsList = JSON.encode(matosIdUnits); // TODO FIXME
+			var unitsList = JSON.encode(matosIdUnits);
 			var ajaxStr = 'action=refreshSessionAddPlan&matosList='+matosList+'&unitsList='+unitsList;
 			AjaxJson ( ajaxStr, "plans_actions", alerteErr );
 			etapesValid[3] = true;

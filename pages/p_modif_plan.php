@@ -80,6 +80,7 @@ try {
 	$userPlanMod  = $thePlan->getPlanCreateur();
 	$tekosPlanMod = $thePlan->getPlanTekos();
 	$matosPlanMod = $thePlan->getPlanMatos();
+	$matosUnitPlanMod = $thePlan->getPlanMatosUnits();
 	$confirmedPlan = $thePlan->getPlanConfirm();
 }
 catch (Exception $e) {
@@ -117,11 +118,11 @@ $SsTotalMatos = array();
 $SsTotalCateg = array();
 $totalFinal   = 0;
 foreach ($matosPlanMod as $matId => $matQte) {
-	if ($matId == 'undefined' && $matId == 0) continue;
 	if ($matQte == 0) continue;
 	$categ = $matosById[$matId]['cat'];
 	$SsTotalMatos[$matId] = $matosById[$matId]['PU'] * $matQte;
-	if (!isset($SsTotalCateg[$categ])) $SsTotalCateg[$categ] = 0;
+	if (!isset($SsTotalCateg[$categ]))
+		$SsTotalCateg[$categ] = 0;
 	$SsTotalCateg[$categ] += $SsTotalMatos[$matId];
 	$totalFinal += $SsTotalMatos[$matId];
 
@@ -152,8 +153,30 @@ if (!isset($_SESSION['plan_mod_backup'])) {
 }
 ?>
 	$(function() {
-<?php foreach ($tekosPlanMod as $t) echo "		tekosIds.push('$t'); $('.tek_name[id*=\"$t\"]').click();\n" ?>
-<?php foreach ($matosPlanMod as $m => $q) echo "		matosIdQte['$m'] = $q; qteMatos_update($m);\n" ?>
+<?php
+foreach ($tekosPlanMod as $t) {
+?>
+		tekosIds.push('<?= $t ?>');
+		$('.tek_name[id*="<?= $t ?>"]').click();
+<?php
+}
+foreach ($matosPlanMod as $matosId => $q) {
+	if (isset($matosUnitPlanMod[$matosId])) {
+?>
+		matosIdUnits['<?= $matosId ?>'] = [];
+<?php
+		foreach ($matosUnitPlanMod[$matosId] as $unitId) {
+?>
+		matosIdUnits['<?= $matosId ?>'].push(<?= $unitId ?>);
+<?php
+		}
+	}
+?>
+		matosIdQte['<?= $matosId ?>'] = <?= $q ?>;
+		qteMatos_update(<?= $matosId ?>);
+<?php
+}
+?>
 		$("#themeSel").parent('p').hide();
 		$("#modifInfoUserActif").hide();
 		$("#modPlanBenef").autocomplete( { source: autoCompleteBENEF });

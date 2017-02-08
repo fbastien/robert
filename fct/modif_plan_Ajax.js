@@ -153,7 +153,7 @@ $(function(){
 function saveModMatosList () {
 	var matosIdQteJson = JSON.stringify(matosIdQte);
 	var matosIdUnitsJson = JSON.stringify(matosIdUnits);
-	var strAjax = "action=sessModifMatos&typeSess=plan_mod&matList="+matosIdQteJson+'&unitList='+matosIdUnitsJson; // TODO FIXME
+	var strAjax = "action=sessModifMatos&typeSess=plan_mod&matList="+matosIdQteJson+'&unitList='+matosIdUnitsJson;
 	AjaxFct ( strAjax, "plans_actions", 'reload', "retourAjax" );
 //	$('#retourAjax').ajaxStop(function(){
 //		window.location.reload();

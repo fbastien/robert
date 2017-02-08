@@ -172,7 +172,6 @@ $(function() {
 			$(this).parent('.matosDispo').find('.qtePikInput, .matosPikUnit').removeClass('show').addClass('hide');
 			$(this).children('button').removeClass('moins').addClass('plus').children('span').children('span').removeClass('ui-icon-minusthick').addClass('ui-icon-plusthick');
 			$(this).parents('.matosPik').removeClass('ui-state-highlight');
-			// TODO FIXME uncheck unit checkboxes
 			id   = parseInt($(this).parents().children('.qtePik').attr('id'), 10);
 			delete matosIdQte[id];
 			delete matosIdUnits[id];
@@ -459,8 +458,7 @@ function displayTekosMatos (data) {
 		$("#matos-"+idMatos).children(".matosDispo").find(".qteDispo_onload").html( qteDispo );
 		if (matosIdUnits.hasOwnProperty(idMatos)) {
 			matosIdUnits[idMatos].forEach(function(idUnit) {
-				$("#boxPikUnit-"+idUnit).prop('checked', true); // TODO FIXME tout décocher avant ?
-				// TODO gérer le matos unitaire déjà pris sur d'autres plans
+				$("#boxPikUnit-"+idUnit).prop('checked', true);
 			});
 		}
 
@@ -576,6 +574,7 @@ function qteMatos_update ( id ) {
 		$("#matos-" + id).children(".matosDispo").find(".qtePikInput").hide();
 		delete matosIdQte[id];
 		$("#matos-" + id).children(".matosDispo").find(".matosPikUnit").hide();
+		$("#matos-" + id).find(".boxPikUnit").prop('checked', false);
 		delete matosIdUnits[id];
 		$("#matos-" + id).children(".matosDispo").find(".qtePik").removeClass('padV10');
 		$("#matos-" + id).find('.matos_plus').children('button').removeClass('moins').addClass('plus').find('.ui-icon').removeClass('ui-icon-minusthick').addClass('ui-icon-plusthick');
@@ -584,7 +583,12 @@ function qteMatos_update ( id ) {
 		$("#matos-" + id).addClass('ui-state-highlight');
 		$("#matos-" + id).children(".matosDispo").find(".qtePikInput").show();
 		$("#matos-" + id).children(".matosDispo").find(".matosPikUnit").show();
-		if(matosIdUnits[id] === undefined) matosIdUnits[id] = [];
+		if(matosIdUnits[id] === undefined)
+			matosIdUnits[id] = [];
+		$("#matos-" + id).find(".boxPikUnit").prop('checked', false);
+		$.each(matosIdUnits[id], function(index, unitId) {
+			$('#boxPikUnit-' + unitId).prop('checked', true);
+		})
 		$("#matos-" + id).children(".matosDispo").find(".qtePik").addClass('padV10');
 		$("#matos-" + id).find('.matos_plus').children('button').removeClass('plus').addClass('moins').find('.ui-icon').removeClass('ui-icon-plusthick').addClass('ui-icon-minusthick');
 	}

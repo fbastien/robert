@@ -33,7 +33,7 @@ class Plan implements Iterator {
 	const PLAN_cBENEFICIAIRE = 'beneficiaire';
 	const PLAN_cTECKOS       = 'techniciens';
 	const PLAN_cMATOS		 = 'materiel';
-	const PLAN_cUNITS		 = 'units'; // TODO FIXME
+	const PLAN_cUNITS		 = 'units';
 	const PLAN_cCONFIRM		 = 'confirm';
 
 	const PLAN_cDETAILS_ID      = 'id_plandetails' ;
@@ -41,7 +41,7 @@ class Plan implements Iterator {
 	const PLAN_cDETAILS_SUBDATE = 'jour' ;
 	const PLAN_cDETAILS_TECKOS  = 'techniciens' ;
 	const PLAN_cDETAILS_MATOS   = 'materiel' ;
-	const PLAN_cDETAILS_UNITS   = 'units'; // TODO FIXME
+	const PLAN_cDETAILS_UNITS   = 'units';
 	const PLAN_cDETAILS_COMMENT = 'details_remarque' ;
 
 	const PLAN_ERROR_INVALID_DATE        = 'Format de date non valide';
@@ -353,7 +353,7 @@ class Plan implements Iterator {
 	// retourne un tableau du matos du sous plan courant (tableau à 2 dimensions : idSousPlan => [idMatos => quantité] )
 	public function getSousPlanMatos ()	{ return json_decode($this->sousPlans[$this->ssPlanIndex]->getInfo( Plan::PLAN_cDETAILS_MATOS ), true) ; }
 	// retourne un tableau du matos unitaire du sous plan courant (tableau à 3 dimensions : idSousPlan => [idMatos => [liste des idMatosUnit]] )
-	public function getSousPlanMatosUnits () { return json_decode($this->sousPlans[$this->ssPlanIndex]->getInfo( Plan::PLAN_cDETAILS_UNITS ), true) ; } // TODO FIXME
+	public function getSousPlanMatosUnits () { return json_decode($this->sousPlans[$this->ssPlanIndex]->getInfo( Plan::PLAN_cDETAILS_UNITS ), true) ; }
 
 	// défini l'id du sous plan (à utiliser seulement pour écrasement en bdd)
 	public function setSousPlanId ($id)			  { $this->sousPlans[$this->ssPlanIndex]->addInfo( Plan::PLAN_cDETAILS_ID, $id ); }
@@ -366,7 +366,7 @@ class Plan implements Iterator {
 	// défini la liste du matos du plan courant (tableau à 2 dimensions : idSousPlan => [idMatos => quantité] )
 	public function setSousPlanMatos ($matosList) { $matos = json_encode($matosList); $this->sousPlans[$this->ssPlanIndex]->addInfo( Plan::PLAN_cDETAILS_MATOS, $matos ); }
 	// définit la liste du matos unitaire du plan courant (tableau à 3 dimensions : idSousPlan => [idMatos => [liste des idMatosUnit]] )
-	public function setSousPlanMatosUnits ($unitsList) { $units = json_encode($unitsList); $this->sousPlans[$this->ssPlanIndex]->addInfo( Plan::PLAN_cDETAILS_UNITS, $units ); } // TODO FIXME
+	public function setSousPlanMatosUnits ($unitsList) { $units = json_encode($unitsList); $this->sousPlans[$this->ssPlanIndex]->addInfo( Plan::PLAN_cDETAILS_UNITS, $units ); }
 
 	// sauvegarde le sous plan COURANT
 	public function saveSousPlan () {

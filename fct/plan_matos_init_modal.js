@@ -764,38 +764,38 @@ function matos_list_detail( retour ){
 	if ( retour.success != 'SUCCESS' ) { alert (retour.success) ;  return; }
 
 	retour = retour.matos ;
-	var isExterne = (retour.externe == '1'); // TODO FIXME ?
+	var isExterne = (retour.externe == '1');
 
 	var newMatos =
-		'<div id="matos-'+ retour.id +'" class="ui-state-default matosPik cat-'+ retour.categorie +' '+ (isExterne ? 'matosExterne' : '') +' pad3">'
-			+'<div class="inline mid rightText" style="width: 100px;">'
-				+'<span class="ui-state-disabled">DETAIL</span>'
-			+'</div>'
-			+'<div class="inline mid rightText" style="width: 50px;">'
-				+ (isExterne ? '<img src="gfx/icones/matosExterne.png" alt="externe" popup="Matériel externe au parc !&lt;br /&gt;A louer chez &lt;b&gt;'+ retour.ownerExt +'&lt;/b&gt;" /&gt;' : '')
-			+'</div>'
-			+'<div class="inline mid matos_categ rightText">'
-				+'<img src="gfx/icones/categ-'+ retour.categorie +'.png" alt="'+ retour.categorie +'" title="catégorie '+ retour.categorie +'" class="marge30l" />'
-			+'</div>'
-			+'<div class="inline mid quart leftText pad30L">'
-				+'<div class="floatRight matos_code">'+ retour.codeBarres +'</div>' // TODO CHECK
-				+'<div class="matos_name" ext="'+ (isExterne ? '1' : '0') +'">'+ retour.ref +'</div>'
-			+'</div>'
-			+'<div class="inline mid quart matosDispo rightText mini" style="width: 200px;">'
-				+'<div class="inline mid qteDispo">'
-					+'<div><span>Total : </span><span class="qteDispo_total">'+ retour.Qtotale +'</span></div>'
-					+'<div '+ ($isExterne ? 'class="hide"' : '') +'><span>Dispo : </span><span class="qteDispo_update">'+ retour.Qtotale + '</span></div>'
-					+'<div class="hide"><span class="qteDispo_onload">'+ retour.Qtotale + '</span></div>'
-					+'<div class="qtePanne center"></div>'
-				+'</div>'
-				+'<div class="inline mid qtePik bordFin bordSection" id="'+ retour.id +'"><input type="text" class="qtePikInput hide" size="2" value="0" /></div>'
-				+'<div class="inline mid matos_plus"><button class="bouton plus"><span class="ui-icon ui-icon-plusthick"></span></button></div>'
-				+'<div class="matosPikUnit padV10 hide"></div>'
-			+'</div>'
-			+'<div class="inline mid quart">'
-				+'<div class="inline mid demi petit rightText"><span class="matos_PU">'+ retour.tarifLoc +' €</span></div>'
-				+'<div class="inline mid demi gros"> = <span class="matos_PRICE">0</span> €</div>'
-			+'</div>'
+		'<div id="matos-'+ retour.id +'" class="ui-state-default matosPik cat-'+ retour.categorie +' '+ (isExterne ? 'matosExterne' : '') +' pad3">\n'
+			+'<div class="inline mid rightText" style="width: 100px;">\n'
+				+'<span class="ui-state-disabled">DETAIL</span>\n'
+			+'</div>\n'
+			+'<div class="inline mid rightText" style="width: 50px;">\n'
+				+ (isExterne ? '<img src="gfx/icones/matosExterne.png" alt="externe" popup="Matériel externe au parc !&lt;br /&gt;A louer chez &lt;b&gt;'+ retour.ownerExt +'&lt;/b&gt;" />' : '')
+			+'</div>\n'
+			+'<div class="inline mid matos_categ rightText">\n'
+				+'<img src="gfx/icones/categ-'+ retour.categorie +'.png" alt="'+ retour.categorie +'" title="catégorie '+ retour.categorie +'" class="marge30l" />\n'
+			+'</div>\n'
+			+'<div class="inline mid quart leftText pad30L">\n'
+				+'<div class="floatRight matos_code">'+ (retour.codeBarres != null ? retour.codeBarres : '') +'</div>\n'
+				+'<div class="matos_name" ext="'+ (isExterne ? '1' : '0') +'">'+ retour.ref +'</div>\n'
+			+'</div>\n'
+			+'<div class="inline mid quart matosDispo rightText mini" style="width: 200px;">\n'
+				+'<div class="inline mid qteDispo">\n'
+					+'<div><span>Total : </span><span class="qteDispo_total">'+ retour.Qtotale +'</span></div>\n'
+					+'<div '+ (isExterne ? 'class="hide"' : '') +'><span>Dispo : </span><span class="qteDispo_update">'+ retour.Qtotale + '</span></div>\n'
+					+'<div class="hide"><span class="qteDispo_onload">'+ retour.Qtotale + '</span></div>\n'
+					+'<div class="qtePanne center"></div>\n'
+				+'</div>\n'
+				+'<div class="inline mid qtePik bordFin bordSection" id="'+ retour.id +'"><input type="text" class="qtePikInput hide" size="2" value="0" /></div>\n'
+				+'<div class="inline mid matos_plus"><button class="bouton plus"><span class="ui-icon ui-icon-plusthick"></span></button></div>\n'
+				+'<div class="matosPikUnit padV10 hide"></div>\n'
+			+'</div>\n'
+			+'<div class="inline mid quart">\n'
+				+'<div class="inline mid demi petit rightText"><span class="matos_PU">'+ retour.tarifLoc +' €</span></div>\n'
+				+'<div class="inline mid demi gros"> = <span class="matos_PRICE">0</span> €</div>\n'
+			+'</div>\n'
 		+'</div>';
 
 	$('#matosHolder').find('.sousCategLine[idSsCat="'+retour.sousCateg+'"]').show().after( newMatos ) ;

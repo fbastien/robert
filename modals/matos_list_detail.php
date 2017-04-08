@@ -115,11 +115,11 @@ if (is_array($matos_by_categ)) {
 <?php
 				foreach ($unitsByMatos[$info['id']] as $infoUnit) {
 ?>
-				<div class="inline padV10 <?= $infoUnit['panne'] ? 'ui-state-error' : '' ?>" style="width: 20%;">
+				<div class="inline padV10 top <?= $infoUnit['panne'] ? 'ui-state-error' : '' ?>" style="width: 20%;">
 					<?= $infoUnit['ref'] ?>
 					<?php if($infoUnit['panne']) { ?><i class="mini">(en panne)</i><?php } ?>
 				</div>
-				<div class="inline padV10">
+				<div class="inline padV10 top">
 					<?= preg_replace('/\\n/', '<br />', addslashes($infoUnit['remarque'])) ?>
 					<?= ($infoUnit['dateAchat'] && $infoUnit['dateAchat'] > 0) ? ' (acheté le '.$infoUnit['dateAchat'].')' : '' ?>
 					<?= $infoUnit['ownerExt'] ? ' (chez '.$infoUnit['ownerExt'].')' : '' ?>
@@ -139,84 +139,107 @@ if (is_array($matos_by_categ)) {
 	<br />
 </div>
 
-<div class="ui-widget-content ui-corner-all center gros hide" id="modifieurPage">
+<div class="ui-widget-content ui-corner-all center gros hide" id="modifieurPage" style="height: auto; max-height: 75%; min-height: 250px; overflow-y: auto;">
 	<div class="closeModifieur ui-state-active ui-corner-all" id="btnClose"><span class="ui-icon ui-icon-circle-close"></span></div>
 	<div class="ui-widget-header ui-corner-all pad3">Modifier le matériel "<span id="nomMatosModif"></span>"</div>
-	<div class="leftText marge30l margeTop5">
-		<input type="hidden" id="modMatosId" />
-		<div class="inline top center pad3" style="width: 140px;">
-			<div class="ui-widget-header ui-corner-all">Référence :</div>
-			<input type="text" id="modMatosRef" style="width: 100%;" />
-		</div>
-		<div class="inline top center pad3" style="width: 450px;">
-			<div class="ui-widget-header ui-corner-all">Désignation complète :</div>
-			<input type="text" id="modMatosLabel" style="width: 100%;" />
-		</div>
-		<div class="inline top center pad3" style="width: 140px;">
-			<div class="ui-widget-header ui-corner-all">Code-barres :</div>
-			<input type="text" id="modMatosCode" style="width: 100%;" />
+	<input type="hidden" id="modMatosId" />
+	<div class="inline leftText marge30l margeTop5">
+		<div class="ui-widget-header ui-corner-all center">Informations générales</div>
+		<div class="ui-widget-content ui-corner-all" style="padding: 1ex;">
+			<div class="inline top center pad3" style="width: 140px;">
+				<div class="ui-widget-header ui-corner-all">Référence : <b class="red">*</b></div>
+				<input type="text" id="modMatosRef" style="width: 100%;" />
+			</div>
+			<div class="inline top center pad3" style="width: 450px;">
+				<div class="ui-widget-header ui-corner-all">Désignation complète : <b class="red">*</b></div>
+				<input type="text" id="modMatosLabel" style="width: 100%;" />
+			</div>
+			<div class="inline top center pad3" style="width: 140px;">
+				<div class="ui-widget-header ui-corner-all">Code-barres :</div>
+				<input type="text" id="modMatosCode" style="width: 100%;" />
+			</div>
+			<br />
+			<div class="inline top center pad3" style="width: 120px;">
+				<div class="ui-widget-header ui-corner-all">Catégorie : <b class="red">*</b></div>
+				<select id="modMatosCateg">
+					<option value="son">SON</option>
+					<option value="lumiere">LUMIÈRE</option>
+					<option value="structure">STRUCTURE</option>
+					<option value="transport">TRANSPORT</option>
+				</select>
+			</div>
+			<div class="inline top center pad3" style="width: 190px;">
+				<div class="ui-widget-header ui-corner-all">Sous Categ :</div>
+				<select id="modMatosSousCateg">
+					<option value="0">---</option>
+					<?php
+					foreach ($liste_ssCat as $ssCat) {
+						echo '<option value="'.$ssCat['id'].'">'.$ssCat['label'].'</option>';
+					}
+					?>
+				</select>
+			</div>
+			<div class="inline top center pad3" style="width: 105px;">
+				<div class="ui-widget-header ui-corner-all">Tarif loc. <b class="red">*</b></div>
+				<input class="NumericInput" type="text" id="modMatosTarif" size="5" /> €
+			</div>
+			<div class="inline top center pad3" style="width: 105px;">
+				<div class="ui-widget-header ui-corner-all">Val. Remp. <b class="red">*</b></div>
+				<input class="NumericInput" type="text" id="modMatosValRemp" size="6" /> €
+			</div>
+			<div class="inline top center pad3" style="width: 90px;">
+				<div class="ui-widget-header ui-corner-all">Qté Parc <b class="red">*</b></div>
+				<input class="NumericInput" type="text" id="modMatosQteTot" size="6" />
+			</div>
+			<div class="inline top center pad3" style="width: 90px;">
+				<div class="ui-widget-header ui-corner-all">En panne</div>
+				<input class="NumericInput" type="text" id="modMatosPanne" size="6" />
+			</div>
+			<br />
+			<div class="inline top center pad3" style="width: 480px;">
+				<div class="ui-widget-header ui-corner-all">Remarque :</div>
+				<textarea id="modMatosRem" rows="5" style="width: 100%;"></textarea>
+			</div>
+			<div class="inline top center pad3" style="width: 130px;">
+				<div class="ui-widget-header ui-corner-all">Externe ?</div>
+				<input type="checkbox" id="modMatosExterne" class="externeBox" />
+			</div>
+			<div class="inline top center pad3" style="width: 120px;">
+				<div id="dateAchatDiv">
+					<div class="ui-widget-header ui-corner-all">Acheté le :</div>
+					<input type="text" id="modMatosDateAchat" class="inputCal2" size="9" />
+				</div>
+				<div id="chezQuiDiv" class="hide">
+					<div class="ui-widget-header ui-corner-all">À louer chez :</div>
+					<input type="text" id="modMatosExtOwner" size="9" />
+				</div>
+			</div>
 		</div>
 		<br />
-		<div class="inline top center pad3" style="width: 120px;">
-			<div class="ui-widget-header ui-corner-all">Catégorie :</div>
-			<select id="modMatosCateg">
-				<option value="son">SON</option>
-				<option value="lumiere">LUMIÈRE</option>
-				<option value="structure">STRUCTURE</option>
-				<option value="transport">TRANSPORT</option>
-			</select>
-		</div>
-		<div class="inline top center pad3" style="width: 190px;">
-			<div class="ui-widget-header ui-corner-all">Sous Categ :</div>
-			<select id="modMatosSousCateg">
-				<option value="0">---</option>
-				<?php
-				foreach ($liste_ssCat as $ssCat) {
-					echo '<option value="'.$ssCat['id'].'">'.$ssCat['label'].'</option>';
-				}
-				?>
-			</select>
-		</div>
-		<div class="inline top center pad3" style="width: 105px;">
-			<div class="ui-widget-header ui-corner-all">Tarif loc.</div>
-			<input class="NumericInput" type="text" id="modMatosTarif" size="5" /> €
-		</div>
-		<div class="inline top center pad3" style="width: 105px;">
-			<div class="ui-widget-header ui-corner-all">Val. Remp.</div>
-			<input class="NumericInput" type="text" id="modMatosValRemp" size="6" /> €
-		</div>
-		<div class="inline top center pad3" style="width: 90px;">
-			<div class="ui-widget-header ui-corner-all">Qté Parc</div>
-			<input class="NumericInput" type="text" id="modMatosQteTot" size="6" />
-		</div>
-		<div class="inline top center pad3" style="width: 90px;">
-			<div class="ui-widget-header ui-corner-all">En panne</div>
-			<input class="NumericInput" type="text" id="modMatosPanne" size="6" />
-		</div>
-		<br />
-		<div class="inline top center pad3" style="width: 480px;">
-			<div class="ui-widget-header ui-corner-all">Remarque :</div>
-			<textarea id="modMatosRem" rows="5" style="width: 100%;"></textarea>
-		</div>
-		<div class="inline top center pad3" style="width: 130px;">
-			<div class="ui-widget-header ui-corner-all">Externe ?</div>
-			<input type="checkbox" id="modMatosExterne" class="externeBox" />
-		</div>
-		<div class="inline top center pad3" style="width: 120px;">
-			<div id="dateAchatDiv">
-				<div class="ui-widget-header ui-corner-all">Acheté le :</div>
-				<input type="text" id="modMatosDateAchat" class="inputCal2" size="9" />
-			</div>
-			<div id="chezQuiDiv" class="hide">
-				<div class="ui-widget-header ui-corner-all">A louer chez :</div>
-				<input type="text" id="modMatosExtOwner" size="9" />
+		<div class="ui-widget-header ui-corner-all center">Matériel identifié unitairement</div>
+		<div class="ui-widget-content ui-corner-all" style="padding: 1ex;">
+			<table id="modMatosListeUnits" class="tableListe">
+				<thead>
+					<tr class="titresListe">
+						<th>Code-barres <b class="red">*</b></th>
+						<th colspan="2" style="text-align: left;">Externe ?</th>
+						<th>Remarque</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+			<br />
+			<div class="big center" title="Ajouter un matériel identifié">
+				<button class="bouton" id="addMatosUnit" onclick="addMatosUnitRow(false);"><span class="ui-icon ui-icon-plusthick"></span></button>
 			</div>
 		</div>
-		<div class="inline top leftText pad10">
-			<button class="bouton closeModifieur">ANNULER</button>
-			<br /><br />
-			<button class="bouton modif" id="matos">SAUVEGARDER</button>
-		</div>
+	</div>
+	<div class="inline bot leftText pad10">
+		<button class="bouton closeModifieur">ANNULER</button>
+		<br /><br />
+		<button class="bouton modif" id="matos">SAUVEGARDER</button>
 	</div>
 </div>
 

@@ -8,14 +8,30 @@ extract($_POST);
 
 
 if ( $action == 'select') {
+	// Récupération des infos générales du matériel
 	$matos = new Matos ('id', $id);
 	$retour = $matos->getMatosInfos();
+	
+	// Récupération des infos du matériel identifié unitairement
+	$retour['units'] = array();
+	$l = new Liste();
+	$listeUnits = $l->getListe(TABLE_MATOS_UNIT, MatosUnit::ID_MATOS_UNIT, MatosUnit::ID_MATOS_UNIT, '', MatosUnit::ID_MATOS_DETAIL, '=', $id);
+	if (is_array($listeUnits)) {
+		foreach ($listeUnits as $idUnit) {
+			$unit = new MatosUnit(MatosUnit::ID_MATOS_UNIT, $idUnit);
+			$retour['units'][] = $unit->getMatosUnitInfos();
+		}
+	}
+	
 	$retour = json_encode($retour);
 	echo $retour ;
 }
 
 if ( $action == 'addMatos') {
-	if ($label == '' || $ref == '' || $Qtotale == '' || $tarifLoc == '' || $valRemp == '') { echo 'Pas assez de données... '; return; }
+	if ($label == '' || $ref == '' || $Qtotale == '' || $tarifLoc == '' || $valRemp == '') {
+		echo 'Pas assez de données... ';
+		return;
+	}
 	unset($_POST['action']);
 
 	$tmpMatos = new Matos();
@@ -25,20 +41,20 @@ if ( $action == 'addMatos') {
 	
 	try {
 		if ( $tmpMatos->save() )
-			echo "Matériel $ref Ajouté !";
+			echo "Matériel $ref ajouté !";
 		$tmpMatos->loadFromBD(Matos::REF_MATOS, $ref);
 		$idMatos = $tmpMatos->getMatosInfos('id');
 		
 		if (isset($matosUnits)) {
 			foreach ($matosUnits as $unit) {
 				$tmpUnit = new MatosUnit();
-				$unit['id_matosdetail'] = $idMatos;
+				$unit[MatosUnit::ID_MATOS_DETAIL] = $idMatos;
 				$tmpUnit->setVals($unit);
 				// TODO Vérifier que la référence n'existe pas déjà dans la table robert_matos_detail
 				
 				try {
 					if ( $tmpUnit->save() )
-						echo "<br />Matériel unitaire {$unit['ref']} Ajouté !";
+						echo "<br />Matériel unitaire {$unit['ref']} ajouté !";
 				} catch (Exception $e) {
 					echo '<br />'.$e->getMessage();
 				}
@@ -82,15 +98,75 @@ if ( $action == 'addMatosJson') {
 }
 
 if ( $action == 'modif') {
+	if ($label == '' || $ref == '' || $Qtotale == '' || $tarifLoc == '' || $valRemp == '') {
+		echo 'Pas assez de données... ';
+		return;
+	}
 	unset($_POST['action']);
 	unset($_POST['id']);
-	$modMatos = new Matos ('id', $id);
-	$modMatos->setVals ($_POST);
+	
+	$modMatos = new Matos('id', $id);
+	unset($_POST['matosUnits']);
+	$modMatos->setVals($_POST);
+	// TODO Vérifier que la référence n'existe pas déjà dans la table robert_matos_unit
+	
 	try {
 		if ($modMatos->save())
 			echo 'Matériel sauvegardé !';
 		else
 			echo 'Impossible de sauvegarder.';
+		
+		if (isset($matosUnits)) {
+			foreach ($matosUnits as $unit) {
+				$unitAction = $unit['action'];
+				$unitId = isset($unit['id']) ? $unit['id'] : -1;
+				unset($unit['action']);
+				unset($unit['id']);
+				
+				if($unitAction == 'ADD') {
+					$tmpUnit = new MatosUnit();
+					$unit[MatosUnit::ID_MATOS_DETAIL] = $id;
+					$tmpUnit->setVals($unit);
+					// TODO Vérifier que la référence n'existe pas déjà dans la table robert_matos_detail
+					
+					try {
+						if ( $tmpUnit->save() )
+							echo "<br />Matériel unitaire {$unit['ref']} ajouté !";
+					} catch (Exception $e) {
+						echo "<br />Impossible d'ajouter le matériel unitaire {$unit['ref']} : ".$e->getMessage();
+					}
+				}
+				
+				elseif($unitAction == 'MOD') {
+					$modUnit = new MatosUnit(MatosUnit::ID_MATOS_UNIT, $unitId);
+					$modUnit->setVals($unit);
+					// TODO Vérifier que la référence n'existe pas déjà dans la table robert_matos_unit
+					
+					try {
+						if ($modUnit->save())
+							echo "<br />Matériel unitaire {$unit['ref']} sauvegardé !";
+					} catch (Exception $e) {
+						echo "<br />Impossible de sauvegarder le matériel unitaire {$unit['ref']} : ".$e->getMessage();
+					}
+				}
+				
+				elseif($unitAction == 'DEL') {
+					try {
+						$delUnit = new MatosUnit(MatosUnit::ID_MATOS_UNIT, $unitId);
+						$delUnitInfos = $delUnit->getMatosUnitInfos();
+						if ($delUnit->deleteMatosUnit() > 0) {
+							echo "<br />Matériel unitaire {$delUnitInfos['ref']} supprimé !";
+						}
+						else {
+							echo "<br />Impossible de supprimer le matériel unitaire {$delUnitInfos['ref']}...";
+						}
+					}
+					catch(Exception $e) {
+						echo '<br />Impossible de supprimer le matériel unitaire : '.$e->getMessage();
+					}
+				}
+			}
+		}
 	} catch (Exception $e) {
 		echo $e->getMessage();
 	}
@@ -100,10 +176,10 @@ if ( $action == 'delete') {
 	ini_set('display_errors', false);
 	try {
 		$l = new Liste();
-		$listeDelUnits = $l->getListe(TABLE_MATOS_UNIT, 'id_matosunit', 'id_matosunit', '', 'id_matosdetail', '=', $id);
+		$listeDelUnits = $l->getListe(TABLE_MATOS_UNIT, MatosUnit::ID_MATOS_UNIT, MatosUnit::ID_MATOS_UNIT, '', MatosUnit::ID_MATOS_DETAIL, '=', $id);
 		if (is_array($listeDelUnits)) {
 			foreach ($listeDelUnits as $idUnitDel) {
-				$delUnit = new MatosUnit('id_matosunit', $idUnitDel);
+				$delUnit = new MatosUnit(MatosUnit::ID_MATOS_UNIT, $idUnitDel);
 				if ($delUnit->deleteMatosUnit() <= 0) {
 					$retour['error'] = "Impossible de supprimer le matériel identifié unitairement...";
 				}

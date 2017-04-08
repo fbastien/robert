@@ -103,7 +103,11 @@ $liste_ssCat = $lm->getListe(TABLE_MATOS_CATEG, '*', 'ordre', 'ASC');
 	<br />
 	<div class="ui-widget-header ui-corner-all center">Matériel identifié unitairement</div>
 	<div class="ui-widget-content ui-corner-all" style="padding: 1ex;">
-		<table id="listeMatosUnit" class="tableListe">
+		<div class="big center" title="Ajouter un matériel identifié">
+			<button class="bouton" id="addMatosUnit" onclick="addMatosUnitRow(true);"><span class="ui-icon ui-icon-plusthick"></span></button>
+		</div>
+		<br />
+		<table id="newMatosListeUnits" class="tableListe">
 			<thead>
 				<tr class="titresListe">
 					<th>Code-barres <b class="red">*</b></th>
@@ -115,10 +119,6 @@ $liste_ssCat = $lm->getListe(TABLE_MATOS_CATEG, '*', 'ordre', 'ASC');
 			<tbody>
 			</tbody>
 		</table>
-		<br />
-		<div class="big center" title="Ajouter un matériel identifié">
-			<button class="bouton" id="addMatosUnit" onclick="addMatosUnitRow()"><span class="ui-icon ui-icon-plusthick"></span></button>
-		</div>
 	</div>
 	<br />
 	<div class="center bot">

@@ -43,6 +43,8 @@ class MatosUnit implements Iterator {
 	const REF_MATOS_UNIT	= 'ref';
 	/** champ BDD où trouver l'id du matos unitaire */
 	const ID_MATOS_UNIT		= 'id_matosunit';
+	/** champ BDD où trouver l'id du matos générique auquel correspond le matos unitaire */
+	const ID_MATOS_DETAIL	= 'id_matosdetail';
 	
 	/** @var Infos Gestion en BDD des informations du matos unitaire. */
 	private $infos;
@@ -165,7 +167,7 @@ class MatosUnit implements Iterator {
 		if ( !$verifInfo['ref'] )
 			throw new Exception(MatosUnit::MANQUE_INFO);
 		
-		$this->infos->save();
+		$this->infos->save(MatosUnit::ID_MATOS_UNIT);
 		return MatosUnit::MATOS_OK ;
 	}
 	

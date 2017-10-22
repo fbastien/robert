@@ -18,10 +18,11 @@ require_once ('checkConnect.php' );
 		$('.miniSmenuBtn').removeClass('ui-state-highlight');
 		$('#matos_add_packs').addClass('ui-state-highlight');
 		$('.packsMiniSsMenu').next().children().show(300);
-		
-		// on cache le bouton de recherche et les filtres (pas besoin ici)
+
+		// On cache le champ de recherche et les boutons de filtre et d'affichage (pas besoin ici)
 		$('#chercheDiv').hide(300);
 		$('#filtresDiv').hide(300);
+		$('#affichageDiv').hide(300);
 		
 	});
 </script>

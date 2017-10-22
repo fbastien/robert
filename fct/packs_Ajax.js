@@ -50,9 +50,8 @@ $(document).ready(function() {
 	});
 	
 	
-	// montre les détails d'un pack en dessous
+	// Montre (ou cache) les détails d'un pack en dessous
 	$('.showPDtr').click(function() {
-		$('.pDetail').hide();
 		var idPack = $(this).attr('id');
 		$('#packDetailTR-'+idPack).toggle();
 	});

@@ -42,6 +42,7 @@ else $liste_packs = $l->getListe(TABLE_PACKS, '*', 'ref');
 		$('#chercheInput').val('');							// vide l'input de recherche
 		$('#chercheDiv').show(300);							// affiche le module de recherche
 		$('#filtresDiv').show(300);							// affiche le module des filtres
+		$('#affichageDiv').show(300);						// affiche les boutons d'affichage
 		$('#polyvalent').show();							// montre le filtre 'polyvalent' (si on viens du matos détail qui le cache)
 		$('.filtre').removeClass('ui-state-error');
 		

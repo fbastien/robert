@@ -41,6 +41,7 @@ $listeMatosUnit = $lm->getListe(TABLE_MATOS_UNIT, '*', 'ref');
 		$('#chercheInput').val('');							// vide l'input de recherche
 		$('#chercheDiv').show(300);							// affiche le module de recherche
 		$('#filtresDiv').show(300);							// affiche le module des filtres
+		$('#affichageDiv').show(300);						// affiche les boutons d'affichage
 		$('#polyvalent').hide();							// sauf le 'polyvalent' (existe que pour les packs)
 		$('.filtre').removeClass('ui-state-error');
 		
@@ -78,7 +79,7 @@ if (is_array($matos_by_categ)) {
 			continue; // n'affiche rien si la sous catégorie est vide !
 ?>
 		<tr class="ui-state-hover sousCategLine">
-			<td colspan="8" class="leftText gros gras" style="padding-left:20px;"><?= $catInfo['label'] ?></td>
+			<td colspan="9" class="leftText gros gras" style="padding-left:20px;"><?= $catInfo['label'] ?></td>
 		</tr>
 <?php
 		foreach ($matos_by_categ[$index] as $info) {

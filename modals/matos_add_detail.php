@@ -20,9 +20,10 @@ $liste_ssCat = $lm->getListe(TABLE_MATOS_CATEG, '*', 'ordre', 'ASC');
 		$('#matos_add_detail').addClass('ui-state-highlight');
 		$('.matosMiniSsMenu').next().children().show(300);
 
-		// on cache le bouton de recherche et les filtres (pas besoin ici)
+		// On cache le champ de recherche et les boutons de filtre et d'affichage (pas besoin ici)
 		$('#chercheDiv').hide(300);
 		$('#filtresDiv').hide(300);
+		$('#affichageDiv').hide(300);
 
 		// Calendrier sur focus d'input
 		$(".inputCal2").datepicker({dateFormat: 'yy-mm-dd', firstDay: 1, changeMonth: true, changeYear: true});

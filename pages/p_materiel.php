@@ -39,6 +39,13 @@
 		
 		$('#modalGestionSousCatMatos').on('blur', '.ssCatInput', function() { saveModifSsCat($(this)); });
 		$('#modalGestionSousCatMatos').on('keydown', '.ssCatInput', function(event) { if (event.which == 13) saveModifSsCat($(this)); });
+		
+		$('#btnToutDevelopper').click(function(){
+			$('.mDetail, .pDetail').show();
+		});
+		$('#btnToutReduire').click(function(){
+			$('.mDetail, .pDetail').hide();
+		}); 
 	});
 	
 	
@@ -132,6 +139,12 @@
 		<button class="bouton filtre" id="int-ext" title="matos INTERNE / EXTERNE au Parc"><img src="./gfx/icones/matosExterne.png" alt="INT/EXT" width="30"></button>
 	</div>
 	
+	<div class="inline top" id="affichageDiv">
+		<div class="inline top Vseparator bordSection"></div>
+		
+		<button class="bouton" id="btnToutDevelopper" title="Afficher le détail de tous les éléments de la liste"><span class="ui-icon ui-icon-zoomin"></span></button>
+		<button class="bouton" id="btnToutReduire" title="Masquer le détail de tous les éléments de la liste"><span class="ui-icon ui-icon-zoomout"></span></button>
+	</div>
 </div>
 
 

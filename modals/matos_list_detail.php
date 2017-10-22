@@ -5,13 +5,20 @@ require_once ('common.inc.php');		// OBLIGATOIRE pour les sessions, à placer TO
 require_once ('checkConnect.php' );
 
 $l = new Liste();
-
 if ( isset($_POST['searchingfor']) ) {
-	$liste_matos = $l->getListe(TABLE_MATOS, '*', 'ref', 'ASC', $_POST['searchingwhat'], 'LIKE', '%'.$_POST['searchingfor'].'%');
+	// Pour les codes-barres, requête imbriquée pour chercher aussi dans la table du matériel unitaire
+	if($_POST['searchingwhat'] === 'codeBarres') {
+		$l->setFiltreSQL('`codeBarres` LIKE \'%'.addSlashes($_POST['searchingfor']).'%\' OR EXISTS( SELECT * FROM `'.TABLE_MATOS_UNIT.'` WHERE `'.TABLE_MATOS_UNIT.'`.`id_matosdetail` = `'.TABLE_MATOS.'`.`id` AND `'.TABLE_MATOS_UNIT.'`.`ref` LIKE \'%'.addSlashes($_POST['searchingfor']).'%\' )');
+		$liste_matos = $l->getListe(TABLE_MATOS, '*', 'ref');
+	}
+	else {
+		$liste_matos = $l->getListe(TABLE_MATOS, '*', 'ref', 'ASC', $_POST['searchingwhat'], 'LIKE', '%'.$_POST['searchingfor'].'%');
+	}
 	$modeRecherche = true;
 }
-else
+else {
 	$liste_matos = $l->getListe(TABLE_MATOS, '*', 'ref');
+}
 unset($l);
 
 $lm = new Liste();
@@ -36,6 +43,7 @@ $listeMatosUnit = $lm->getListe(TABLE_MATOS_UNIT, '*', 'ref');
 		$('#filtreCherche').html(							// Ajout des options de filtrage pour la recherche
 			'<option value="label">Désignation</option>' +
 			'<option value="ref">Référence</option>' +
+			'<option value="codeBarres">Code-barres</option>' +
 			'<option value="dateAchat">Année d\'achat</option>'
 		);
 		$('#chercheInput').val('');							// vide l'input de recherche

@@ -73,6 +73,12 @@ $(function() {
 			window.location = urlBase+'&sousPage='+pageToLoad;
 		}
 	});
+	// Appui sur la touche entrée du champ "cherche"
+	$('#chercheInput').keyup(function(event) {
+		if(event.keyCode == 13) {
+			$('#chercheInput').closest(':has(.chercheBtn)').find('.chercheBtn').first().click();
+		}
+	});
 	
 	
 	// set de la hauteur des icones menus

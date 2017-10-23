@@ -41,9 +41,9 @@ $listeMatosUnit = $lm->getListe(TABLE_MATOS_UNIT, '*', 'ref');
 		// init du system de recherche
 		$('.chercheBtn').attr('id', 'matos_list_detail');	// ajoute le nom du fichier actuel (en id du bouton) pour la recherche
 		$('#filtreCherche').html(							// Ajout des options de filtrage pour la recherche
+			'<option value="codeBarres">Code-barres</option>' +
 			'<option value="label">Désignation</option>' +
 			'<option value="ref">Référence</option>' +
-			'<option value="codeBarres">Code-barres</option>' +
 			'<option value="dateAchat">Année d\'achat</option>'
 		);
 		$('#chercheInput').val('');							// vide l'input de recherche
